@@ -1,9 +1,8 @@
 {
   "name": "chatgpt-next-web",
-  "private": false,
   "license": "mit",
   "scripts": {
-    "dev": "next dev",
+    "dev": "cross-env PORT=3001 next dev",
     "build": "cross-env BUILD_MODE=standalone next build",
     "start": "next start",
     "lint": "next lint",
@@ -12,7 +11,6 @@
     "app:dev": "yarn tauri dev",
     "app:build": "yarn tauri build",
     "prompts": "node ./scripts/fetch-prompts.mjs",
-    "prepare": "husky install",
     "proxy-dev": "sh ./scripts/init-proxy.sh && proxychains -f ./scripts/proxychains.conf yarn dev"
   },
   "dependencies": {
@@ -40,7 +38,8 @@
     "sass": "^1.59.2",
     "spark-md5": "^3.0.2",
     "use-debounce": "^9.0.4",
-    "zustand": "^4.3.8"
+    "zustand": "^4.3.8",
+    "openai": "^4.24.1"
   },
   "devDependencies": {
     "@tauri-apps/cli": "1.5.7",
@@ -59,8 +58,6 @@
     "prettier": "^3.0.2",
     "typescript": "5.2.2",
     "webpack": "^5.88.1"
-  },
-  "resolutions": {
-    "lint-staged/yaml": "^2.2.2"
   }
+
 }

@@ -21,6 +21,8 @@ export enum Path {
   NewChat = "/new-chat",
   Masks = "/masks",
   Auth = "/auth",
+  //  针对Assistant的聊天窗口页面
+  Thread = "/thread",
 }
 
 export enum ApiPath {
@@ -46,6 +48,7 @@ export enum StoreKey {
   Prompt = "prompt-store",
   Update = "chat-update",
   Sync = "sync",
+  Assistant = "assistant-store",
 }
 
 export const DEFAULT_SIDEBAR_WIDTH = 300;

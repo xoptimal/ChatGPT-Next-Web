@@ -205,12 +205,18 @@
   cursor: pointer;
 }
 
+.chat-item-button {
+  position: absolute;
+  top: 2px;
+  right: 6px;
+}
+
 .chat-item:hover > .chat-item-delete {
   opacity: 0.5;
   transform: translateX(-4px);
 }
 
-.chat-item:hover > .chat-item-delete:hover {
+.chat-item:hover > .chat-item-delete:hover > .chat-item-button:hover {
   opacity: 1;
 }
 
