@@ -19,7 +19,7 @@ import {Mask} from "../store/mask";
 import {useRef, useEffect, useState} from "react";
 import {showConfirm} from "./ui-lib";
 import {useMobileScreen} from "../utils";
-import AssistantList from "@/app/components/assistant/lists/AssistantList";
+import ThreadList from "@/app/components/thread-list";
 import {listAssistants} from "@/app/services/api";
 import {fetchAssistantThreadsFromLocalStorage} from "@/app/utils/localStorageAssistants";
 
@@ -152,11 +152,11 @@ export function ChatList(props: { narrow?: boolean }) {
 
     return (
         <>
-            <AssistantList narrow={props.narrow}
-                           clickAssistant={clickAssistant}
-                           init={init}
-                           selectedIndex={selectedIndex}
-                           onClick={handleStartExistingAssistant}/>
+            <ThreadList narrow={props.narrow}
+                        clickAssistant={clickAssistant}
+                        init={init}
+                        selectedIndex={selectedIndex}
+                        onClick={handleStartExistingAssistant}/>
             <DragDropContext onDragEnd={onDragEnd}>
                 <Droppable droppableId="chat-list">
                     {(provided) => (

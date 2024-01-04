@@ -1,4 +1,4 @@
-import {LocalStoredAssistant, StoredAssistant} from "@/app/components/assistant/lists/AssistantList";
+import {LocalStoredAssistant, StoredAssistant} from "@/app/components/thread-list";
 
 
 export const saveAssistantsToLocalStorage = ({assistantId, threadId}: LocalStoredAssistant): void => {

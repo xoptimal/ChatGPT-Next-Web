@@ -1,11 +1,10 @@
 import {listAssistants} from "@/app/services/api";
 import React, {useEffect} from "react";
-import styles from "../../home.module.scss";
-import styles2 from "../../button.module.scss";
+import styles from "./home.module.scss";
+import styles2 from "./button.module.scss";
 import ConnectionIcon from "@/app/icons/connection.svg";
 import BrainIcon from "@/app/icons/brain.svg";
-import {DEFAULT_TOPIC, useAssistantStore} from "@/app/store/assistant";
-import {createEmptyMask} from "@/app/store/mask";
+import {useAssistantStore} from "@/app/store/assistant";
 
 export interface StoredAssistant {
     name: string | null;
@@ -30,21 +29,21 @@ interface AssistantListProps {
     init: (has: boolean) => void
 }
 
-export default function AssistantList(props: AssistantListProps) {
+export default function ThreadList(props: AssistantListProps) {
 
     const assistantStore = useAssistantStore()
     const maxInitialFetchedAssistants = 100;
 
     const fetchInitialAssistantList = async () => {
-       try {
-           const res = await listAssistants(maxInitialFetchedAssistants);
-           //  添加到Store
-           assistantStore.setSessions(res.assistants)
-           //  通知
-           props.init(res.assistants.length > 0)
-       } catch (e) {
-           console.log("e", e)
-       }
+        try {
+            const res = await listAssistants(maxInitialFetchedAssistants);
+            //  添加到Store
+            assistantStore.setSessions(res.assistants)
+            //  通知
+            props.init(res.assistants.length > 0)
+        } catch (e) {
+            console.log("e", e)
+        }
     }
 
     useEffect(() => {
