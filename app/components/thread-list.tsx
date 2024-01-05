@@ -34,7 +34,7 @@ export default function ThreadList(props: AssistantListProps) {
     const assistantStore = useAssistantStore()
     const maxInitialFetchedAssistants = 100;
 
-    const fetchInitialAssistantList = async () => {
+    async function fetchInitialAssistantList() {
         try {
             const res = await listAssistants(maxInitialFetchedAssistants);
             //  添加到Store
@@ -48,6 +48,7 @@ export default function ThreadList(props: AssistantListProps) {
 
     useEffect(() => {
         fetchInitialAssistantList();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

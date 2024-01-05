@@ -17,7 +17,6 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-console.log("process.env.OPENAI_API_KEY,", process.env.OPENAI_API_KEY)
 
 // Define an asynchronous POST function to handle incoming requests
 export async function POST(req: NextRequest) {
@@ -29,8 +28,6 @@ export async function POST(req: NextRequest) {
 
     // Log the received thread ID for debugging
     console.log(`Fetching all assistants`);
-
-    console.log("process.env.OPENAI_API_KEY,", process.env.OPENAI_API_KEY)
 
     // Retrieve messages for the given thread ID using the OpenAI API
     const assistants = await openai.beta.assistants.list({limit: limit, after: after, before: before})

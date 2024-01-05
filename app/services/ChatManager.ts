@@ -130,10 +130,7 @@ class ChatManager {
         const response = await fetchAssistantResponse(
           this.state.runId as string, 
           this.state.threadId as string, 
-          this.state.setStatusMessage, 
-          this.state.setProgress,
-          40 // initialProgress
-        );        
+        );
         this.state.setStatusMessage('Run complete...');
         this.state.assistantResponseReceived = true;
         this.state.setStatusMessage('Received messages...');
@@ -197,7 +194,7 @@ async startAssistantWithId(assistantId: string, initialMessage: string): Promise
       const runId = this.state.runId as string;
       const threadId = this.state.threadId as string;
       this.state.setStatusMessage('checking status...');
-      const assistantResponse = await fetchAssistantResponse(runId, threadId, this.state.setStatusMessage, this.state.setProgress, 10);
+      const assistantResponse = await fetchAssistantResponse(runId, threadId);
       
       this.state.setStatusMessage('Run complete...');
       this.state.assistantResponseReceived = true;
@@ -333,7 +330,7 @@ async sendMessage(input: string, type: string, files: File[], fileDetails: any[]
 
           // Fetch the assistant's response
           console.log("getting assistant response from sendMessage component")
-          const response = await fetchAssistantResponse(this.state.runId as string, this.state.threadId as string, this.state.setStatusMessage, this.state.setProgress,0);
+          const response = await fetchAssistantResponse(this.state.runId as string, this.state.threadId as string);
           console.log('Assistant response fetched. Adding to chat state...');
 
 

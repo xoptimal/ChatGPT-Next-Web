@@ -13,5 +13,6 @@ export const useChatManager = (
   useEffect(() => {
     const chatManager = ChatManager.getInstance(setChatMessages, setStatusMessage, setProgress, setIsLoadingFirstMessage); 
     setChatManager(chatManager);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setChatMessages, setStatusMessage, setProgress, setIsLoadingFirstMessage]);
 };
