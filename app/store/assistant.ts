@@ -16,11 +16,20 @@ import {ClientApi, RequestMessage} from "../client/api";
 import {estimateTokenLength} from "../utils/token";
 import {nanoid} from "nanoid";
 import {createPersistStore} from "../utils/store";
-import {addMessage, createThread} from "@/app/services/api";
+import {addMessage, createThread, removeFile, uploadFile} from "@/app/services/api";
 import {runChatAssistant} from "@/app/modules/assistantModules";
 import {fetchAssistantResponse} from "@/app/modules/chatModules";
 import {prettyObject} from "@/app/utils/format";
 
+export type UploadFileType = {
+    id: string
+    "object"?: string,
+    "purpose"?: string,
+    "filename": string,
+    "bytes"?: number,
+    "created_at"?: number,
+    "status": string,
+}
 export type ChatMessage = RequestMessage & {
     date?: string;
     streaming?: boolean;
@@ -58,6 +67,8 @@ export interface ChatSession {
     threadId?: string;
 
     mask: Mask;
+
+    uploadFiles?: UploadFileType[]
 }
 
 export const DEFAULT_TOPIC = Locale.Store.DefaultTopic;
@@ -149,6 +160,40 @@ export const useAssistantStore = createPersistStore(
         }
 
         const methods = {
+
+            getFiles(): UploadFileType[] {
+                const session = get().currentSession();
+                return session.uploadFiles || [];
+            },
+
+            async removeFile(fileId: string) {
+                //  移除openai存储的
+                await removeFile(fileId)
+
+                //  移除本地
+                get().updateCurrentSession((session) => {
+                    session.uploadFiles = session.uploadFiles?.filter((find: any) => find.id !== fileId)
+                });
+            },
+
+            async addFile(file: File) {
+                //   写入一条数据
+                get().updateCurrentSession((session) => {
+                    const data = {filename: file.name, id: nanoid(), status: 'loading'}
+                    if (session.uploadFiles) {
+                        session.uploadFiles.push(data)
+                    } else {
+                        session.uploadFiles = [data]
+                    }
+                });
+                //  上传
+                const resp = await uploadFile(file)
+                //  更新数据
+                get().updateCurrentSession((session) => {
+                    const index = session.uploadFiles!.length - 1;
+                    session.uploadFiles![index] = resp.data;
+                });
+            },
 
             setSessions(newSessions: any[]) {
                 set((state) => {
@@ -295,9 +340,7 @@ export const useAssistantStore = createPersistStore(
                     set(() => ({currentSessionIndex: index}));
                 }
 
-                const session = sessions[index];
-
-                return session;
+                return sessions[index];
             },
 
             onNewMessage(message: ChatMessage) {
@@ -358,8 +401,14 @@ export const useAssistantStore = createPersistStore(
 
                 console.log("session.threadId", session.threadId)
 
+                const fileIds = session.uploadFiles
+                    .filter((item: any) => item.status === 'processed')
+                    .map((item: any) => item.id)
+
+                console.log("session.fileIds", fileIds)
+
                 //  发送消息
-                await addMessage({threadId: session.threadId, input: userContent, fileIds: []})
+                await addMessage({threadId: session.threadId, input: userContent, fileIds})
 
                 try {
                     //  重新请求
@@ -378,6 +427,8 @@ export const useAssistantStore = createPersistStore(
                     }
                     get().updateCurrentSession((session) => {
                         session.messages = session.messages.concat();
+                        //  置空
+                        session.uploadFiles = []
                     });
                 } catch (error) {
 

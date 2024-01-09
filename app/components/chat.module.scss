@@ -475,6 +475,82 @@
   }
 }
 
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+.chat-input-panel-upload {
+  margin-bottom: 10px;
+
+  display: flex;
+
+  .loading-icon {
+    width: 14px;
+    position: absolute;
+    left: 8px;
+    top: 4px;
+    color: #666;
+    animation: rotate 1s linear infinite;
+  }
+
+  .upload-icon {
+    width: 14px;
+    position: absolute;
+    left: 8px;
+    top: 4px;
+    color: #666;
+  }
+
+  .delete-icon {
+    width: 14px;
+    opacity: 0;
+    position: absolute;
+    left: 8px;
+    top: 4px;
+    color: #666;
+
+    &:hover {
+      color: black;
+    }
+
+  }
+
+  > div {
+    position: relative;
+    cursor: pointer;
+    width: fit-content;
+    border-radius: 8px;
+    padding: 2px 8px 2px 28px;
+    border: var(--border-in-light);
+    display: flex;
+    align-items: center;
+    color: #333;
+    margin-right: 8px;
+
+    &:hover {
+      background: #f1f1f1;
+
+      .upload-icon {
+        opacity: 0;
+      }
+
+      .delete-icon {
+        opacity: 1;
+      }
+
+    }
+  }
+
+
+}
+
+
 .chat-input-panel-inner {
   display: flex;
   flex: 1;
@@ -482,7 +558,7 @@
   border: var(--border-in-light);
   position: relative;
   align-items: flex-end;
-  padding:16px;
+  padding: 16px;
 }
 
 .chat-input {

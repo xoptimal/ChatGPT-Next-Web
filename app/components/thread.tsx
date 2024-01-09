@@ -9,12 +9,15 @@ import LoadingIcon from "../icons/three-dots.svg";
 import MaxIcon from "../icons/max.svg";
 import MinIcon from "../icons/min.svg";
 import ResetIcon from "../icons/reload.svg";
-import DeleteIcon from "../icons/clear.svg";
+import ClearIcon from "../icons/clear.svg";
 import PinIcon from "../icons/pin.svg";
 import ConfirmIcon from "../icons/confirm.svg";
 import CancelIcon from "../icons/cancel.svg";
 import StopIcon from "../icons/pause.svg";
 import PaperclipIcon from "../icons/paperclip.svg";
+import FileIcon from "../icons/file.svg";
+import DeleteIcon from "../icons/x-circle.svg";
+import LoaderIcon from "../icons/loader.svg";
 
 import Image from "next/image";
 
@@ -41,7 +44,7 @@ import {ChatCommandPrefix, useChatCommand, useCommand} from "../command";
 import {prettyObject} from "../utils/format";
 import {ExportMessageModal} from "./exporter";
 import {getClientConfig} from "../config/client";
-import {useAssistantStore} from "@/app/store/assistant";
+import {UploadFileType, useAssistantStore} from "@/app/store/assistant";
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
     loading: () => <LoadingIcon/>,
@@ -508,7 +511,6 @@ function _Thread() {
         }
     };
 
-
     const doSubmit = async (userInput: string) => {
         if (userInput.trim() === "") return;
         const matchCommand = chatCommands.match(userInput);
@@ -689,7 +691,6 @@ function _Thread() {
 
     const accessStore = useAccessStore();
 
-    //  todo 这块是校验后初始化的
     if (context.length === 0 && session.messages.at(0)?.content !== BOT_HELLO.content) {
         const copiedHello = Object.assign({}, BOT_HELLO);
         if (!accessStore.isAuthorized()) {
@@ -866,9 +867,24 @@ function _Thread() {
 
     const fileInput = useRef<HTMLInputElement>(null)
 
+    const beforeInput = async (event: any) => {
+        const file = event.target.files[0];
+        await assistantStore.addFile(file)
+        event.target.value = ''
+    }
+
     const handleUpload = () => {
         fileInput.current!.click()
     }
+
+    const handleRemoveFile = (file: UploadFileType) => {
+        //  只针对上传成功做处理
+        if (file.status === 'processed') {
+            assistantStore.removeFile(file.id)
+        }
+    }
+
+    const uploadFiles = assistantStore.getFiles()
 
     return (
         <div className={styles.chat} key={session.id}>
@@ -996,7 +1012,7 @@ function _Thread() {
 
                                                             <ChatAction
                                                                 text={Locale.Chat.Actions.Delete}
-                                                                icon={<DeleteIcon/>}
+                                                                icon={<ClearIcon/>}
                                                                 onClick={() => onDelete(message.id ?? i)}
                                                             />
 
@@ -1053,14 +1069,33 @@ function _Thread() {
             <div className={styles["chat-input-panel"]}>
                 <PromptHints prompts={promptHints} onPromptSelect={onPromptSelect}/>
 
+                <div className={styles["chat-input-panel-upload"]}>
+                    {uploadFiles.map(item => <div key={item.id}>
+
+                        {
+                            item.status === 'loading'
+                                ? <div className={styles["loading-icon"]}><LoaderIcon/></div>
+                                : (<>
+                                    <div className={styles["upload-icon"]}><FileIcon/></div>
+                                    <div className={styles["delete-icon"]} onClick={() => handleRemoveFile(item)}>
+                                        <DeleteIcon/></div>
+                                </>)
+                        }
+                        <span style={{color: item.status === 'error' ? 'red' : '#666'}}>{item.filename}</span>
+                        <div className={styles["error-icon"]}><CancelIcon/></div>
+                    </div>)}
+                </div>
+
                 <div className={styles["chat-input-panel-inner"]}>
 
                     <div className={styles["chat-button-upload"]}>
                         <IconButton
+                            disabled={uploadFiles.length > 0}
                             icon={<PaperclipIcon/>}
                             onClick={handleUpload}
                         />
-                        <input ref={fileInput} type={"file"} accept=".c, .cpp, .csv, .docx, .html, .java, .json, .md, .pdf, .php, .pptx, .py, .rb, .tex, .txt"/>
+                        <input ref={fileInput} onChange={beforeInput} type={"file"} multiple={false}
+                               accept=".c, .cpp, .csv, .docx, .html, .java, .json, .md, .pdf, .php, .pptx, .py, .rb, .tex, .txt"/>
                     </div>
 
                     <textarea

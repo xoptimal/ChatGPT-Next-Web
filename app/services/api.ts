@@ -30,7 +30,7 @@ export const uploadImageAndGetDescription = async (base64Image: unknown) => {
   
   // Uploads a file
   export const uploadFile = async (file: File) => {
-    console.log('Uploading file...');
+    console.log('Uploading file...', file);
     const fileData = new FormData();
     fileData.append('file', file);
     const response = await fetch('/api/upload', {
@@ -44,7 +44,24 @@ export const uploadImageAndGetDescription = async (base64Image: unknown) => {
     console.log('File uploaded successfully');
     const jsonResponse = await response.json();
     console.log('Server response:', jsonResponse); // Add this line
-    return { fileId: jsonResponse.fileId }; // return only the fileId
+    return jsonResponse; // return only the fileId
+  };
+
+  //  remove a file
+  export const removeFile = async (fileId: string) => {
+    console.log('remove file...', fileId);
+
+    const response = await fetch(`/api/upload/${fileId}`, {
+      method: 'delete',
+    });
+    if (!response.ok) {
+      console.error('File upload failed');
+      throw new Error('File upload failed');
+    }
+    console.log('File uploaded successfully');
+    const jsonResponse = await response.json();
+    console.log('Server response:', jsonResponse); // Add this line
+    return jsonResponse; // return only the fileId
   };
   
   // Creates an assistant

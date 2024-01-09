@@ -1,12 +1,12 @@
 /**
  * API Route - Upload Files
- * 
+ *
  * This API route is designed for initiating a chat session within an application.
  * It handles the processing and uploading of a file necessary for starting a chat session
  * with the OpenAI API. The route manages the receipt of a file through POST request,
  * temporarily saves it, and then uploads it to OpenAI, ultimately returning the
  * file ID for use in further chat-related operations.
- * 
+ *
  * Path: /api/upload
  */
 
@@ -35,23 +35,23 @@ export async function POST(request: NextRequest) {
   }
 
   // Convert file to buffer and write to a temporary location
-  const bytes = await file.arrayBuffer();
-  const buffer = Buffer.from(bytes);
-  const path = `/tmp/${file.name}`;
-  await writeFile(path, buffer);
-  console.log(`File written to ${path}`);
+  // const bytes = await file.arrayBuffer();
+  // const buffer = Buffer.from(bytes);
+  // const path = `/tmp/${file.name}`;
+  // await writeFile(path, buffer);
+  // console.log(`File written to ${path}`);
 
   try {
     // Uploading the file to OpenAI
     console.log('Starting file upload to OpenAI');
     const fileForRetrieval = await openai.files.create({
-      file: createReadStream(path),
+      file: file,
       purpose: "assistants",
     });
     console.log(`File uploaded, ID: ${fileForRetrieval.id}`);
 
     // Respond with the file ID
-    return NextResponse.json({ success: true, fileId: fileForRetrieval.id });
+    return NextResponse.json({ success: true, data: fileForRetrieval });
   } catch (error) {
     // Log and respond to any errors during the upload process
     console.error('Error uploading file:', error);
