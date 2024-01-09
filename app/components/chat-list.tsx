@@ -160,7 +160,7 @@ export function ChatList(props: { narrow?: boolean }) {
                         init={init}
                         selectedIndex={assistantStore.currentSessionIndex}
                         onClick={handleStartExistingAssistant}/>
-            <DragDropContext onDragEnd={onDragEnd}>
+            {/*<DragDropContext onDragEnd={onDragEnd}>
                 <Droppable droppableId="chat-list">
                     {(provided) => (
                         <div
@@ -198,7 +198,7 @@ export function ChatList(props: { narrow?: boolean }) {
                         </div>
                     )}
                 </Droppable>
-            </DragDropContext>
+            </DragDropContext>*/}
         </>
     );
 }
