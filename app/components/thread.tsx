@@ -14,6 +14,7 @@ import PinIcon from "../icons/pin.svg";
 import ConfirmIcon from "../icons/confirm.svg";
 import CancelIcon from "../icons/cancel.svg";
 import StopIcon from "../icons/pause.svg";
+import PaperclipIcon from "../icons/paperclip.svg";
 
 import Image from "next/image";
 
@@ -454,13 +455,13 @@ function _Thread() {
     );
 
     // auto grow input
-    const [inputRows, setInputRows] = useState(2);
+    const [inputRows, setInputRows] = useState(1);
     const measure = useDebouncedCallback(
         () => {
             const rows = inputRef.current ? autoGrowTextArea(inputRef.current) : 1;
             const inputRows = Math.min(
                 20,
-                Math.max(2 + Number(!isMobileScreen), rows),
+                Math.max(1 + Number(!isMobileScreen), rows),
             );
             setInputRows(inputRows);
         },
@@ -863,6 +864,12 @@ function _Thread() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const fileInput = useRef<HTMLInputElement>(null)
+
+    const handleUpload = () => {
+        fileInput.current!.click()
+    }
+
     return (
         <div className={styles.chat} key={session.id}>
             <div className="window-header" data-tauri-drag-region>
@@ -1046,43 +1053,37 @@ function _Thread() {
             <div className={styles["chat-input-panel"]}>
                 <PromptHints prompts={promptHints} onPromptSelect={onPromptSelect}/>
 
-                {/*<ChatActions
-          showPromptModal={() => setShowPromptModal(true)}
-          scrollToBottom={scrollToBottom}
-          hitBottom={hitBottom}
-          showPromptHints={() => {
-            // Click again to close
-            if (promptHints.length > 0) {
-              setPromptHints([]);
-              return;
-            }
-
-            inputRef.current?.focus();
-            setUserInput("/");
-            onSearch("");
-          }}
-        />*/}
                 <div className={styles["chat-input-panel-inner"]}>
-          <textarea
-              ref={inputRef}
-              className={styles["chat-input"]}
-              placeholder={Locale.Chat.Input(submitKey)}
-              onInput={(e) => onInput(e.currentTarget.value)}
-              value={userInput}
-              onKeyDown={onInputKeyDown}
-              onFocus={scrollToBottom}
-              onClick={scrollToBottom}
-              rows={inputRows}
-              autoFocus={autoFocus}
-              style={{
-                  fontSize: config.fontSize,
-              }}
-          />
+
+                    <div className={styles["chat-button-upload"]}>
+                        <IconButton
+                            icon={<PaperclipIcon/>}
+                            onClick={handleUpload}
+                        />
+                        <input ref={fileInput} type={"file"} accept=".c, .cpp, .csv, .docx, .html, .java, .json, .md, .pdf, .php, .pptx, .py, .rb, .tex, .txt"/>
+                    </div>
+
+                    <textarea
+                        ref={inputRef}
+                        className={styles["chat-input"]}
+                        placeholder={Locale.Chat.Input(submitKey)}
+                        onInput={(e) => onInput(e.currentTarget.value)}
+                        value={userInput}
+                        onKeyDown={onInputKeyDown}
+                        onFocus={scrollToBottom}
+                        onClick={scrollToBottom}
+                        rows={inputRows}
+                        autoFocus={autoFocus}
+                        style={{
+                            fontSize: config.fontSize,
+                        }}
+                    />
                     <IconButton
                         icon={<SendWhiteIcon/>}
                         text={Locale.Chat.Send}
                         className={styles["chat-input-send"]}
                         type="primary"
+                        disabled={userInput.length === 0}
                         onClick={() => doSubmit(userInput)}
                     />
                 </div>

@@ -22,6 +22,7 @@ import {useMobileScreen} from "../utils";
 import ThreadList from "@/app/components/thread-list";
 import {listAssistants} from "@/app/services/api";
 import {fetchAssistantThreadsFromLocalStorage} from "@/app/utils/localStorageAssistants";
+import {useAssistantStore} from "@/app/store/assistant";
 
 export function ChatItem(props: {
     onClick?: () => void;
@@ -138,10 +139,12 @@ export function ChatList(props: { narrow?: boolean }) {
 
     const [clickAssistant, setClickAssistant] = useState(true)
 
+    const assistantStore = useAssistantStore();
+
     const handleStartExistingAssistant = (assistant : any, index: number) => {
         setClickAssistant(true);
         navigate(Path.Thread);
-        selectSession(index);
+        assistantStore.selectSession(index);
         // if (assistant.threadId) {
         //     navigate(`/thread?assistant=${assistant.id}&thread=${assistant.threadId}`)
         // } else {
@@ -155,7 +158,7 @@ export function ChatList(props: { narrow?: boolean }) {
             <ThreadList narrow={props.narrow}
                         clickAssistant={clickAssistant}
                         init={init}
-                        selectedIndex={selectedIndex}
+                        selectedIndex={assistantStore.currentSessionIndex}
                         onClick={handleStartExistingAssistant}/>
             <DragDropContext onDragEnd={onDragEnd}>
                 <Droppable droppableId="chat-list">

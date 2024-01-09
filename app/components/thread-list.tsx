@@ -68,10 +68,10 @@ export default function ThreadList(props: AssistantListProps) {
                     ) : (
                         <>
                             <div className={styles["chat-item-title"]}>{assistant.name}</div>
-                            <div className={styles["chat-item-info"]}>
+                          {/*  <div className={styles["chat-item-info"]}>
                                 {assistant.instructions}
-                            </div>
-                            <div
+                            </div>*/}
+                           {/* <div
                                 className={`${styles["chat-item-button"]} ${styles2["icon-button"]}`}
                                 onClickCapture={(e) => {
                                     e.preventDefault();
@@ -79,7 +79,7 @@ export default function ThreadList(props: AssistantListProps) {
                                 }}
                             >
                                 <ConnectionIcon/>
-                            </div>
+                            </div>*/}
                         </>
                     )}
                 </div>
