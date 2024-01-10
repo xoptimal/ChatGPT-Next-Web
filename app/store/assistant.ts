@@ -401,9 +401,7 @@ export const useAssistantStore = createPersistStore(
 
                 console.log("session.threadId", session.threadId)
 
-                const fileIds = session.uploadFiles
-                    .filter((item: any) => item.status === 'processed')
-                    .map((item: any) => item.id)
+                const fileIds = session.uploadFiles?.filter((item: any) => item.status === 'processed').map((item: any) => item.id)
 
                 console.log("session.fileIds", fileIds)
 
