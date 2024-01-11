@@ -415,12 +415,16 @@ export const useAssistantStore = createPersistStore(
 
                     // Fetch the assistant's response
                     console.log("getting assistant response from sendMessage component")
-                    const message = await fetchAssistantResponse(runId!, session.threadId);
+                    let message = await fetchAssistantResponse(runId!, session.threadId);
                     console.log('Assistant response fetched. Adding to chat state...');
 
                     botMessage.streaming = false;
                     if (message) {
+                        //  过滤索引
+                        message = message.replace(/【.*?】/g, '');
+                        //  写入
                         botMessage.content = message;
+                        //  更新时间
                         botMessage.date = new Date().toLocaleString();
                     }
                     get().updateCurrentSession((session) => {

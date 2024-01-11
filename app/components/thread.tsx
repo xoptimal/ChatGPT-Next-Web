@@ -865,6 +865,12 @@ function _Thread() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const handleClear = () =>{
+        //  重置
+        assistantStore.resetSession()
+
+    }
+
     const fileInput = useRef<HTMLInputElement>(null)
 
     const beforeInput = async (event: any) => {
@@ -913,6 +919,14 @@ function _Thread() {
                     </div>
                 </div>
                 <div className="window-actions">
+                    {
+                        messages.length > 0 &&
+                        <IconButton
+                            icon={<ClearIcon/>}
+                            bordered
+                            onClick={handleClear}
+                        />
+                    }
                     {showMaxIcon && (
                         <div className="window-action-button">
                             <IconButton
