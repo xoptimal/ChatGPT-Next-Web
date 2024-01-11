@@ -42,9 +42,10 @@ import {ContextPrompts, MaskConfig} from "./mask";
 import {useMaskStore} from "../store/mask";
 import {ChatCommandPrefix, useChatCommand, useCommand} from "../command";
 import {prettyObject} from "../utils/format";
-import {ExportMessageModal} from "./exporter";
 import {getClientConfig} from "../config/client";
 import {UploadFileType, useAssistantStore} from "@/app/store/assistant";
+import ExportIcon from "@/app/icons/share.svg";
+import {AssistantExportMessageModal} from "@/app/components/exporter-assistant";
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
     loading: () => <LoadingIcon/>,
@@ -865,7 +866,7 @@ function _Thread() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const handleClear = () =>{
+    const handleClear = () => {
         //  重置
         assistantStore.resetSession()
 
@@ -927,6 +928,16 @@ function _Thread() {
                             onClick={handleClear}
                         />
                     }
+                    <div className="window-action-button">
+                        <IconButton
+                            icon={<ExportIcon/>}
+                            bordered
+                            title={Locale.Chat.Actions.Export}
+                            onClick={() => {
+                                setShowExport(true);
+                            }}
+                        />
+                    </div>
                     {showMaxIcon && (
                         <div className="window-action-button">
                             <IconButton
@@ -1139,7 +1150,7 @@ function _Thread() {
             </div>
 
             {showExport && (
-                <ExportMessageModal onClose={() => setShowExport(false)}/>
+                <AssistantExportMessageModal onClose={() => setShowExport(false)}/>
             )}
 
             {isEditingMessage && (

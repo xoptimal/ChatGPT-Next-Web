@@ -141,7 +141,7 @@ export function SideBar(props: { className?: string }) {
                     CONSULTANT GUIDE
                 </div>
                 <div className={styles["sidebar-sub-title"]}>
-                    AI assistant.
+                    Assistant API
                 </div>
                 <div className={styles["sidebar-logo"] + " no-dark"}>
                     <Image src={"/logo.png"} alt={""} width={40} height={40} style={{marginBottom: '12px'}}></Image>
