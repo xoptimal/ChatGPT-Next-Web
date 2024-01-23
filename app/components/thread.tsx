@@ -190,11 +190,45 @@ function useSubmitHandler() {
     };
 }
 
-export type RenderPompt = Pick<Prompt, "title" | "content">;
+export type RenderPrompt = Pick<Prompt, "title" | "content">;
+
+
+function getPrompts(threadId: string) {
+    if(threadId === 'asst_GrfD3y2b13movH1BpI4LPRY7') {
+        //  do something....
+    }
+
+    return [
+        {title: 'Create a charter', content: 'to start a film club'},
+        {title: 'Plan a trip', content: 'to see the best of New York in 3 days'},
+        {title: 'Tell me a fun fact', content: 'about the Roman Empire'},
+        {title: 'Show me a code snippet', content: 'of a website\'s sticky header'},
+    ]
+}
+
+export function PromptGuide(props: {
+    prompts: RenderPrompt[],
+    onPromptSelect: (prompt: RenderPrompt) => void;
+}) {
+
+    const {prompts = []} = props;
+
+    return <div className={styles["prompt-guide"]}>
+        {prompts.map((prompt, i) => (
+            <div
+                key={prompt.title + i.toString()}
+                onClick={() => props.onPromptSelect(prompt)}
+            >
+                <div className={styles["hint-title"]}>{prompt.title}</div>
+                <div className={styles["hint-content"]}>{prompt.content}</div>
+            </div>
+        ))}
+    </div>
+}
 
 export function PromptHints(props: {
-    prompts: RenderPompt[];
-    onPromptSelect: (prompt: RenderPompt) => void;
+    prompts: RenderPrompt[];
+    onPromptSelect: (prompt: RenderPrompt) => void;
 }) {
     const noPrompts = props.prompts.length === 0;
     const [selectIndex, setSelectIndex] = useState(0);
@@ -448,7 +482,7 @@ function _Thread() {
 
     // prompt hints
     const promptStore = usePromptStore();
-    const [promptHints, setPromptHints] = useState<RenderPompt[]>([]);
+    const [promptHints, setPromptHints] = useState<RenderPrompt[]>([]);
     const onSearch = useDebouncedCallback(
         (text: string) => {
             const matchedPrompts = promptStore.search(text);
@@ -530,7 +564,7 @@ function _Thread() {
         setAutoScroll(true);
     };
 
-    const onPromptSelect = (prompt: RenderPompt) => {
+    const onPromptSelect = (prompt: RenderPrompt) => {
         setTimeout(() => {
             setPromptHints([]);
 
@@ -544,6 +578,12 @@ function _Thread() {
                 setUserInput(prompt.content);
             }
             inputRef.current?.focus();
+        }, 30);
+    };
+
+    const onPromptSelect2Guide = (prompt: RenderPrompt) => {
+        setTimeout(() => {
+            doSubmit(prompt.content);
         }, 30);
     };
 
@@ -1092,6 +1132,11 @@ function _Thread() {
             </div>
 
             <div className={styles["chat-input-panel"]}>
+
+                {   messages.length === 1 &&
+                    <PromptGuide prompts={getPrompts(session.id)} onPromptSelect={onPromptSelect2Guide} />
+                }
+
                 <PromptHints prompts={promptHints} onPromptSelect={onPromptSelect}/>
 
                 <div className={styles["chat-input-panel-upload"]}>
