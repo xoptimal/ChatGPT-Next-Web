@@ -25,7 +25,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # 生成 Prisma 客户端代码
-# RUN yarn prisma generate
+RUN yarn prisma generate
 
 RUN yarn build
 
