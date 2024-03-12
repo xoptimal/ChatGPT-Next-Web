@@ -11,7 +11,8 @@
     "app:dev": "yarn tauri dev",
     "app:build": "yarn tauri build",
     "prompts": "node ./scripts/fetch-prompts.mjs",
-    "proxy-dev": "sh ./scripts/init-proxy.sh && proxychains -f ./scripts/proxychains.conf yarn dev"
+    "proxy-dev": "sh ./scripts/init-proxy.sh && proxychains -f ./scripts/proxychains.conf yarn dev",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@ant-design/icons": "^5.3.1",
