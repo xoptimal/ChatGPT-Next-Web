@@ -1,6 +1,6 @@
 'use client'
 import {useRouter} from 'next/navigation'
-import React, {useEffect, useRef, useState} from "react";
+import React, {useRef, useState} from "react";
 import {Alert, Button, Form, Input, Space, Spin} from "antd";
 import styles from './page.module.scss'
 import Image from 'next/image'
@@ -8,28 +8,16 @@ import UserIcon from '@/app/icons/user.svg'
 import RenameIcon from '@/app/icons/rename.svg'
 import {ModalForm, ProFormText} from "@ant-design/pro-components";
 import request from "@/app/utils/api";
+import {useAsyncEffect, useGetState} from "ahooks";
+import AnalogInputText from "@/app/components/analog-input-text";
 
 const TextArea = Input.TextArea
 
-const question = [
-    '你目前的年级是什么？你在哪个年级？',
-    '你上的是哪所高中？',
-    '你的成绩怎么样？你的成绩如何？',
-    '你想追求什么职业？',
-    '你想主修什么？',
-    '如果你能做任何你想做的事，没有任何限制，你会做什么，为什么？',
-    '你有什么兴趣和爱好？你还有其他兴趣/爱好吗？',
-    '你喜欢在哪个国家生活？',
-    '你想上什么大学？',
-    '你打算如何支付大学学费？',
-]
-
-
-export default function Guide() {
+export default function FormPage() {
 
     const router = useRouter()
 
-    const [list, setList] = useState<string[]>([question[0]])
+    const [list, setList, getList] = useGetState<string[]>([])
     const [inputValue, setInputValue] = useState("")
     const [editIndex, setEditIndex] = useState(-1)
     const [editValue, setEditValue] = useState("")
@@ -37,13 +25,18 @@ export default function Guide() {
     const [open, setOpen] = useState(false)
     const [form] = Form.useForm()
     const questionIndexRef = useRef(0);
+    const questionListRef = useRef([])
     const contentRef = useRef<HTMLDivElement>(null);
 
-    const listRef = useRef([question[0]])
-
-    useEffect(() => {
-        setList(listRef.current)
-    }, [listRef.current])
+    useAsyncEffect(async () => {
+        const res = await request('/api/question', {method: 'GET'})
+        questionListRef.current = res.data.list.map((item: { content: string }) => item.content)
+        setLoadingIndex(0);
+        setList([questionListRef.current[0]])
+        setTimeout(() => {
+            setLoadingIndex(-1)
+        }, 500)
+    }, [])
 
     const handleEdit = (index: number, value: string) => {
         setEditIndex(index)
@@ -59,9 +52,11 @@ export default function Guide() {
     }
 
     const handleSend = () => {
-        const list = listRef.current;
+        const list = getList();
+        const question = questionListRef.current
         //  添加
         list.push(inputValue)
+        setList([...list])
         //  置空
         setInputValue("")
 
@@ -79,6 +74,7 @@ export default function Guide() {
 
             //  写入数据
             list.push(question[questionIndexRef.current += 1])
+            setList([...list])
 
             setTimeout(() => {
                 setLoadingIndex(-1)
@@ -90,7 +86,7 @@ export default function Guide() {
     return <div className={styles.container}>
 
         <div className={styles.content} ref={contentRef}>
-            {list.map((item, index) =>
+            {list.map((text, index) =>
                 index % 2 === 0
                     ? (
                         <div key={index}>
@@ -101,7 +97,7 @@ export default function Guide() {
                                 <span>ENDAI</span>
                             </div>
                             <div className={styles.content_footer}>
-                                {loadingIndex === index ? <Spin/> : item}
+                                {loadingIndex === index ? <Spin/> : <AnalogInputText text={text} />}
                             </div>
                         </div>
                     )
@@ -125,10 +121,10 @@ export default function Guide() {
                                             <Button onClick={handleEditSave} type={"primary"}>Save</Button>
                                         </Space>
                                     </div>
-                                    : item
+                                    : text
                             }
                             {editIndex === -1 &&
-                                <div className={styles.icon_edit} onClick={() => handleEdit(index, item)}><RenameIcon/>
+                                <div className={styles.icon_edit} onClick={() => handleEdit(index, text)}><RenameIcon/>
                                 </div>}
                         </div>
                     </div>
@@ -146,7 +142,7 @@ export default function Guide() {
                         setInputValue(e.target.value)
                     }}/>
                 <div>
-                    <Button type={"primary"} disabled={inputValue.length === 0} onClick={handleSend}>Send</Button>
+                    <Button type={"primary"} disabled={inputValue.length === 0} onClick={handleSend}>发送</Button>
                 </div>
             </div>
             <p>系统会依次提出问题, 请点击Send提交</p>

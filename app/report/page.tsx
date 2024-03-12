@@ -29,7 +29,7 @@ export type TableListItem = {
 };
 
 
-export default () => {
+export default function ReportPage() {
 
     const [psqOpen, setPsqOpen] = useState(false)
     const [reportOpen, setReportOpen] = useState(false)

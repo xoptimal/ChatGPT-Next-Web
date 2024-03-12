@@ -2,11 +2,9 @@ import {PrismaClient} from "@prisma/client";
 import {NextRequest, NextResponse} from "next/server";
 import {getQuery} from "@/app/utils/api";
 import OpenAI from "openai";
-
-const prisma = new PrismaClient();
+import prisma from "@/prisma/client";
 
 const openai = new OpenAI();
-
 
 export async function GET(req: NextRequest) {
     try {

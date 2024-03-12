@@ -22,4 +22,8 @@ model psq {
   created_at DateTime @default(now())
 }
 
+model question {
+  id         Int     @id @default(autoincrement())
+  content    String?
+}
 

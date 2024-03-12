@@ -133,3 +133,15 @@
   margin-bottom: 12px;
 }
 
+@keyframes letterAppear {
+  from { width: 0; } /* 初始宽度为0 */
+  to { width: 100% } /* 结束时宽度为100% */
+}
+
+.letter {
+  display: inline-block;
+  overflow: hidden; /* 确保文本不会溢出容器 */
+  white-space: nowrap; /* 防止文字换行 */
+  border-right: .15em solid orange; /* 添加光标效果 */
+  animation: letterAppear 5s steps(13) forwards;;
+}

@@ -17,7 +17,7 @@ export default function Guide() {
         <h1>参与问卷</h1>
         <h2>准备好就点击下方按钮开始吧!</h2>
         <div>
-            <Button type={"primary"} size={"large"} onClick={onStart}>Start</Button>
+            <Button type={"primary"} size={"large"} onClick={onStart}>开始</Button>
         </div>
     </div>
 }
