@@ -11,9 +11,7 @@ export default function AnalogInputText(props: {text: string}) {
     const indexRef = useRef(-1)
 
     function renderText() {
-
         const index = indexRef.current
-
         if (index < text.length) {
             setValue(pre => pre+ text.charAt(index))
             indexRef.current++;
@@ -24,9 +22,7 @@ export default function AnalogInputText(props: {text: string}) {
     }
 
     useEffect(() => {
-
         renderText();
-
     }, [])
 
     return <span>{value}</span>

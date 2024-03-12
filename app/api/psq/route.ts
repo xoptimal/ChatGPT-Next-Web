@@ -1,4 +1,3 @@
-import {PrismaClient} from "@prisma/client";
 import {NextRequest, NextResponse} from "next/server";
 import {getQuery} from "@/app/utils/api";
 import OpenAI from "openai";

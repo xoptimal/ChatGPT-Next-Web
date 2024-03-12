@@ -194,7 +194,7 @@ export type RenderPrompt = Pick<Prompt, "title" | "content">;
 
 
 function getPrompts(threadId: string) {
-    if(threadId === 'asst_GrfD3y2b13movH1BpI4LPRY7') {
+    if (threadId === 'asst_GrfD3y2b13movH1BpI4LPRY7') {
         //  do something....
     }
 
@@ -1133,8 +1133,8 @@ function _Thread() {
 
             <div className={styles["chat-input-panel"]}>
 
-                {   messages.length === 1 &&
-                    <PromptGuide prompts={getPrompts(session.id)} onPromptSelect={onPromptSelect2Guide} />
+                {messages.length === 1 &&
+                    <PromptGuide prompts={getPrompts(session.id)} onPromptSelect={onPromptSelect2Guide}/>
                 }
 
                 <PromptHints prompts={promptHints} onPromptSelect={onPromptSelect}/>
