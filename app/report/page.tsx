@@ -1,0 +1,165 @@
+'use client';
+
+import type {ProColumns} from '@ant-design/pro-components';
+import {ProTable} from '@ant-design/pro-components';
+import Image from 'next/image'
+
+import request from "@/app/utils/api";
+import styles from './page.module.scss'
+import {Button, Drawer, Empty, Modal} from "antd";
+import {useState} from "react";
+
+const valueEnum = {
+    0: 'close',
+    1: 'running',
+    2: 'online',
+    3: 'error',
+};
+
+export type TableListItem = {
+    key: number;
+    name: string;
+    containers: number;
+    creator: string;
+    status: string;
+    createdAt: number;
+    progress: number;
+    money: number;
+    memo: string;
+};
+
+
+export default () => {
+
+    const [psqOpen, setPsqOpen] = useState(false)
+    const [reportOpen, setReportOpen] = useState(false)
+    const [selectItem, setSelectItem] = useState<any>(null)
+
+    const onClickItem = (entity: any) => {
+
+        const item: any = {...entity}
+        item.psqList = JSON.parse(entity.content)
+
+        setSelectItem(item)
+        setPsqOpen(true)
+    }
+
+    const onClickReport = (entity?: any) => {
+        if (entity) {
+            setSelectItem(entity)
+        }
+        setReportOpen(true)
+    }
+
+    const columns: ProColumns<TableListItem>[] = [
+        {
+            title: '姓名',
+            dataIndex: 'username',
+        },
+        {
+            title: '电话',
+            dataIndex: 'phone',
+        },
+        {
+            title: '问卷',
+            key: 'content',
+            search: false,
+            render: (dom, entity) => <a onClick={() => onClickItem(entity)}>预览</a>
+        },
+        {
+            title: '报告',
+            key: 'report',
+            search: false,
+            render: (dom, entity) => <a onClick={() => onClickReport(entity)}>查看</a>
+        },
+        {
+            title: '创建时间',
+            search: false,
+            dataIndex: 'created_at',
+            valueType: 'dateTime'
+        },
+        // {
+        //     title: '操作',
+        //     width: 180,
+        //     key: 'option',
+        //     valueType: 'option',
+        //     render: () => [],
+        // },
+    ];
+
+    return (
+        <div className={styles.container}>
+            <div className={styles.top}>
+                <div>
+                    <Image className={styles.icon_logo} src={"/logo-all.png"} width={100} height={0} alt={""}/>
+                </div>
+            </div>
+            <div className={styles.content}>
+                <ProTable<TableListItem>
+                    columns={columns}
+                    request={async (params, sorter, filter) => {
+                        const res = await request('/api/psq', {
+                            params: params,
+                            method: 'GET'
+                        })
+                        return {
+                            data: res.data.list,
+                            total: res.data.total,
+                            success: res.status === 200,
+                        }
+                    }}
+                    rowKey="id"
+                    pagination={{
+                        showQuickJumper: true,
+                    }}
+                    dateFormatter={'number'}
+                    options={{
+                        density: false,
+                        search: false,
+                        setting: false,
+                        fullScreen: true,
+                    }}
+                    toolbar={{
+                        title: '问卷列表',
+                    }}
+                />
+            </div>
+
+            <Drawer open={psqOpen} onClose={() => setPsqOpen(false)} title={'问卷预览'} width={600} footer={false}>
+                <div className={styles.title}>
+                    <div
+                        className={styles.drawer_title}>来自<a>{selectItem?.username}</a>同学问卷调查</div>
+                    <Button type={"primary"} ghost onClick={() => onClickReport()}>查看报告</Button>
+                </div>
+                {
+                    selectItem?.psqList?.map((item: any, index: number) =>
+                        <div key={index} className={styles.item}>
+                            <h1>{`${index + 1}.`}</h1>
+                            <div>
+                                <h1>{item.question}</h1>
+                                <p>{item.value}</p>
+                            </div>
+                        </div>)
+                }
+            </Drawer>
+
+            <Modal open={reportOpen} onCancel={() => setReportOpen(false)} title={'查看报告'} width={600} footer={false}>
+                {
+                    selectItem?.report ?
+                        <>
+                            <div className={styles.title}>
+                                <div className={styles.drawer_title}>来自<a>{selectItem?.username}</a>同学问卷调查,
+                                    生成如下报告:
+                                </div>
+                            </div>
+                            <div className={styles.report}>
+                                {selectItem?.report}
+                            </div>
+                        </>
+                        : <div ><Empty style={{padding: '100px 0'}} description={"正在努力生成中..."}  /></div>
+                }
+            </Modal>
+
+        </div>
+    )
+};

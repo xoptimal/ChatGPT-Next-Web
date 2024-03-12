@@ -76,6 +76,10 @@ if (mode !== "export") {
         source: "/sharegpt",
         destination: "https://sharegpt.com/api/conversations",
       },
+      {
+        source: "/",
+        destination: "/guide",
+      },
     ];
 
     return {

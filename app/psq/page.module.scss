@@ -1,0 +1,41 @@
+
+.container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  > svg {
+    width: 64px;
+    height: 64px;
+  }
+
+  > h1 {
+    margin-top: 12px;
+    font-size: 18px;
+    color: #333;
+  }
+
+  > h2 {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #666;
+    font-weight: normal;
+  }
+
+  > div {
+    margin-top: 40px;
+
+    > button {
+      width: 110px;
+    }
+  }
+
+  .icon_logo {
+    height: 70px;
+    object-fit: contain;
+  }
+
+}

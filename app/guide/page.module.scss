@@ -1,0 +1,83 @@
+
+.container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content {
+
+  display: grid;
+  grid-template-rows: auto auto; /* 两行 */
+  grid-template-columns: repeat(3, 1fr); /* 三列 */
+  gap: 20px; /* 设置行列间距 */
+
+  height: 800px;
+
+  > div {
+    background: #f1f1f1;
+    width: 300px;
+    flex: 1;
+    border-radius: 16px;
+    padding: 40px;
+    position: relative;
+
+    > h1 {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    > h2 {
+      font-size: 24px;
+      font-weight: normal;
+      padding-top: 4px;
+      color: #666;
+    }
+
+    > div {
+      position: absolute;
+      right: 24px;
+      bottom: 24px;
+
+      svg {
+        width: 32px;
+        height: 32px;
+        color: #999;
+      }
+
+    }
+
+    &:hover {
+      background: white;
+      box-shadow: 0 50px 100px -20px rgba(50, 50, 93, 0.1), 0 30px 60px -30px rgba(107, 124, 147, 0.15);
+      transform: translateY(-10px);
+      border-radius: 32px;
+      cursor: pointer;
+
+      > h1 {
+        color: #1677ff;
+      }
+
+      > h2 {
+        color: #1677ff;
+      }
+
+      > div {
+        svg {
+          color: #1677ff;
+        }
+      }
+
+    }
+  }
+}
+
+
+@media (min-width: 1001px) {
+  .container {
+    width: 1000px;
+    margin: 0 auto;
+  }
+}
