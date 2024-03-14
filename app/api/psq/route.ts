@@ -63,8 +63,8 @@ export async function POST(req: NextRequest) {
         //  写入到数据库
         const record = await prisma.psq.create({data: body})
 
-        setTimeout(async () => {
-
+        process.nextTick(async () => {
+            // 在这里执行一些后续操作
             console.log("test request open ai")
             console.log("test record.id: ", record.id)
 
@@ -91,7 +91,8 @@ export async function POST(req: NextRequest) {
                 where: {id: record.id},
                 data: {report: callback}
             });
-        }, 100)
+        });
+
         return NextResponse.json({status: 200, statusText: 'OK'});
 
     } catch (error) {
