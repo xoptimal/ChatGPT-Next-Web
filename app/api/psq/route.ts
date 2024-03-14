@@ -60,12 +60,6 @@ export async function POST(req: NextRequest) {
         //  用户提交的信息
         const body = await req.json()
 
-        //  写入到数据库
-        const record = await prisma.psq.create({data: body})
-
-        process.nextTick(async () => {
-            // 在这里执行一些后续操作
-            console.log("test record.id: ", record.id)
 
             //  添加助记词, 定义返回内容
             const content = `请根据这个内容: ${body.content}, 做一份留学报告反馈给我`
@@ -84,19 +78,20 @@ export async function POST(req: NextRequest) {
                 });
 
                 //  解答内容
-                const callback = `${completion.choices[0].message.content}`
+                body.report = `${completion.choices[0].message.content}`
 
                 console.log("test open ai: ", JSON.stringify(completion))
 
                 //  写入对象
-                await prisma.psq.update({
-                    where: {id: record.id},
-                    data: {report: callback}
-                });
+                // await prisma.psq.update({
+                //     where: {id: record.id},
+                //     data: {report: callback}
+                // });
             } catch (error) {
                 console.error('Failed to connect to OpenAI:', error);
             }
-        });
+
+        await prisma.psq.create({data: body})
 
         return NextResponse.json({status: 200, statusText: 'OK'});
 
