@@ -3,7 +3,9 @@ import {getQuery} from "@/app/utils/api";
 import OpenAI from "openai";
 import prisma from "@/prisma/client";
 
-const openai = new OpenAI();
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+});
 
 export async function GET(req: NextRequest) {
     try {
@@ -60,7 +62,7 @@ export async function POST(req: NextRequest) {
 
         Promise.resolve().then(async () => {
             //  添加助记词, 定义返回内容
-            const content = `请根据这个内容: ${body.content}, 做一份报告反馈给我`
+            const content = `请根据这个内容: ${body.content}, 做一份留学报告反馈给我`
 
             //  请求
             const completion = await openai.chat.completions.create({

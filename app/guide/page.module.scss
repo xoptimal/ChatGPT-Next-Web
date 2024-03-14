@@ -12,31 +12,45 @@
   grid-template-rows: auto auto; /* 两行 */
   grid-template-columns: repeat(3, 1fr); /* 三列 */
   gap: 20px; /* 设置行列间距 */
-
-  height: 800px;
+  height: 600px;
 
   > div {
     background: #f1f1f1;
-    width: 300px;
+    width: 200px;
     flex: 1;
     border-radius: 16px;
     padding: 40px;
     position: relative;
 
-    > h1 {
-      font-size: 24px;
-      font-weight: bold;
-      color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+
+
+      > h1 {
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+        margin: 0;
+      }
+
+      > h2 {
+        font-size: 16px;
+        font-weight: normal;
+        color: #666;
+        margin: 0;
+        padding-top: 10px;
+      }
     }
 
-    > h2 {
-      font-size: 24px;
-      font-weight: normal;
-      padding-top: 4px;
-      color: #666;
-    }
-
-    > div {
+    .icon_next {
       position: absolute;
       right: 24px;
       bottom: 24px;
@@ -46,7 +60,6 @@
         height: 32px;
         color: #999;
       }
-
     }
 
     &:hover {
@@ -56,11 +69,11 @@
       border-radius: 32px;
       cursor: pointer;
 
-      > h1 {
+      h1 {
         color: #1677ff;
       }
 
-      > h2 {
+      h2 {
         color: #1677ff;
       }
 
