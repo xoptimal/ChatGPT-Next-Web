@@ -1,7 +1,4 @@
 {
   "extends": "next/core-web-vitals",
-  "plugins": ["prettier"],
-  "rules": {
-    "react-hooks/rules-of-hooks": "off"
-  }
+  "plugins": ["prettier"]
 }
