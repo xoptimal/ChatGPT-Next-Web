@@ -52,6 +52,9 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+
+    console.log("open ai key: ", process.env.OPENAI_API_KEY)
+
     try {
 
         //  用户提交的信息
@@ -76,6 +79,9 @@ export async function POST(req: NextRequest) {
 
             //  解答内容
             const callback = `${completion.choices[0].message.content}`
+
+            console.log("open ai: ", callback)
+            console.log("record.id: ", record.id)
 
             //  写入对象
             await prisma.psq.update({
