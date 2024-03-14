@@ -53,7 +53,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
 
-    console.log("open ai key: ", process.env.OPENAI_API_KEY)
+    console.log("test open ai key: ", process.env.OPENAI_API_KEY)
 
     try {
 
@@ -63,7 +63,11 @@ export async function POST(req: NextRequest) {
         //  写入到数据库
         const record = await prisma.psq.create({data: body})
 
-        Promise.resolve().then(async () => {
+        setTimeout(async () => {
+
+            console.log("test request open ai")
+            console.log("test record.id: ", record.id)
+
             //  添加助记词, 定义返回内容
             const content = `请根据这个内容: ${body.content}, 做一份留学报告反馈给我`
 
@@ -80,15 +84,14 @@ export async function POST(req: NextRequest) {
             //  解答内容
             const callback = `${completion.choices[0].message.content}`
 
-            console.log("open ai: ", callback)
-            console.log("record.id: ", record.id)
+            console.log("test open ai: ", callback)
 
             //  写入对象
             await prisma.psq.update({
                 where: {id: record.id},
                 data: {report: callback}
             });
-        })
+        }, 100)
         return NextResponse.json({status: 200, statusText: 'OK'});
 
     } catch (error) {
