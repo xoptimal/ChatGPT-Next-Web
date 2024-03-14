@@ -65,32 +65,37 @@ export async function POST(req: NextRequest) {
 
         process.nextTick(async () => {
             // 在这里执行一些后续操作
-            console.log("test request open ai")
             console.log("test record.id: ", record.id)
 
             //  添加助记词, 定义返回内容
             const content = `请根据这个内容: ${body.content}, 做一份留学报告反馈给我`
 
-            //  请求
-            const completion = await openai.chat.completions.create({
-                messages: [{role: "user", content}],
-                model: "gpt-3.5-turbo",
-                frequency_penalty: 0,
-                presence_penalty: 0,
-                temperature: 0.5,
-                top_p: 1
-            });
+            console.log("content: ", content)
 
-            //  解答内容
-            const callback = `${completion.choices[0].message.content}`
+            try {
+                //  请求
+                const completion = await openai.chat.completions.create({
+                    messages: [{role: "user", content}],
+                    model: "gpt-3.5-turbo",
+                    frequency_penalty: 0,
+                    presence_penalty: 0,
+                    temperature: 0.5,
+                    top_p: 1
+                });
 
-            console.log("test open ai: ", JSON.stringify(completion))
+                //  解答内容
+                const callback = `${completion.choices[0].message.content}`
 
-            //  写入对象
-            await prisma.psq.update({
-                where: {id: record.id},
-                data: {report: callback}
-            });
+                console.log("test open ai: ", JSON.stringify(completion))
+
+                //  写入对象
+                await prisma.psq.update({
+                    where: {id: record.id},
+                    data: {report: callback}
+                });
+            } catch (error) {
+                console.error('Failed to connect to OpenAI:', error);
+            }
         });
 
         return NextResponse.json({status: 200, statusText: 'OK'});
