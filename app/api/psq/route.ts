@@ -84,7 +84,7 @@ export async function POST(req: NextRequest) {
             //  解答内容
             const callback = `${completion.choices[0].message.content}`
 
-            console.log("test open ai: ", callback)
+            console.log("test open ai: ", JSON.stringify(completion))
 
             //  写入对象
             await prisma.psq.update({
