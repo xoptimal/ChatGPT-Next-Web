@@ -7,19 +7,18 @@
 }
 
 .content {
-
   display: grid;
   grid-template-rows: auto auto; /* 两行 */
   grid-template-columns: repeat(3, 1fr); /* 三列 */
   gap: 20px; /* 设置行列间距 */
-  height: 600px;
+  height: 260px;
 
   > div {
     background: #f1f1f1;
-    width: 200px;
+    width: 80px;
     flex: 1;
     border-radius: 16px;
-    padding: 40px;
+    padding: 24px;
     position: relative;
 
     display: flex;
@@ -35,14 +34,14 @@
 
 
       > h1 {
-        font-size: 24px;
+        font-size: 16px;
         font-weight: bold;
         color: #333;
         margin: 0;
       }
 
       > h2 {
-        font-size: 16px;
+        font-size: 12px;
         font-weight: normal;
         color: #666;
         margin: 0;
