@@ -1,28 +1,19 @@
 /* eslint-disable @next/next/no-img-element */
-import {ChatMessage, ModelType, useAppConfig, useChatStore} from "../store";
+import {ChatMessage, useAppConfig} from "../store";
 import Locale from "../locales";
 import styles from "./exporter.module.scss";
-import {
-    List,
-    ListItem,
-    Modal,
-    Select,
-    showImageModal,
-    showModal,
-    showToast,
-} from "./ui-lib";
+import {List, ListItem, Modal, Select, showImageModal, showModal, showToast,} from "./ui-lib";
 import {IconButton} from "./button";
 import {copyToClipboard, downloadAs, useMobileScreen} from "../utils";
 
 import CopyIcon from "../icons/copy.svg";
 import LoadingIcon from "../icons/three-dots.svg";
 import ChatGptIcon from "../icons/chatgpt.png";
-import ShareIcon from "../icons/share.svg";
 import BotIcon from "../icons/bot.png";
 
 import DownloadIcon from "../icons/download.svg";
 import React, {useEffect, useMemo, useRef, useState} from "react";
-import {MessageSelector, useMessageSelector} from "./message-selector";
+import {useMessageSelector} from "./message-selector";
 import {Avatar} from "./emoji";
 import dynamic from "next/dynamic";
 import NextImage from "next/image";
@@ -36,7 +27,6 @@ import {getClientConfig} from "../config/client";
 import {ClientApi} from "../client/api";
 import {useAssistantStore} from "@/app/store/assistant";
 import {MessageSelectorAssistant} from "@/app/components/message-selector-assistant";
-import Image from "next/image";
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
     loading: () => <LoadingIcon/>,
@@ -372,7 +362,7 @@ export function PreviewActions(props: {
                     icon={<DownloadIcon/>}
                     onClick={props.download}
                 ></IconButton>
-              {/*  <IconButton
+                {/*  <IconButton
                     text={Locale.Export.Share}
                     bordered
                     shadow

@@ -3,7 +3,7 @@
 import {LockOutlined, MailOutlined,} from '@ant-design/icons';
 import {LoginForm, ProFormText,} from '@ant-design/pro-components';
 import {Form, message} from 'antd';
-import {useEffect, useState} from 'react';
+import {Suspense, useEffect, useState} from 'react';
 import styles from './page.module.scss'
 import md5 from 'crypto-js/md5';
 import {signIn} from "next-auth/react"
@@ -11,7 +11,7 @@ import {useRouter, useSearchParams} from "next/navigation";
 import request from "@/app/utils/api";
 import handlerError from "@/app/utils/helper";
 
-export default () => {
+ function Content() {
 
     const [type, setType] = useState<'login' | 'register'>('login')
 
@@ -180,3 +180,12 @@ export default () => {
         </div>
     );
 };
+
+export default function Page() {
+    return (
+        // You could have a loading skeleton as the `fallback` too
+        <Suspense>
+            <Content />
+        </Suspense>
+    )
+}
