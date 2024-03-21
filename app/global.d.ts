@@ -27,3 +27,22 @@ declare interface Window {
     };
   };
 }
+
+import {DefaultSession} from "next-auth";
+
+declare module "next-auth" {
+
+  interface Session {
+
+    email: string;
+    username: string;
+    role: string;
+    userId: string;
+    user: {
+      email: string;
+      username: string;
+      role: number;
+      userId: string;
+    }
+  }
+}

@@ -9,7 +9,7 @@ export default function Guide() {
     const router = useRouter()
 
     const onBack = () => {
-        router.replace('/psq')
+        router.replace('/')
     }
 
     return <div className={styles.container}>

@@ -1,7 +1,9 @@
 import {NextRequest, NextResponse} from "next/server";
 import {getQuery} from "@/app/utils/api";
 import OpenAI from "openai";
-import prisma from "@/prisma/client";
+import prisma from "@/lib/prisma";
+import {getServerSession} from "next-auth/next";
+import {authOptions} from "@/lib/authOptions";
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
@@ -53,43 +55,42 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
 
-    console.log("test open ai key: ", process.env.OPENAI_API_KEY)
-
     try {
 
         //  用户提交的信息
         const body = await req.json()
 
+        //  添加助记词, 定义返回内容
+        const content = `请根据这个内容: ${body.content}, 做一份留学报告反馈给我`
 
-            //  添加助记词, 定义返回内容
-            const content = `请根据这个内容: ${body.content}, 做一份留学报告反馈给我`
+        try {
+            //  请求
+            const completion = await openai.chat.completions.create({
+                messages: [{role: "user", content}],
+                model: "gpt-3.5-turbo",
+                frequency_penalty: 0,
+                presence_penalty: 0,
+                temperature: 0.5,
+                top_p: 1
+            });
 
-            console.log("content: ", content)
+            //  解答内容
+            body.report = `${completion.choices[0].message.content}`
 
-            try {
-                //  请求
-                const completion = await openai.chat.completions.create({
-                    messages: [{role: "user", content}],
-                    model: "gpt-3.5-turbo",
-                    frequency_penalty: 0,
-                    presence_penalty: 0,
-                    temperature: 0.5,
-                    top_p: 1
-                });
+            //  写入对象
+            // await prisma.psq.update({
+            //     where: {id: record.id},
+            //     data: {report: callback}
+            // });
+        } catch (error) {
+            console.error('Failed to connect to OpenAI:', error);
+        }
 
-                //  解答内容
-                body.report = `${completion.choices[0].message.content}`
-
-                console.log("test open ai: ", JSON.stringify(completion))
-
-                //  写入对象
-                // await prisma.psq.update({
-                //     where: {id: record.id},
-                //     data: {report: callback}
-                // });
-            } catch (error) {
-                console.error('Failed to connect to OpenAI:', error);
-            }
+        //  补充登录用户信息, 做关联 (如果有的话)
+        const session = await getServerSession(authOptions)
+        if (session) {
+            body.userId = session.user.userId
+        }
 
         await prisma.psq.create({data: body})
 

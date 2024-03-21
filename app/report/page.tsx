@@ -8,6 +8,7 @@ import request from "@/app/utils/api";
 import styles from './page.module.scss'
 import {Button, Drawer, Empty, Modal} from "antd";
 import {useState} from "react";
+import {useRouter} from "next/navigation";
 
 const valueEnum = {
     0: 'close',
@@ -35,6 +36,8 @@ export default function ReportPage() {
     const [reportOpen, setReportOpen] = useState(false)
     const [selectItem, setSelectItem] = useState<any>(null)
 
+    const router = useRouter()
+
     const onClickItem = (entity: any) => {
 
         const item: any = {...entity}
@@ -49,6 +52,10 @@ export default function ReportPage() {
             setSelectItem(entity)
         }
         setReportOpen(true)
+    }
+
+    const handleJumpHome = () => {
+        router.replace('/')
     }
 
     const columns: ProColumns<TableListItem>[] = [
@@ -88,12 +95,7 @@ export default function ReportPage() {
     ];
 
     return (
-        <div className={styles.container}>
-            <div className={styles.top}>
-                <div>
-                    <Image className={styles.icon_logo} src={"/logo-all.png"} width={100} height={0} alt={""}/>
-                </div>
-            </div>
+        <>
             <div className={styles.content}>
                 <ProTable<TableListItem>
                     columns={columns}
@@ -159,7 +161,6 @@ export default function ReportPage() {
                         : <div ><Empty style={{padding: '100px 0'}} description={"正在努力生成中..."}  /></div>
                 }
             </Modal>
-
-        </div>
+        </>
     )
 };
