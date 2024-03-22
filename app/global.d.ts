@@ -22,11 +22,18 @@ declare module "next-auth" {
     username: string;
     role: string;
     userId: string;
+    school: string;
+    class: string;
+    studentId: string;
+
     user: {
       email: string;
       username: string;
       role: number;
       userId: string;
+      school: string;
+      class: string;
+      studentId: string;
     }
   }
 }

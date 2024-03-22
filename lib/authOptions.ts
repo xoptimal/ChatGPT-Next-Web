@@ -49,6 +49,9 @@ export const authOptions: NextAuthOptions = {
                 username: profile!.username,
                 email: profile!.email,
                 role: profile!.role,
+                school: profile!.school,
+                class: profile!.class,
+                studentId: profile!.studentId
             };
         },
         async session({session, token, trigger}) {
@@ -59,6 +62,9 @@ export const authOptions: NextAuthOptions = {
                     username: token.username,
                     email: token.email,
                     role: token.role,
+                    school: token!.school,
+                    class: token!.class,
+                    studentId: token!.studentId
                 },
             };
         }

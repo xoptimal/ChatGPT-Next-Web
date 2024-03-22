@@ -12,7 +12,9 @@ const openai = new OpenAI({
 export async function GET(req: NextRequest) {
     try {
 
-        const {current, pageSize, username, phone} = getQuery(req)
+        const session = await getServerSession(authOptions)
+
+        const {current, pageSize, studentId, class: queryClass} = getQuery(req)
 
         const currentToNumber = parseInt(current)
         const pageSizeToNumber = parseInt(pageSize)
@@ -21,17 +23,36 @@ export async function GET(req: NextRequest) {
             skip: currentToNumber === 1 ? 0 : currentToNumber * pageSizeToNumber,
             take: pageSizeToNumber,
             where: {
-                username: {
-                    contains: username
-                },
-                phone: {
-                    contains: phone
+                user: {
+                    studentId: {
+                        equals: studentId,
+                    },
+                    class: {
+                        equals: queryClass
+                    },
+                    school: {
+                        equals: session?.user.school
+                    },
                 },
             },
             orderBy: {
                 created_at: 'desc',
             },
-
+            select: {
+                id: true,
+                content: true,
+                report: true,
+                created_at: true,
+                userId: true,
+                user: {
+                    select: {
+                        email: true,
+                        class: true,
+                        school: true,
+                        studentId: true,
+                    }
+                }
+            }
         })
 
         const total = await prisma.psq.count()

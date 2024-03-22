@@ -61,7 +61,7 @@ function Container({
                     !hideHeader &&
                     <div className={styles.header}>
                         <div>
-                            <Image onClick={handleGoHome} className={styles.icon_logo} src={"/logo-all.png"}
+                            <Image onClick={handleGoHome} className={styles.icon_logo} src={"/logo2.png"}
                                    width={100}
                                    height={0} alt={""}/>
                         </div>
@@ -72,8 +72,7 @@ function Container({
                                         <Space>
                                             <Avatar size={24} style={{backgroundColor: '#1677ff'}}
                                                     icon={<UserOutlined/>}/>
-                                            <span
-                                                style={{color: '#666'}}>欢迎回来, {session.user.email}{renderAppellation()}</span>
+                                            <span style={{color: '#666'}}>{session.user.email}{renderAppellation()}</span>
                                         </Space>
                                     </Button>
                                 </Dropdown>

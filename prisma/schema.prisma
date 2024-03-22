@@ -13,29 +13,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model psq {
-  id         Int     @id @default(autoincrement())
-  username   String?
-  phone      String?
-  content    String?
-  report     String?
-  created_at DateTime @default(now())
-  userId     String?  @map("user_id")
-}
-
 model question {
   id         Int     @id @default(autoincrement())
   content    String?
 }
 
 model User {
+  @@map("users")
   id            String    @id @default(uuid())
   username      String?
   email         String    @unique
   password      String
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  school        String
   role          Int?
-  @@map("users")
+  class         String?
+  studentId     String?
+  psqs          psq[]     // 添加与 psq 模型关系字段的反向关系字段
+
 }
 
+model psq {
+  id         Int      @id @default(autoincrement())
+  content    String   @db.Text
+  report     String?  @db.Text
+  created_at DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String   @map("user_id")
+}

@@ -1,18 +1,22 @@
 body {
-    margin: 0;
-    padding: 0;
-    background: #f5f7fa;
+  margin: 0;
+  padding: 0;
+  background: #f5f7fa;
 }
 
 h1, h2, h3, h4, p {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 div {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .ant-alert-message {
-    white-space: pre;
+  white-space: pre;
+}
+
+.ant-pro-form-login-container {
+  height: fit-content !important;
 }

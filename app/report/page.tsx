@@ -58,26 +58,34 @@ export default function ReportPage() {
         router.replace('/')
     }
 
-    const columns: ProColumns<TableListItem>[] = [
+    const columns: ProColumns[] = [
         {
-            title: '姓名',
-            dataIndex: 'username',
+            title: '邮箱账号',
+            key: 'email',
+            search: false,
+            render: (_, entity) => entity.user.email
         },
         {
-            title: '电话',
-            dataIndex: 'phone',
+            title: '班级',
+            key: 'class',
+            render: (_, entity) => entity.user.class
+        },
+        {
+            title: '学号',
+            key: 'studentId',
+            render: (_, entity) => entity.user.studentId
         },
         {
             title: '问卷',
             key: 'content',
             search: false,
-            render: (dom, entity) => <a onClick={() => onClickItem(entity)}>预览</a>
+            render: (_, entity) => <a onClick={() => onClickItem(entity)}>预览</a>
         },
         {
             title: '报告',
             key: 'report',
             search: false,
-            render: (dom, entity) => <a onClick={() => onClickReport(entity)}>查看</a>
+            render: (_, entity) => <a onClick={() => onClickReport(entity)}>查看</a>
         },
         {
             title: '创建时间',
@@ -130,7 +138,8 @@ export default function ReportPage() {
             <Drawer open={psqOpen} onClose={() => setPsqOpen(false)} title={'问卷预览'} width={600} footer={false}>
                 <div className={styles.title}>
                     <div
-                        className={styles.drawer_title}>来自<a>{selectItem?.username}</a>同学问卷调查</div>
+                        className={styles.drawer_title}>来自<a>{selectItem?.username}</a>同学问卷调查
+                    </div>
                     <Button type={"primary"} ghost onClick={() => onClickReport()}>查看报告</Button>
                 </div>
                 {
@@ -145,7 +154,8 @@ export default function ReportPage() {
                 }
             </Drawer>
 
-            <Modal open={reportOpen} onCancel={() => setReportOpen(false)} title={'查看报告'} width={600} footer={false}>
+            <Modal open={reportOpen} onCancel={() => setReportOpen(false)} title={'查看报告'} width={600}
+                   footer={false}>
                 {
                     selectItem?.report ?
                         <>
@@ -158,7 +168,7 @@ export default function ReportPage() {
                                 {selectItem?.report}
                             </div>
                         </>
-                        : <div ><Empty style={{padding: '100px 0'}} description={"正在努力生成中..."}  /></div>
+                        : <div><Empty style={{padding: '100px 0'}} description={"正在努力生成中..."}/></div>
                 }
             </Modal>
         </>

@@ -13,7 +13,7 @@ export default function Guide() {
     }
 
     return <div className={styles.container}>
-        <Image className={styles.icon_logo} src={"/logo-dark.png"} width={100} height={0} alt={""}/>
+        <Image className={styles.icon_logo} src={"/logo2.png"} width={100} height={0} alt={""}/>
         <h1>参与问卷</h1>
         <h2>准备好就点击下方按钮开始吧!</h2>
         <div>

@@ -18,11 +18,11 @@ export default function Guide() {
 
     const [loading, setLoading] = useState(false)
 
-    useEffect(() => {
-        if (session && !session.user.role) {
-            setOpen(true)
-        }
-    }, [session])
+    // useEffect(() => {
+    //     if (session && !session.user.role) {
+    //         setOpen(true)
+    //     }
+    // }, [session])
 
     async function gotoPage(item: any) {
         const {key, role} = item
@@ -42,7 +42,7 @@ export default function Guide() {
         setOpen(false)
         message.success("设定成功")
         //  刷新
-        window.location.href = "/"
+        location.reload();
     }
 
     const handleMouseEnter = (role: number) => {
@@ -75,17 +75,16 @@ export default function Guide() {
     return <div className={styles.container}>
         <div className={styles.content}>
             {session && session?.user.role &&
-                card.map((item, index) => (
-                    <div key={index} onClick={() => gotoPage(item)} className={getClassName(item.role)}>
-                        <div>
-                            <h1>{item.title}</h1>
-                            <h2>{item.subTitle}</h2>
-                        </div>
+                card.map((item, index) => <div key={index} onClick={() => gotoPage(item)}
+                                               className={getClassName(item.role)}>
+                    <div>
+                        <h1>{item.title}</h1>
+                        <h2>{item.subTitle}</h2>
                     </div>
-                ))
+                </div>)
             }
         </div>
-        <Modal open={open} closable={false} centered
+        {/*<Modal open={open} closable={false} centered
                footer={false}>
             <div className={styles.modal_title}>
                 <h1>首次使用, 请选择身份</h1>
@@ -109,6 +108,6 @@ export default function Guide() {
                             onClick={handleRole}>确认</Button>
                 </div>
             </div>
-        </Modal>
+        </Modal>*/}
     </div>
 }
