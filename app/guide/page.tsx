@@ -6,7 +6,6 @@ import {useEffect, useState} from "react";
 import request from "../utils/api";
 
 import styles from './page.module.scss'
-import Log from "@hello-pangea/dnd/src/debug/middleware/log";
 
 export default function Guide() {
     const router = useRouter()
@@ -42,6 +41,8 @@ export default function Guide() {
         setLoading(false)
         setOpen(false)
         message.success("设定成功")
+        //  刷新
+        router.refresh();
     }
 
     const handleMouseEnter = (role: number) => {
@@ -73,7 +74,7 @@ export default function Guide() {
 
     return <div className={styles.container}>
         <div className={styles.content}>
-            {session &&
+            {session && session?.user.role &&
                 card.map((item, index) => (
                     <div key={index} onClick={() => gotoPage(item)} className={getClassName(item.role)}>
                         <div>
