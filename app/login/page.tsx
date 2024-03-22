@@ -107,7 +107,7 @@ import handlerError from "@/app/utils/helper";
                                     rules={[
                                         {
                                             required: true,
-                                            pattern: /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.{8,20})/,
+                                            pattern: /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.{6,20})/,
                                             message: '密码必须以字母数字组成, 6-20个字符',
                                             min: 8,
                                             max: 20,

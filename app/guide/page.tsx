@@ -42,7 +42,7 @@ export default function Guide() {
         setOpen(false)
         message.success("设定成功")
         //  刷新
-        router.refresh();
+        window.location.href = "/"
     }
 
     const handleMouseEnter = (role: number) => {
