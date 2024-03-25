@@ -86,8 +86,6 @@
 
 .disabled {
 
-  display: none;
-
   user-select: none;
   cursor: not-allowed;
 
@@ -98,7 +96,7 @@
   position: relative;
   margin: 0 auto 2rem;
 
-  //display: flex;
+  display: flex;
   flex-direction: column;
   align-items: center;
 
@@ -126,6 +124,9 @@
   }
 }
 
+.display_none {
+  display: none;
+}
 
 @media (min-width: 1001px) {
   .container {

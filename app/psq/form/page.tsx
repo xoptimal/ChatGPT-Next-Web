@@ -7,7 +7,7 @@ import Image from 'next/image'
 import UserIcon from '@/app/icons/user.svg'
 import RenameIcon from '@/app/icons/rename.svg'
 import request from "@/app/utils/api";
-import {useAsyncEffect, useGetState} from "ahooks";
+import {useAsyncEffect, useGetState, useKeyPress} from "ahooks";
 import AnalogInputText from "@/app/components/analog-input-text";
 import {ExclamationCircleFilled} from '@ant-design/icons';
 
@@ -134,7 +134,6 @@ export default function FormPage() {
         setShowSend(list.length < (question.length * 2))
     }, [list])
 
-
     return <div className={styles.container}>
 
         <div className={styles.content} ref={contentRef}>
@@ -193,17 +192,17 @@ export default function FormPage() {
                                 value={inputValue}
                                 autoSize={{minRows: 2, maxRows: 10}}
                                 placeholder={"请回答"}
-                                onPressEnter={handleSend}
                                 onInput={e => {
                                     // @ts-ignore
                                     setInputValue(e.target.value)
-                                }}/>
+                                }}
+                            />
                             <div>
                                 <Button loading={loading} type={"primary"} disabled={inputValue.length === 0}
                                         onClick={handleSend}>发送</Button>
                             </div>
                         </div>
-                        <p>系统会依次提出问题, 请点击Send提交</p>
+                        <p>系统会依次提出问题, 请点击发送提交</p>
                     </>
                     : !confirmOpen && <Button loading={loading} type={"primary"} size={"large"} onClick={onFinish}>已确认,
                     提交信息</Button>

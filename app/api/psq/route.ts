@@ -69,8 +69,8 @@ export async function GET(req: NextRequest) {
     } catch (error) {
         // Handling and logging any errors that occur during the process. This includes errors in
         // API requests, data extraction, or any other part of the interaction flow.
-        console.error(`Error in -runAssistant: ${error}`);
-        return NextResponse.json({error: 'Failed to run assistant'}, {status: 500});
+        console.error(error)
+        return NextResponse.json({error: 'System exception'}, {status: 500});
     }
 }
 
@@ -118,9 +118,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({status: 200, statusText: 'OK'});
 
     } catch (error) {
-        // Handling and logging any errors that occur during the process. This includes errors in
-        // API requests, data extraction, or any other part of the interaction flow.
-        console.error(`Error in -runAssistant: ${error}`);
-        return NextResponse.json({error: 'Failed to run assistant'}, {status: 500});
+        console.error(error)
+        return NextResponse.json({error: 'System exception'}, {status: 500});
     }
 }

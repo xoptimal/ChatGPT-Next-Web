@@ -30,7 +30,6 @@ export type ResponseTYpe<T = any> = {
 request.interceptors.response.use(
     (response) => {
         const res = response.data;
-        console.log("res.data", res)
         if (res.status !== 200) {
             // // B002:Token 过期了;
             // if (res.code === 'B002') {
@@ -61,9 +60,6 @@ request.interceptors.response.use(
             // if (token) {
             //     localStorage.setItem('token', token);
             // }
-            console.log("response.data", response.data)
-
-
             return response.data
         }
     },
