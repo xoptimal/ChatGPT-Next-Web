@@ -36,7 +36,7 @@ const universities = [
 
 function Content() {
 
-    const [type, setType] = useState<'login' | 'register'>('register')
+    const [type, setType] = useState<'login' | 'register'>('login')
 
     const router = useRouter()
     const searchParams = useSearchParams()
