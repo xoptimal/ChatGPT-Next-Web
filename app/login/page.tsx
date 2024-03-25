@@ -151,8 +151,16 @@ function Content() {
                                         }),
                                     ]}
                                 />
-
-
+                                <ProFormText
+                                    name="username"
+                                    placeholder={'姓名'}
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: '请输入姓名！',
+                                        },
+                                    ]}
+                                />
                                 <ProFormSelect
                                     name="school"
                                     options={universities}

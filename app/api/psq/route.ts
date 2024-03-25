@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
 
         const session = await getServerSession(authOptions)
 
-        const {current, pageSize, studentId, class: queryClass} = getQuery(req)
+        const {current, pageSize, studentId, class: queryClass, username} = getQuery(req)
 
         const currentToNumber = parseInt(current)
         const pageSizeToNumber = parseInt(pageSize)
@@ -24,6 +24,9 @@ export async function GET(req: NextRequest) {
             take: pageSizeToNumber,
             where: {
                 user: {
+                    username: {
+                        equals: username,
+                    },
                     studentId: {
                         equals: studentId,
                     },
@@ -49,6 +52,7 @@ export async function GET(req: NextRequest) {
                         email: true,
                         class: true,
                         school: true,
+                        username: true,
                         studentId: true,
                     }
                 }
