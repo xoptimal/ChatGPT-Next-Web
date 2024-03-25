@@ -138,7 +138,7 @@ export default function ReportPage() {
             <Drawer open={psqOpen} onClose={() => setPsqOpen(false)} title={'问卷预览'} width={600} footer={false}>
                 <div className={styles.title}>
                     <div
-                        className={styles.drawer_title}>来自<a>{selectItem.user.email}</a>同学问卷调查
+                        className={styles.drawer_title}>来自<a>{selectItem?.user.email}</a>同学问卷调查
                     </div>
                     <Button type={"primary"} ghost onClick={() => onClickReport()}>查看报告</Button>
                 </div>
@@ -160,7 +160,7 @@ export default function ReportPage() {
                     selectItem?.report ?
                         <>
                             <div className={styles.title}>
-                                <div className={styles.drawer_title}>来自<a>{selectItem.user.email}</a>同学问卷调查,
+                                <div className={styles.drawer_title}>来自<a>{selectItem?.user.email}</a>同学问卷调查,
                                     生成如下报告:
                                 </div>
                             </div>
