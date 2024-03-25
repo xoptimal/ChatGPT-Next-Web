@@ -1,0 +1,7 @@
+
+
+const WEI_XIN_CONTACT = `wxid_tojveiaug3mi22`
+
+const INVITATION_CODE ="ENDAI-8120512"
+
+export {WEI_XIN_CONTACT, INVITATION_CODE}

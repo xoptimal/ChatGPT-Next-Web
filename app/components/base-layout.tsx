@@ -72,7 +72,7 @@ function Container({
                                         <Space>
                                             <Avatar size={24} style={{backgroundColor: '#1677ff'}}
                                                     icon={<UserOutlined/>}/>
-                                            <span style={{color: '#666'}}>{session.user.email}{renderAppellation()}</span>
+                                            <span style={{color: '#666'}}>{session.user.email}</span>
                                         </Space>
                                     </Button>
                                 </Dropdown>

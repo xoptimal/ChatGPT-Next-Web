@@ -4,13 +4,12 @@ import {LockOutlined, MailOutlined,} from '@ant-design/icons';
 import {
     LoginForm,
     ProForm,
+    ProFormCaptcha,
     ProFormDependency,
-    ProFormRadio,
     ProFormSelect,
-    ProFormText,
-    StepsForm,
+    ProFormText
 } from '@ant-design/pro-components';
-import {Form, message} from 'antd';
+import {Form, message, Modal} from 'antd';
 import {Suspense, useEffect, useState} from 'react';
 import styles from './page.module.scss'
 import md5 from 'crypto-js/md5';
@@ -18,6 +17,7 @@ import {signIn} from "next-auth/react"
 import {useRouter, useSearchParams} from "next/navigation";
 import request from "@/app/utils/api";
 import handlerError from "@/app/utils/helper";
+import {WEI_XIN_CONTACT} from "@/app/utils/dic";
 
 
 const universities = [
@@ -83,7 +83,7 @@ function Content() {
             {
                 type === 'register'
                     ? (
-                        <div className={styles.container} >
+                        <div className={styles.container}>
 
                             <h1>创建您的帐户</h1>
 
@@ -218,6 +218,30 @@ function Content() {
                                         );
                                     }}
                                 </ProFormDependency>
+
+                                <ProFormCaptcha
+                                    onGetCaptcha={() => {
+                                        Modal.info({
+                                            title: '邀请码获取方式',
+                                            centered: true,
+                                            content:
+                                                <div>请添加微信客服<a style={{padding: '0 4px'}}>{WEI_XIN_CONTACT}</a>获取邀请码
+                                                </div>
+                                        });
+                                        return Promise.resolve();
+                                    }}
+                                    countDown={1}
+                                    captchaTextRender={() => '获取邀请码'}
+                                    placeholder={'邀请码'}
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: '请输入邀请码',
+                                        },
+                                    ]}
+                                    name="code"
+                                />
+
                             </ProForm>
 
                             <div className={styles.text_register}>已经拥有账号?<a

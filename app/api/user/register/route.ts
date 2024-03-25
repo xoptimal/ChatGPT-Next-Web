@@ -1,5 +1,6 @@
 import {NextRequest, NextResponse} from "next/server";
 import prisma from "@/lib/prisma";
+import {INVITATION_CODE} from "@/app/utils/dic";
 
 export async function POST(req: NextRequest, res: NextResponse) {
 
@@ -7,9 +8,16 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
         const body = await req.json()
 
+        const {code, ...data} = body;
+
+
+        if(code !== INVITATION_CODE) {
+            return NextResponse.json({status: 409, statusText: '邀请码错误!'});
+        }
+
         const existingUser = await prisma.user.findFirst({
             where: {
-                email: body.email,
+                email: data.email,
             },
         });
 
@@ -17,7 +25,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
             return NextResponse.json({status: 409, statusText: '账号已存在!'});
         }
 
-        await prisma.user.create({data: body});
+        await prisma.user.create({data});
 
         return NextResponse.json({status: 200, statusText: 'OK'});
 
