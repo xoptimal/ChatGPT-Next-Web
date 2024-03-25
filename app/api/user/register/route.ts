@@ -12,7 +12,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
 
         if(code !== INVITATION_CODE) {
-            return NextResponse.json({status: 409, statusText: '邀请码错误!'});
+            return NextResponse.json({status: 409, statusText: '验证码错误!'});
         }
 
         const existingUser = await prisma.user.findFirst({

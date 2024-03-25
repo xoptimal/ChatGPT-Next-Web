@@ -222,21 +222,21 @@ function Content() {
                                 <ProFormCaptcha
                                     onGetCaptcha={() => {
                                         Modal.info({
-                                            title: '邀请码获取方式',
+                                            title: '验证码获取方式',
                                             centered: true,
                                             content:
-                                                <div>请添加微信客服<a style={{padding: '0 4px'}}>{WEI_XIN_CONTACT}</a>获取邀请码
+                                                <div>添加微信客服<a style={{padding: '0 4px'}}>{WEI_XIN_CONTACT}</a>获取验证码
                                                 </div>
                                         });
                                         return Promise.resolve();
                                     }}
                                     countDown={1}
-                                    captchaTextRender={() => '获取邀请码'}
-                                    placeholder={'邀请码'}
+                                    captchaTextRender={() => '获取验证码'}
+                                    placeholder={'验证码'}
                                     rules={[
                                         {
                                             required: true,
-                                            message: '请输入邀请码',
+                                            message: '请输入验证码',
                                         },
                                     ]}
                                     name="code"
