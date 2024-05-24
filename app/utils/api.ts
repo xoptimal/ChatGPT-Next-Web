@@ -7,7 +7,7 @@ export function getQuery<T = any>(req: NextRequest): T {
     const searchParams = new URLSearchParams(url.search);
     const obj: Record<string, any> = {}
     for (const [key, value] of searchParams) {
-        obj[key] = value;
+        if(value) obj[key] = value;
     }
     console.log("params", obj)
     return obj as T;

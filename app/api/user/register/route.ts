@@ -1,28 +1,20 @@
 import {NextRequest, NextResponse} from "next/server";
 import prisma from "@/lib/prisma";
-import {INVITATION_CODE} from "@/app/utils/dic";
 
 export async function POST(req: NextRequest, res: NextResponse) {
 
     try {
 
-        const body = await req.json()
-
-        const {code, ...data} = body;
-
-
-        if(code !== INVITATION_CODE) {
-            return NextResponse.json({status: 409, statusText: '验证码错误!'});
-        }
+        const data = await req.json()
 
         const existingUser = await prisma.user.findFirst({
             where: {
-                email: data.email,
+                phone: data.phone,
             },
         });
 
         if (existingUser) {
-            return NextResponse.json({status: 409, statusText: '账号已存在!'});
+            return NextResponse.json({status: 409, statusText: '手机号已存在!'});
         }
 
         await prisma.user.create({data});

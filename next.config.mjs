@@ -78,7 +78,22 @@ if (mode !== "export") {
       },
       {
         source: "/",
-        destination: "/guide",
+        destination: "/welcome",
+      },
+      {
+        source: "/users",
+        destination: "/users/guest/student",
+      },
+      {
+        source: "/users/guest",
+        destination: "/users/guest/student",
+      },
+      {
+        source: "/service",
+        destination: "/service/product",
+      }, {
+        source: "/apply",
+        destination: "/apply/guest",
       },
     ];
 

@@ -5,6 +5,7 @@
   height: 100%;
 }
 
+
 .center {
   justify-content: center;
 }
@@ -37,7 +38,7 @@
 }
 
 .text_register {
-  text-align: center;
+  text-align: left;
   margin-bottom: 16px;
   margin-top: 16px;
 
@@ -52,6 +53,24 @@
   display: none;
 }
 
+.title {
+  font-size: 32px;
+  color: #333;
+  font-weight: bold;
+  text-align: center;
+}
+
+.form {
+  padding: 48px 24px;
+}
+
+.footer {
+  width: 484px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 @media (min-width: 800px) {
 
   .container {
@@ -60,6 +79,7 @@
 
   .icon_logo {
     flex: 1;
+    flex-shrink: 0;
     display: flex;
     justify-content: center;
     align-items: center;

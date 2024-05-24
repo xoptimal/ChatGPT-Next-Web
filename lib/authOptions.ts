@@ -47,9 +47,9 @@ export const authOptions: NextAuthOptions = {
                 ...token,
                 userId: token.sub,
                 username: profile!.username,
+                phone: profile!.phone,
                 email: profile!.email,
                 role: profile!.role,
-                school: profile!.school,
                 class: profile!.class,
                 studentId: profile!.studentId
             };
@@ -60,9 +60,9 @@ export const authOptions: NextAuthOptions = {
                 user: {
                     userId: token.sub,
                     username: token.username,
+                    phone: token.phone,
                     email: token.email,
                     role: token.role,
-                    school: token!.school,
                     class: token!.class,
                     studentId: token!.studentId
                 },

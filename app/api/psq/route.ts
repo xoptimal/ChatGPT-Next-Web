@@ -33,9 +33,9 @@ export async function GET(req: NextRequest) {
                     class: {
                         equals: queryClass
                     },
-                    school: {
-                        equals: session?.user.school
-                    },
+                    // school: {
+                    //     equals: session?.user.school
+                    // },
                 },
             },
             orderBy: {

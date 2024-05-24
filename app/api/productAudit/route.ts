@@ -1,0 +1,81 @@
+import prisma from "@/lib/prisma";
+import {NextRequest, NextResponse} from "next/server";
+
+
+/**
+ * 管理员审核
+ * @param req
+ * @param res
+ * @constructor
+ */
+export async function PUT(req: NextRequest, res: NextResponse) {
+    try {
+        const data = await req.json();
+
+        await prisma.productAudit.update({
+            where: {
+                id: data.targetId
+            },
+            data: {
+                auditMessage: data.auditMessage,
+            }
+        });
+
+        const product = await prisma.product.update({
+            where: {id: data.productId},
+            data: {
+                status: data.status,
+            },
+        });
+
+        //  更新到用户表
+        await prisma.user.update({
+            where: {id: product.userId},
+            data: {
+                type: product.type
+            },
+        })
+
+        return NextResponse.json({status: 200, statusText: "OK"});
+
+    } catch (error) {
+        console.error(error);
+        return NextResponse.json({error: "System exception"}, {status: 500});
+    }
+}
+
+
+/**
+ * 用户提交
+ * @param req
+ * @param res
+ * @constructor
+ */
+export async function POST(req: NextRequest, res: NextResponse) {
+    try {
+        const data = await req.json();
+
+        await prisma.productAudit.create({
+            data: {
+                productId: data.productId,
+                message: data.message,
+                attachment: data.attachment,
+            }
+        });
+
+        if (data.status !== null) {
+            await prisma.product.update({
+                where: {id: data.productId},
+                data: {
+                    status: data.status,
+                },
+            });
+        }
+
+        return NextResponse.json({status: 200, statusText: "OK"});
+    } catch (error) {
+        console.error(error);
+        return NextResponse.json({error: "System exception"}, {status: 500});
+    }
+}
+

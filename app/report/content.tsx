@@ -15,8 +15,6 @@ export default function Content() {
     const [reportOpen, setReportOpen] = useState(false)
     const [selectItem, setSelectItem] = useState<any>(null)
 
-    const router = useRouter()
-
     const onClickItem = (entity: any) => {
 
         const item: any = {...entity}

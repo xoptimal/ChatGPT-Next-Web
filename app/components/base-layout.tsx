@@ -105,7 +105,12 @@ export default function BaseLayout(props: any) {
         </head>
         <body>
         <AuthProvider>
-            <Container hideHeader={props.hideHeader}>{props.children}</Container>
+            {
+                props.hideContainer
+                    ? props.children
+                    : <Container hideHeader={props.hideHeader}>{props.children}</Container>
+            }
+
         </AuthProvider>
         </body>
         </html>

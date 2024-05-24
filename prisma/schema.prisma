@@ -14,24 +14,8 @@ datasource db {
 }
 
 model question {
-  id         Int     @id @default(autoincrement())
-  content    String?
-}
-
-model User {
-  @@map("users")
-  id            String    @id @default(uuid())
-  username      String?
-  email         String    @unique
-  password      String
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  school        String
-  role          Int?
-  class         String?
-  studentId     String?
-  psqs          psq[]     // 添加与 psq 模型关系字段的反向关系字段
-
+  id      Int     @id @default(autoincrement())
+  content String?
 }
 
 model psq {
@@ -41,4 +25,105 @@ model psq {
   created_at DateTime @default(now())
   user       User     @relation(fields: [userId], references: [id])
   userId     String   @map("user_id")
+}
+
+model User {
+  id                 String     @id @default(uuid())
+  username           String?
+  email              String     @unique
+  password           String
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+  school             String?
+  role               Int?
+  age                Int?
+  class              String?
+  studentId          String?
+  country            String?
+  companyName        String?
+  address            String?
+  score              Float?
+  phone              String     @unique
+  entityType         Int?
+  isDeleted          Int?       @default(0)
+  parentIds          String?
+  childIds           String?
+  type               Int?
+  psqs               psq[] // 添加与 psq 模型关系字段的反向关系字段
+  products           product[]
+  userSchedules      schedule[] @relation("UserSchedule")
+  counselorSchedules schedule[] @relation("CounselorSchedule")
+
+  @@map("users")
+}
+
+model product {
+  id          Int      @id @default(autoincrement())
+  bankName    String?
+  bankAccount String?
+  bankNumber  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  phone       String
+  username    String
+  price       Float?
+  //  
+  status      Int      @default(0)
+  // category=0 type对应的是学生的会员类型,  category=1 type对应的是顾问的等级
+  type        Int
+
+  userId       String         @map("user_id")
+  User         User           @relation(fields: [userId], references: [id])
+  productAudit productAudit[]
+  //  学生会员审核(默认), 顾问级别审核
+  category     Int            @default(0)
+}
+
+model productAudit {
+  id           Int      @id @default(autoincrement())
+  productId    Int      @map("product_id")
+  Product      product  @relation(fields: [productId], references: [id])
+  message      String?
+  auditMessage String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  attachment   String?  @db.LongText
+
+  @@map("product_audit")
+}
+
+model schedule {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isDeleted Int?     @default(0)
+
+  startTime      DateTime
+  endTime        DateTime
+  //  1: 未预约, 2:已经预约 3:学生取消了预约 4:顾问取消了预约
+  status         Int      @default(0)
+  remark         String?
+  //  老师已就位
+  counselorReady Int?     @default(0)
+  //  学生已就位
+  userReady      Int?     @default(0)
+
+  userId        String?         @map("user_id")
+  counselorId   String          @map("counselor_id")
+  user          User?           @relation("UserSchedule", fields: [userId], references: [id])
+  counselor     User            @relation("CounselorSchedule", fields: [counselorId], references: [id])
+  scheduleAudit scheduleAudit[]
+}
+
+model scheduleAudit {
+  id           Int      @id @default(autoincrement())
+  scheduleId   Int      @map("schedule_id")
+  message      String?
+  auditMessage String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  attachment   String?  @db.LongText
+  schedule     schedule @relation(fields: [scheduleId], references: [id])
+
+  @@map("schedule_audit")
 }

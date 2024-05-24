@@ -7,6 +7,8 @@ import request from "../utils/api";
 
 import styles from './page.module.scss'
 import {useAsyncEffect} from "ahooks";
+import {ROLE} from "@/app/utils/dic";
+import {NULL} from "sass";
 
 const card = [
     {title: '问答', subTitle: 'QUESTION', key: 'psq', role: 1},
@@ -20,6 +22,35 @@ const card = [
     {title: '待定3', subTitle: 'Coming soon', key: '', role: -1},
     {title: '待定4', subTitle: 'Coming soon', key: '', role: -1},
 ]
+
+const roleCard = {
+    [ROLE.STUDENT] : [
+        {title: '预约咨询', subTitle: 'reserve', key: 'psq', },
+        {title: '任务中心', subTitle: 'task', key: 'gpt', },
+        {title: '信息中心', subTitle: 'information', key: '', },
+        {title: '产品中心', subTitle: 'service', key: '', },
+        {title: 'GPT', subTitle: 'GPT', key: 'gpt', },
+    ],
+    [ROLE.PARENT] : [
+        {title: '查看孩子进度', subTitle: 'reserve', key: 'psq', },
+        {title: '产品中心', subTitle: 'service', key: '', },
+    ],
+    [ROLE.COUNSELOR] : [
+        {title: '顾问申请', subTitle: 'reserve', key: 'psq', },
+        {title: '管理日程', subTitle: 'service', key: '', },
+        {title: '信息中心', subTitle: 'service', key: '', },
+        {title: 'GPT', subTitle: 'GPT', key: 'gpt', },
+    ],
+    [ROLE.CHANNEL] : [
+        {title: '加入我们', subTitle: 'reserve', key: 'psq', },
+        {title: '个人信息', subTitle: 'reserve', key: 'psq', },
+    ],
+    [ROLE.ADMIN] : [
+        {title: '用户管理', subTitle: 'reserve', key: 'users', },
+        {title: '服务管理', subTitle: 'reserve', key: 'services', },
+        {title: '数据管理', subTitle: 'reserve', key: 'data', },
+    ]
+}
 
 
 export default function Guide() {
@@ -38,55 +69,20 @@ export default function Guide() {
 
 
     async function gotoPage(item: any) {
-        const {key, role} = item
-
-        let path;
-
-        if (role === -1 || role === 0) {
-            if (session?.user.role === 1) {
-                if (exist) {
-                    path = key
-                } else {
-                    return
-                }
-            } else {
-                path = key
-            }
-        } else if (session?.user.role === role) {
-            path = key
-        }
-
+        const {key: path} = item
         if (path) {
-            router.push(`/${key}`)
+            router.push(`/${path}`)
         } else {
             await message.warning("Coming soon")
         }
-
     }
-
-
-    const getClassName = (role: number, key: string) => {
-        if (role === -1 || role === 0) {
-            let className = styles.item
-
-            if (session?.user.role === 1 && !exist) {
-                className = styles.disabled;
-            }
-            return className;
-        }
-
-        return session?.user.role === role
-            ? styles.item
-            : styles.display_none
-    }
-
 
     return <div className={styles.container}>
         <div className={styles.content}>
-            {session && session?.user.role &&
-                card.map((item, index) =>
-                    <div key={index} onClick={() => gotoPage(item)}
-                         className={getClassName(item.role, item.key)}>
+            {session && session?.user.role !== null &&
+                // @ts-ignore
+                roleCard[session?.user.role].map((item, index) =>
+                    <div key={index} onClick={() => gotoPage(item)} className={styles.item}>
                         <div>
                             <h1>{item.title}</h1>
                             <h2>{item.subTitle}</h2>

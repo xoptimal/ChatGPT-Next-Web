@@ -18,6 +18,7 @@ import {useRouter, useSearchParams} from "next/navigation";
 import request from "@/app/utils/api";
 import handlerError from "@/app/utils/helper";
 import {WEI_XIN_CONTACT} from "@/app/utils/dic";
+import Register from "@/app/login/components/Register";
 
 
 const universities = [
@@ -36,7 +37,7 @@ const universities = [
 
 function Content() {
 
-    const [type, setType] = useState<'login' | 'register'>('login')
+    const [type, setType] = useState<'login' | 'register'>('register')
 
     const router = useRouter()
     const searchParams = useSearchParams()
@@ -80,224 +81,54 @@ function Content() {
                 <img src={'/logo2.png'} alt={""}/>
             </div>
 
-            {
-                type === 'register'
-                    ? (
-                        <div className={styles.container}>
-
-                            <h1>创建您的帐户</h1>
-
-                            <ProForm
-                                style={{
-                                    width: '328px',
-                                }}
-                                form={form}
-                                size={"large"}
-                                submitter={{
-                                    searchConfig: {
-                                        submitText: '注册',
-                                    },
-                                    submitButtonProps: {
-                                        style: {width: '100%'}
-                                    },
-                                    render: (props, doms) => doms[1]
-                                }}
-                                onFinish={onFinish}
-                            >
-                                <ProFormText
-                                    name="email"
-                                    placeholder={'邮箱账号'}
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: '请输入邮箱账号',
-                                        },
-                                        {
-                                            pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-                                            message: '请输入正确的邮箱账号',
-                                        },
-                                    ]}
-                                />
-                                <ProFormText.Password
-                                    name="password"
-                                    placeholder={'密码'}
-                                    rules={[
-                                        {
-                                            required: true,
-                                            pattern: /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.{6,20})/,
-                                            message: '密码必须以字母数字组成, 6-20个字符',
-                                            min: 8,
-                                            max: 20,
-                                        },
-                                    ]}
-                                />
-
-                                <ProFormText.Password
-                                    name="confirmPassword"
-                                    placeholder={'确认密码'}
-                                    dependencies={['password']}
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: '请输入确认密码！',
-                                        },
-                                        ({getFieldValue}) => ({
-                                            validator(_, value) {
-                                                if (!value || getFieldValue('password') === value) {
-                                                    return Promise.resolve();
-                                                }
-                                                return Promise.reject(new Error('您输入的密码不匹配'));
+            <div className={styles.container}>
+                <div className={styles.title}>{type === 'register' ? '创建您的帐户' : '欢迎回来'}</div>
+                <div className={styles.form}>
+                    {
+                        type === 'register'
+                            ? <Register setType={setType} onFinish={onFinish} />
+                            : (
+                                <LoginForm
+                                    form={form}
+                                    onFinish={onFinish}
+                                    actions={<div className={styles.text_register}>没有账号?<a
+                                        onClick={() => setType('register')}>注册</a>
+                                    </div>
+                                    }
+                                >
+                                    <ProFormText
+                                        name="email"
+                                        fieldProps={{
+                                            size: 'large',
+                                            prefix: <MailOutlined className={'prefixIcon'}/>,
+                                        }}
+                                        placeholder={'邮箱账号'}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: '请输入邮箱账号!',
                                             },
-                                        }),
-                                    ]}
-                                />
-                                <ProFormText
-                                    name="username"
-                                    placeholder={'姓名'}
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: '请输入姓名！',
-                                        },
-                                    ]}
-                                />
-                                <ProFormSelect
-                                    name="school"
-                                    options={universities}
-                                    placeholder={'所在学校'}
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: '请选择所在学校',
-                                        },
-                                    ]}
-                                />
-                                <ProFormSelect
-                                    name="role"
-                                    options={[
-                                        {
-                                            value: 1,
-                                            label: "学生",
-                                        },
-                                        {
-                                            value: 2,
-                                            label: "老师",
-                                        },
-                                    ]}
-                                    placeholder={'学生 / 老师'}
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: '请选择身份, 学生或者老师',
-                                        },
-                                    ]}
-                                />
-                                <ProFormDependency name={['role']}>
-                                    {({role}) => {
-                                        return (
-                                            role === 1 && <>
-                                                <ProFormText
-                                                    name="class"
-                                                    placeholder={'班级信息, 例如:高3二班'}
-                                                    fieldProps={{
-                                                        maxLength: 20
-                                                    }}
-                                                    rules={[
-                                                        {
-                                                            required: true,
-                                                            message: '请输入班级信息',
-                                                        },
-                                                    ]}
-                                                />
-                                                <ProFormText
-                                                    name="studentId"
-                                                    placeholder={'学号'}
-                                                    fieldProps={{
-                                                        maxLength: 20
-                                                    }}
-                                                    rules={[
-                                                        {
-                                                            required: true,
-                                                            message: '请输入学号',
-                                                        },
-                                                    ]}
-                                                />
-                                            </>
-                                        );
-                                    }}
-                                </ProFormDependency>
+                                        ]}
+                                    />
+                                    <ProFormText.Password
+                                        name="password"
+                                        fieldProps={{
+                                            size: 'large',
+                                            prefix: <LockOutlined className={'prefixIcon'}/>,
+                                        }}
+                                        placeholder={'密码'}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: '请输入密码！',
+                                            },
+                                        ]}
+                                    />
+                                </LoginForm>)
+                    }
+                </div>
 
-                                <ProFormCaptcha
-                                    onGetCaptcha={() => {
-                                        Modal.info({
-                                            title: '验证码获取方式',
-                                            centered: true,
-                                            content:
-                                                <div>添加微信客服<a style={{padding: '0 4px'}}>{WEI_XIN_CONTACT}</a>获取验证码
-                                                </div>
-                                        });
-                                        return Promise.resolve();
-                                    }}
-                                    countDown={1}
-                                    captchaTextRender={() => '获取验证码'}
-                                    placeholder={'验证码'}
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: '请输入验证码',
-                                        },
-                                    ]}
-                                    name="code"
-                                />
-
-                            </ProForm>
-
-                            <div className={styles.text_register}>已经拥有账号?<a
-                                onClick={() => setType('login')}>登录</a>
-                            </div>
-                        </div>
-                    )
-                    : (<div className={styles.container}>
-                        <LoginForm
-                            form={form}
-                            title={'欢迎回来'}
-                            onFinish={onFinish}
-                            actions={<div className={styles.text_register}>没有账号?<a
-                                onClick={() => setType('register')}>注册</a>
-                            </div>
-                            }
-                        >
-                            <ProFormText
-                                name="email"
-                                fieldProps={{
-                                    size: 'large',
-                                    prefix: <MailOutlined className={'prefixIcon'}/>,
-                                }}
-                                placeholder={'邮箱账号'}
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: '请输入邮箱账号!',
-                                    },
-                                ]}
-                            />
-                            <ProFormText.Password
-                                name="password"
-                                fieldProps={{
-                                    size: 'large',
-                                    prefix: <LockOutlined className={'prefixIcon'}/>,
-                                }}
-                                placeholder={'密码'}
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: '请输入密码！',
-                                    },
-                                ]}
-                            />
-                        </LoginForm>
-                    </div>)
-            }
+            </div>
 
         </div>
     );

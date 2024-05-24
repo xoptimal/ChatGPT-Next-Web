@@ -20,9 +20,8 @@ declare module "next-auth" {
 
     email: string;
     username: string;
-    role: string;
+    role: number;
     userId: string;
-    school: string;
     class: string;
     studentId: string;
 
@@ -31,12 +30,13 @@ declare module "next-auth" {
       username: string;
       role: number;
       userId: string;
-      school: string;
       class: string;
+      phone: string;
       studentId: string;
     }
   }
 }
+
 
 declare global {
 
