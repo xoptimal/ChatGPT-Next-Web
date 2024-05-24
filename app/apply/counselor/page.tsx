@@ -2,7 +2,7 @@
 
 import ExTable, { ModalType } from "@/app/components/ExTable";
 import request from "@/app/utils/api";
-import { scheduleStatusType } from "@/app/utils/dic";
+import { productEnum, productStatusEnum, scheduleStatusType } from "@/app/utils/dic";
 import { ProColumns } from "@ant-design/pro-components";
 import { Empty, Form, Input, Modal, Radio } from "antd";
 import dayjs from "dayjs";
@@ -16,8 +16,9 @@ const TextArea = Input.TextArea;
 
 const auditOptions = [
   { label: "通过", value: 1 },
-  { label: "驳回", value: 6 },
+  { label: "驳回", value: 2 },
 ];
+
 export default function Page() {
   const [loading, setLoading] = useState(false);
 
@@ -33,13 +34,13 @@ export default function Page() {
     form
       .validateFields()
       .then(async (values) => {
-        const target = record.scheduleAudit[record.scheduleAudit.length - 1];
+        const  target = record.productAudit[record.productAudit.length - 1];
         const data = {
           ...values,
-          scheduleId: record.id,
+          productId: record.id,
           targetId: target.id,
         };
-        await request("/api/schedule", { method: "PUT", data });
+        await request("/api/productAudit", { method: "PUT", data });
         onSubmitCallback();
       })
       .finally(() => {
@@ -49,64 +50,37 @@ export default function Page() {
 
   const columns: ProColumns[] = [
     {
-      title: "开始时间",
-      dataIndex: "startTime",
-      valueType: "dateTime",
-      fieldProps: {
-        format: "YYYY-MM-DD HH:mm",
-      },
-      search: false,
+      title: "申请级别",
+      dataIndex: "type",
+      valueEnum: productEnum,
     },
     {
-      title: "结束时间",
-      dataIndex: "endTime",
-      valueType: "dateTime",
-      fieldProps: {
-        format: "YYYY-MM-DD HH:mm",
-      },
-      search: false,
+      title: "姓名",
+      dataIndex: "username",
     },
     {
-      title: "预约顾问",
-      dataIndex: "counselorId",
-      render: (dom, record) => record.counselor.username,
-      search: false,
+      title: "电话",
+      dataIndex: "phone",
     },
-    {
-      title: "学生",
-      dataIndex: "studentId",
-      render: (dom, record) => record.user?.username || "-",
-      search: false,
-    },
-    // {
-    //   title: "学生就位",
-    //   dataIndex: "userReady",
-    //   valueEnum: scheduleReadyType,
-    // },
-    // {
-    //   title: "顾问就位",
-    //   dataIndex: "counselorReady",
-    //   valueEnum: scheduleReadyType,
-    // },
     {
       title: "状态",
-      valueEnum: scheduleStatusType,
+      key: "status",
       dataIndex: "status",
-      search: false,
+      valueEnum: productStatusEnum,
     },
     {
       title: "创建时间",
-      search: false,
       dataIndex: "createdAt",
       valueType: "dateTime",
+      search: false,
     },
   ];
 
   return (
     <ExTable
       columns={columns}
-      apiUrl={"/api/schedule"}
-      title={"普通客户预约列表"}
+      apiUrl={"/api/product"}
+      title={"顾问申请列表"}
       optionRender={(record, onClick) => (
         <a key="edit" onClick={() => onClick(ModalType.detail)}>
           审核详情
@@ -125,16 +99,15 @@ export default function Page() {
           onOk: async () => {
             await onSubmit(record, onSubmitCallback, type);
           },
-          footer: (dom: any) => (record?.status === 5 ? dom : false),
+          footer: (dom: any) => (record?.status === 0 ? dom : false),
           width: 640,
         };
 
         return (
           <Modal {...temp}>
             <div className={styles.modal_body}>
-              {record?.status === 0 && <Empty />}
               <div className={styles.modal_body_list}>
-                {record?.scheduleAudit.map((item: any, index: number) => {
+                {record?.productAudit.map((item: any, index: number) => {
                   let attachmentList;
                   if (item.attachment) {
                     attachmentList = JSON.parse(item.attachment);
@@ -147,7 +120,7 @@ export default function Page() {
                     <div>
                       <div key={index}>
                         <div>
-                          <h1>{record.user.username}</h1>
+                          <h1>{record.username}</h1>
                           <span>
                             {dayjs(item.createdAt).format("YYYY-MM-DD HH:mm")}
                           </span>
@@ -178,7 +151,7 @@ export default function Page() {
                   );
                 })}
               </div>
-              {record?.status === 5 && (
+              {record?.status === 0 && (
                 <Form form={form} style={{ marginTop: "16px" }}>
                   <Form.Item
                     name={"status"}

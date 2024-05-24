@@ -3,6 +3,7 @@ import ExTable, { ModalType } from "@/app/components/ExTable";
 import ExUpload from "@/app/components/ExUpload";
 import styles from "@/app/service/product/page.module.scss";
 import request from "@/app/utils/api";
+import { productEnum, productStatusEnum } from "@/app/utils/dic";
 import { getImageUrl } from "@/app/utils/helper";
 import { MailOutlined } from "@ant-design/icons";
 import { BetaSchemaForm, ProCard } from "@ant-design/pro-components";
@@ -62,27 +63,6 @@ function StudentView() {
     />
   );
 }
-
-const productEnum = {
-  1: "初级顾问",
-  2: "中级顾问",
-  3: "高级顾问",
-};
-
-const productStatusEnum = {
-  1: {
-    text: "通过",
-    status: "Success",
-  },
-  2: {
-    status: "Error",
-    text: "驳回",
-  },
-  0: {
-    status: "Processing",
-    text: "待审核",
-  },
-};
 
 const productColumns: any[] = [
   {

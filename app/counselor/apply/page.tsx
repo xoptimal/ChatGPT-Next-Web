@@ -7,13 +7,12 @@ import request from "@/app/utils/api";
 import { Button, Descriptions, message, Radio, Result, Space } from "antd";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import styles from "./page.module.scss";
 import { counselorLevelOptions } from "@/app/utils/dic";
 
-
 export default function Page() {
-  const [index, setIndex] = useState(2);
+  const [index, setIndex] = useState(0);
 
   const { data: session } = useSession();
 
@@ -57,9 +56,12 @@ export default function Page() {
     router.replace("/");
   };
 
+  const containerRef = useRef();
+
   return (
     <div className={styles.root}>
       <ExContainer
+        ref={containerRef}
         request={async () => {
           const { data } = await request("/api/product/find");
           setData(data);

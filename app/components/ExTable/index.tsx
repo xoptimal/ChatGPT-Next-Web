@@ -33,7 +33,7 @@ type ExTableProps<DataSource, U, ValueType = "text"> = {
     record: any,
     modalProps: any,
     onSubmitCallback: () => void,
-    type: number,
+    type?: number,
   ) => ReactNode;
   modalProps?: ModalProps;
   onSubmit?: (selectItem: any) => void;
@@ -186,6 +186,7 @@ export default function ExTable(props: ExTableProps<any, any>) {
             success: status === 200,
           };
         }}
+        search={false}
         rowKey="id"
         pagination={{
           showQuickJumper: true,

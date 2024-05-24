@@ -35,6 +35,7 @@ export default function Page() {
   const [monthData, setMonthData] = useState();
   const [selectedDay, setSelectDay] = useState(dayjs());
   const [selectedItem, setSelectedItem] = useState<string>();
+  const [fileList, setFileList] = useState<any[]>();
 
   const [form] = Form.useForm();
 
@@ -45,8 +46,8 @@ export default function Page() {
   ) => {
     setLoading(true);
 
-    try {
-      if (type === ModalType.create) {
+    if (type === ModalType.create) {
+      try {
         if (!selectedItem) {
           message.warning("请选择预约时间再提交");
           return;
@@ -62,28 +63,34 @@ export default function Page() {
         };
 
         await request("/api/appointment", { method: "POST", data });
-      } else {
-        //  审核详情
-        form
-          .validateFields()
-          .then(async (values) => {
-            const data = {
-              message: values.message,
-              productId: record.id,
-              attachment: imageUrl,
-              status: 0,
-            };
-            await request("/api/productAudit", { method: "POST", data });
-            onSubmitCallback();
-          })
-          .finally(() => {
-            setLoading(false);
-          });
+        onSubmitCallback();
+      } finally {
+        setLoading(false);
       }
+    } else {
+      //  审核详情
+      form
+        .validateFields()
+        .then(async (values) => {
+          const data: any = {
+            message: values.message,
+            scheduleId: record.id,
+            status: 5,
+          };
 
-      onSubmitCallback();
-    } finally {
-      setLoading(false);
+          if (fileList) {
+            data.attachment = JSON.stringify({
+              uid: fileList[0].uid,
+              name: fileList[0].name,
+            });
+          }
+
+          await request("/api/appointment/audit", { method: "POST", data });
+          onSubmitCallback();
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     }
   };
 
@@ -166,8 +173,6 @@ export default function Page() {
     setMonthData(res.data);
   }, [level]);
 
-  const [imageUrl, setImageUrl] = useState<string | null>();
-
   return (
     <ExTable
       columns={columns}
@@ -196,7 +201,7 @@ export default function Page() {
             onOk: async () => {
               await onSubmit(record, onSubmitCallback, type);
             },
-            footer: (dom: any) => (record?.status === 0 ? dom : false),
+            footer: (dom: any) => (record?.status === 6 ? dom : false),
           };
         } else {
           temp = {
@@ -291,7 +296,7 @@ export default function Page() {
                     );
                   })}
                 </div>
-                {record?.status === 2 && (
+                {record?.status === 6 && (
                   <Form
                     form={form}
                     labelCol={{ span: 2 }}
@@ -306,9 +311,9 @@ export default function Page() {
                     </Form.Item>
                     <Form.Item label="附件">
                       <ExUpload
-                        imageClassName={styles.icon_attachment}
-                        imageUrl={imageUrl}
-                        setImageUrl={setImageUrl}
+                        onChange={(info: any) => {
+                          setFileList(info.fileList);
+                        }}
                       />
                     </Form.Item>
                   </Form>

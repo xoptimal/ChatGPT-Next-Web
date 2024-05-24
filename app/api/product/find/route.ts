@@ -1,9 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { ROLE } from "@/app/utils/dic";
+import { authOptions } from "@/lib/authOptions";
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/authOptions";
-import { ROLE } from "@/app/utils/dic";
-import { queryList } from "@/app/utils/apiUtils";
+import { NextResponse } from "next/server";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
@@ -24,6 +23,9 @@ export async function GET() {
   const data = await prisma.product.findFirst({
     where,
   });
+
+  console.log("data", data);
+  
 
   const resp = {
     status: 200,

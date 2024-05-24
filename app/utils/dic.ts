@@ -50,7 +50,32 @@ const counselorLevelOptions = [
   { label: "高级顾问", value: 3 },
 ];
 
+
+const productEnum = {
+  1: "初级顾问",
+  2: "中级顾问",
+  3: "高级顾问",
+};
+
+const productStatusEnum = {
+  1: {
+    text: "通过",
+    status: "Success",
+  },
+  2: {
+    status: "Error",
+    text: "驳回",
+  },
+  0: {
+    status: "Processing",
+    text: "待审核",
+  },
+};
+
 export {
+  productEnum,
+  productStatusEnum,
+  
   WEI_XIN_CONTACT,
   INVITATION_CODE,
   ROLE,

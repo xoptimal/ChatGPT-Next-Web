@@ -28,7 +28,7 @@ export async function PUT(req: NextRequest, res: NextResponse) {
             },
         });
 
-        //  更新到用户表
+        //  更新到用户表(同步等级)
         await prisma.user.update({
             where: {id: product.userId},
             data: {
@@ -63,6 +63,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
             }
         });
 
+        //  如果是更新的话, 需要同步到Product的表的status
         if (data.status !== null) {
             await prisma.product.update({
                 where: {id: data.productId},

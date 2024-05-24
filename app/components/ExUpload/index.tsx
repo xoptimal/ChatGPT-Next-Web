@@ -7,6 +7,8 @@ import * as qiniu from "qiniu-js";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
+import styles from './index.module.scss'
+
 const getBase64 = (img: FileType, callback: (url: string) => void) => {
   const reader = new FileReader();
   reader.addEventListener("load", () => callback(reader.result as string));
@@ -99,7 +101,7 @@ export default function (props: any) {
         {fileList.length < maxCount
           ? uploadButton
           : imageUrl && (
-              <img src={imageUrl} alt="" className={imageClassName} />
+              <img src={imageUrl} alt="" className={`${styles.img} ${imageClassName}`} />
             )}
       </Upload>
     </div>

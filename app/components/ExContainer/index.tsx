@@ -1,14 +1,15 @@
 "use client";
 
-import request from "@/app/utils/api";
 import { useAsyncEffect } from "ahooks";
 import { useState } from "react";
 
 type ExContainerProps = {
-    request: () => void
-}
+  request: () => void;
+};
 
-export default function ExContainer(props: React.PropsWithChildren<ExContainerProps>) {
+export default function ExContainer(
+  props: React.PropsWithChildren<ExContainerProps>,
+) {
   const { children, request } = props;
 
   const [loading, setLoading] = useState(true);
