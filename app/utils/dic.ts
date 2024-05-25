@@ -72,7 +72,27 @@ const productStatusEnum = {
   },
 };
 
+const taskEnum = {
+  2: {
+    text: "已完成",
+    status: "Success",
+  },
+  3: {
+    status: "Error",
+    text: "驳回",
+  },
+  1: {
+    status: "Processing",
+    text: "进行中",
+  },
+  0: {
+    status: "Processing",
+    text: "待开始",
+  },
+}
+
 export {
+  taskEnum,
   productEnum,
   productStatusEnum,
   

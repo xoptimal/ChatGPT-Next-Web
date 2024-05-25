@@ -1,117 +1,88 @@
 "use client";
 
 import ExTable, { ModalType } from "@/app/components/ExTable";
-import request from "@/app/utils/api";
-import { counselorLevelOptions, scheduleStatusType } from "@/app/utils/dic";
-import { ProColumns } from "@ant-design/pro-components";
+import { ROLE, taskEnum } from "@/app/utils/dic";
 import {
-  Alert,
-  Calendar,
-  CalendarProps,
-  DatePicker,
-  Form,
-  Input,
-  Modal,
-  Radio,
-  Select,
-  message,
-} from "antd";
-import dayjs, { Dayjs } from "dayjs";
-import { useState } from "react";
-
-import { useAsyncEffect } from "ahooks";
-
-import styles from "@/app/service/product/page.module.scss";
-
-import ExUpload from "@/app/components/ExUpload";
-import { getImageUrl } from "@/app/utils/helper";
-
-const TextArea = Input.TextArea;
+  BetaSchemaForm,
+  ProColumns,
+  ProFormColumnsType,
+} from "@ant-design/pro-components";
+import { Form, Modal } from "antd";
+import request from "../utils/api";
 
 export default function Page() {
-  const [loading, setLoading] = useState(false);
-  const [level, setLevel] = useState(1);
-  const [monthData, setMonthData] = useState();
-  const [selectedDay, setSelectDay] = useState(dayjs());
-  const [selectedItem, setSelectedItem] = useState<string>();
-  const [fileList, setFileList] = useState<any[]>();
-
   const [form] = Form.useForm();
 
-  const onSubmit = async (
-    record: any,
-    onSubmitCallback: any,
-    type?: number,
-  ) => {
-    setLoading(true);
-
-    if (type === ModalType.create) {
-      try {
-        if (!selectedItem) {
-          message.warning("请选择预约时间再提交");
-          return;
-        }
-
-        const arr = selectedItem.split(" ");
-        const date = arr[0];
-        const times = arr[1].split("-");
-        const data = {
-          level,
-          startTime: `${date} ${times[0]}`,
-          endTime: `${date} ${times[1]}`,
-        };
-
-        await request("/api/appointment", { method: "POST", data });
-        onSubmitCallback();
-      } finally {
-        setLoading(false);
-      }
-    } else {
-      //  审核详情
-      form
-        .validateFields()
-        .then(async (values) => {
-          const data: any = {
-            message: values.message,
-            scheduleId: record.id,
-            status: 5,
-          };
-
-          if (fileList) {
-            data.attachment = JSON.stringify({
-              uid: fileList[0].uid,
-              name: fileList[0].name,
-            });
-          }
-
-          await request("/api/appointment/audit", { method: "POST", data });
-          onSubmitCallback();
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }
+  const onSearch = async (params: any) => {
+    const { data } = await request("/api/user", { params });
+    return data.list.map((item: any) => ({
+      label: item.username,
+      value: item.id,
+    }));
   };
 
   const columns: ProColumns[] = [
     {
       title: "标题",
       dataIndex: "title",
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "此项为必填项",
+          },
+        ],
+      },
     },
     {
       title: "顾问",
       dataIndex: "counselorId",
       render: (dom, record) => record.counselor?.username,
+      valueType: "select",
+      fieldProps: {
+        showSearch: true,
+      },
+      request: async (params: { keyWords: string }) =>
+        onSearch({ role: ROLE.COUNSELOR, username: params.keyWords }),
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "此项为必填项",
+          },
+        ],
+      },
     },
     {
       title: "学生",
-      dataIndex: "studentId",
-      render: (dom, record) => record.user?.username
+      dataIndex: "userId",
+      valueType: "select",
+      fieldProps: {
+        showSearch: true,
+      },
+      request: async (params: { keyWords: string }) =>
+        onSearch({ role: ROLE.STUDENT, username: params.keyWords }),
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "此项为必填项",
+          },
+        ],
+      },
+      render: (dom, record) => record.user?.username,
     },
     {
       title: "状态",
-      valueEnum: scheduleStatusType,
+      valueEnum: taskEnum,
       dataIndex: "status",
+      search: false,
+      hideInForm: true,
+    },
+    {
+      title: "描述",
+      dataIndex: "remark",
+      valueType: "textarea",
       search: false,
     },
     {
@@ -119,28 +90,58 @@ export default function Page() {
       search: false,
       dataIndex: "createdAt",
       valueType: "dateTime",
+      hideInForm: true,
     },
   ];
 
   return (
     <ExTable
+      form={form}
       columns={columns}
       apiUrl={"/api/task"}
       title={"任务列表"}
       showCreateButton
       showDetailAction={false}
-      // optionRender={(record, onClick) => (
-      //   <a key="edit" onClick={() => onClick(ModalType.detail)}>
-      //     审核详情
-      //   </a>
-      // )}
+      optionRender={(record, onClick, doms) => doms}
     >
-      {(record, modalProps, onSubmitCallback, type) => {
+      {(record, modalProps, { type, onOk }) => {
+        const tempModalProps: any = {};
+        if (type === ModalType.create) {
+          tempModalProps.title = "新建任务";
+        } else {
+          tempModalProps.title = "编辑任务";
+        }
 
         return (
-          <div>123</div>
-        )
-  }}
+          <Modal
+            {...modalProps}
+            {...tempModalProps}
+            width={600}
+            onOk={() =>
+              onOk(async (values) => {
+                if (type === ModalType.create) {
+                  await request("/api/task", { method: "POST", data: values });
+                } else if (type === ModalType.editor) {
+                  await request("/api/task", {
+                    method: "PUT",
+                    data: { id: record.id, ...values },
+                  });
+                }
+              })
+            }
+          >
+            {type === ModalType.create || type === ModalType.editor ? (
+              <BetaSchemaForm
+                form={form}
+                columns={columns as ProFormColumnsType[]}
+                submitter={false}
+              />
+            ) : (
+              <span></span>
+            )}
+          </Modal>
+        );
+      }}
     </ExTable>
   );
 }

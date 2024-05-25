@@ -30,7 +30,6 @@ import { getImageUrl } from "@/app/utils/helper";
 const TextArea = Input.TextArea;
 
 export default function Page() {
-  const [loading, setLoading] = useState(false);
   const [level, setLevel] = useState(1);
   const [monthData, setMonthData] = useState();
   const [selectedDay, setSelectDay] = useState(dayjs());
@@ -38,61 +37,6 @@ export default function Page() {
   const [fileList, setFileList] = useState<any[]>();
 
   const [form] = Form.useForm();
-
-  const onSubmit = async (
-    record: any,
-    onSubmitCallback: any,
-    type?: number,
-  ) => {
-    setLoading(true);
-
-    if (type === ModalType.create) {
-      try {
-        if (!selectedItem) {
-          message.warning("请选择预约时间再提交");
-          return;
-        }
-
-        const arr = selectedItem.split(" ");
-        const date = arr[0];
-        const times = arr[1].split("-");
-        const data = {
-          level,
-          startTime: `${date} ${times[0]}`,
-          endTime: `${date} ${times[1]}`,
-        };
-
-        await request("/api/appointment", { method: "POST", data });
-        onSubmitCallback();
-      } finally {
-        setLoading(false);
-      }
-    } else {
-      //  审核详情
-      form
-        .validateFields()
-        .then(async (values) => {
-          const data: any = {
-            message: values.message,
-            scheduleId: record.id,
-            status: 5,
-          };
-
-          if (fileList) {
-            data.attachment = JSON.stringify({
-              uid: fileList[0].uid,
-              name: fileList[0].name,
-            });
-          }
-
-          await request("/api/appointment/audit", { method: "POST", data });
-          onSubmitCallback();
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }
-  };
 
   const columns: ProColumns[] = [
     {
@@ -175,6 +119,7 @@ export default function Page() {
 
   return (
     <ExTable
+      form={form}
       columns={columns}
       apiUrl={"/api/schedule"}
       title={"预约管理"}
@@ -186,32 +131,58 @@ export default function Page() {
         </a>
       )}
     >
-      {(record, modalProps, onSubmitCallback, type) => {
+      {(record, modalProps, { type, onOk }) => {
         let temp;
 
         if (type === ModalType.detail) {
           temp = {
             ...modalProps,
             title: "审核详情",
-            confirmLoading: loading,
-            onCancel: () => {
-              form.resetFields();
-              modalProps.onCancel();
-            },
-            onOk: async () => {
-              await onSubmit(record, onSubmitCallback, type);
-            },
+            onOk: () =>
+              onOk(async (values) => {
+                const data: any = {
+                  message: values.message,
+                  scheduleId: record.id,
+                  status: 5,
+                };
+
+                if (fileList) {
+                  data.attachment = JSON.stringify({
+                    uid: fileList[0].uid,
+                    name: fileList[0].name,
+                  });
+                }
+
+                await request("/api/appointment/audit", {
+                  method: "POST",
+                  data,
+                });
+              }),
             footer: (dom: any) => (record?.status === 6 ? dom : false),
           };
         } else {
           temp = {
             ...modalProps,
-            confirmLoading: loading,
             title: "新建预约",
             width: 1200,
-            onOk: async () => {
-              await onSubmit(record, onSubmitCallback, type);
-            },
+            onOk: () =>
+              onOk(async () => {
+                if (!selectedItem) {
+                  message.warning("请选择预约时间再提交");
+                  return;
+                }
+
+                const arr = selectedItem.split(" ");
+                const date = arr[0];
+                const times = arr[1].split("-");
+                const data = {
+                  level,
+                  startTime: `${date} ${times[0]}`,
+                  endTime: `${date} ${times[1]}`,
+                };
+
+                await request("/api/appointment", { method: "POST", data });
+              }),
           };
         }
 

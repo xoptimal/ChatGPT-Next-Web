@@ -1,3 +1,4 @@
+import { getQuery } from "@/app/utils/api";
 import { queryList } from "@/app/utils/apiUtils";
 import { ROLE } from "@/app/utils/dic";
 import { authOptions } from "@/lib/authOptions";
@@ -17,8 +18,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
   if (session?.user.role === ROLE.ADMIN) {
     //  管理员
-    where = {
-    };
+    where = {};
   } else if (session?.user.role === ROLE.STUDENT) {
     //   学生
     where = {
@@ -30,23 +30,16 @@ export async function GET(req: NextRequest, res: NextResponse) {
       counselorId: session!.user.userId,
     };
   }
-
   return queryList("task", req, where, { include });
 }
 
 export async function POST(req: NextRequest, res: NextResponse) {
-  const session = await getServerSession(authOptions);
   try {
     let data = await req.json();
 
-    data = data.map((item: any) => ({
-      ...item,
-      counselorId: session?.user.userId,
-    }));
+    const res = await prisma.task.create({ data });
 
-    await prisma.schedule.createMany({ data });
-
-    return NextResponse.json({ status: 200, statusText: "OK" });
+    return NextResponse.json({ status: 200, statusText: "OK", data: res });
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "System exception" }, { status: 500 });
@@ -54,29 +47,19 @@ export async function POST(req: NextRequest, res: NextResponse) {
 }
 
 export async function PUT(req: NextRequest, res: NextResponse) {
-    try {
-        const data = await req.json();
+  try {
+    const { id, ...rest } = await req.json();
 
-        await prisma.scheduleAudit.update({
-            where: {
-                id: data.targetId
-            },
-            data: {
-                auditMessage: data.auditMessage,
-            }
-        });
+    await prisma.task.update({
+      where: {
+        id,
+      },
+      data: rest,
+    });
 
-        await prisma.schedule.update({
-            where: {id: data.scheduleId},
-            data: {
-                status: data.status,
-            },
-        });
-
-        return NextResponse.json({status: 200, statusText: "OK"});
-
-    } catch (error) {
-        console.error(error);
-        return NextResponse.json({error: "System exception"}, {status: 500});
-    }
+    return NextResponse.json({ status: 200, statusText: "OK" });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: "System exception" }, { status: 500 });
+  }
 }

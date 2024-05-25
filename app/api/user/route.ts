@@ -8,15 +8,17 @@ export async function GET(req: NextRequest) {
 
         const {current, pageSize, role, username, phone, email} = getQuery(req)
 
-        const currentToNumber = parseInt(current)
-        const pageSizeToNumber = parseInt(pageSize)
+        const currentToNumber = parseInt(current) || 1
+        const pageSizeToNumber = parseInt(pageSize) || 20
 
-        const parentRole = parseInt(role)
+        const parentRole = parseInt(role) || 0
 
         const where = {
             isDeleted: 0,
             role: parentRole,
-            username,
+            username: {
+                contains: username
+            },
             phone,
             email,
         }

@@ -6,7 +6,6 @@ import { scheduleStatusType } from "@/app/utils/dic";
 import { ProColumns } from "@ant-design/pro-components";
 import { Empty, Form, Input, Modal, Radio } from "antd";
 import dayjs from "dayjs";
-import { useState } from "react";
 
 import styles from "@/app/service/product/page.module.scss";
 
@@ -19,33 +18,7 @@ const auditOptions = [
   { label: "驳回", value: 6 },
 ];
 export default function Page() {
-  const [loading, setLoading] = useState(false);
-
   const [form] = Form.useForm();
-
-  const onSubmit = async (
-    record: any,
-    onSubmitCallback: any,
-    type?: number,
-  ) => {
-    setLoading(true);
-
-    form
-      .validateFields()
-      .then(async (values) => {
-        const target = record.scheduleAudit[record.scheduleAudit.length - 1];
-        const data = {
-          ...values,
-          scheduleId: record.id,
-          targetId: target.id,
-        };
-        await request("/api/schedule", { method: "PUT", data });
-        onSubmitCallback();
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
 
   const columns: ProColumns[] = [
     {
@@ -104,6 +77,7 @@ export default function Page() {
 
   return (
     <ExTable
+      form={form}
       columns={columns}
       apiUrl={"/api/schedule"}
       title={"普通客户预约列表"}
@@ -113,24 +87,28 @@ export default function Page() {
         </a>
       )}
     >
-      {(record, modalProps, onSubmitCallback, type) => {
+      {(record, modalProps, { onOk }) => {
         const temp = {
           ...modalProps,
           title: "审核详情",
-          confirmLoading: loading,
-          onCancel: () => {
-            form.resetFields();
-            modalProps.onCancel();
-          },
-          onOk: async () => {
-            await onSubmit(record, onSubmitCallback, type);
-          },
           footer: (dom: any) => (record?.status === 5 ? dom : false),
           width: 640,
         };
 
         return (
-          <Modal {...temp}>
+          <Modal
+            {...temp}
+            onOk={onOk(async (values) => {
+              const target =
+                record.scheduleAudit[record.scheduleAudit.length - 1];
+              const data = {
+                ...values,
+                scheduleId: record.id,
+                targetId: target.id,
+              };
+              await request("/api/schedule", { method: "PUT", data });
+            })}
+          >
             <div className={styles.modal_body}>
               {record?.status === 0 && <Empty />}
               <div className={styles.modal_body_list}>

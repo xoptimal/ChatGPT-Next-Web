@@ -7,7 +7,6 @@ import { Form, Image, Input, Modal, Radio } from "antd";
 import request from "@/app/utils/api";
 import dayjs from "dayjs";
 import styles from "./page.module.scss";
-import { useState } from "react";
 
 const TextArea = Input.TextArea;
 
@@ -18,27 +17,10 @@ const auditOptions = [
 
 export default function Page() {
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState(false)
-
-  const onSubmit = (record: any, onSubmitCallback: any) => {
-    setLoading(true);
-    form.validateFields().then(async (values) => {
-      const target = record.productAudit[record.productAudit.length - 1];
-      const data = {
-        ...values,
-        productId: record.id,
-        targetId: target.id,
-      };
-      await request("/api/productAudit", { method: "PUT", data });
-      onSubmitCallback();
-    }).finally(() => {
-      setLoading(false)
-    });
-  };
-
 
   return (
     <ExTable
+      form={form}
       columns={productColumns}
       apiUrl={"/api/product"}
       title={"签约客户管理"}
@@ -49,17 +31,21 @@ export default function Page() {
         </a>
       )}
     >
-      {(record, modalProps, onSubmitCallback) => (
+      {(record, modalProps, { type, onOk }) => (
         <Modal
           {...modalProps}
-          onCancel={() => {
-            form.resetFields();
-            modalProps.onCancel();
-          }}
-          confirmLoading={loading}
-          onOk={async () => {
-            await onSubmit(record, onSubmitCallback);
-          }}
+          onOk={() =>
+            onOk(async (values) => {
+              const target =
+                record.productAudit[record.productAudit.length - 1];
+              const data = {
+                ...values,
+                productId: record.id,
+                targetId: target.id,
+              };
+              await request("/api/productAudit", { method: "PUT", data });
+            })
+          }
           footer={(dom) => (record?.status === 0 ? dom : false)}
         >
           <div className={styles.modal_body}>
@@ -96,7 +82,7 @@ export default function Page() {
               ))}
             </div>
             {record?.status === 0 && (
-              <Form form={form} style={{marginTop: '16px'}}>
+              <Form form={form} style={{ marginTop: "16px" }}>
                 <Form.Item
                   name={"status"}
                   label="审核"

@@ -7,12 +7,11 @@ import { productEnum, productStatusEnum } from "@/app/utils/dic";
 import { getImageUrl } from "@/app/utils/helper";
 import { MailOutlined } from "@ant-design/icons";
 import { BetaSchemaForm, ProCard } from "@ant-design/pro-components";
-import { Form, Image, Input, Menu, Modal, message } from "antd";
+import { Form, Input, Menu, Modal, message } from "antd";
 import dayjs from "dayjs";
 import { useMemo, useState } from "react";
 
 const TextArea = Input.TextArea;
-
 
 function StudentView() {
   const columns: any[] = [
@@ -94,30 +93,11 @@ const productColumns: any[] = [
 
 function ProductView() {
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>();
-
-  const onSubmit = (record: any, onSubmitCallback: any) => {
-    setLoading(true);
-    form
-      .validateFields()
-      .then(async (values) => {
-        const data = {
-          message: values.message,
-          productId: record.id,
-          attachment: imageUrl,
-          status: 0,
-        };
-        await request("/api/productAudit", { method: "POST", data });
-        onSubmitCallback();
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
 
   return (
     <ExTable
+      form={form}
       hideTitle
       modalTitle={"审核详情"}
       optionRender={(record, onClick) => (
@@ -125,7 +105,7 @@ function ProductView() {
           审核详情
         </a>
       )}
-      onModalOpen={() => {
+      onModalChange={() => {
         setImageUrl(null);
       }}
       tableProps={{
@@ -135,17 +115,20 @@ function ProductView() {
       columns={productColumns}
       apiUrl={"/api/product"}
     >
-      {(record, modalProps, onSubmitCallback) => (
+      {(record, modalProps, { onOk }) => (
         <Modal
           {...modalProps}
-          onCancel={() => {
-            form.resetFields();
-            modalProps.onCancel();
-          }}
-          confirmLoading={loading}
-          onOk={async () => {
-            await onSubmit(record, onSubmitCallback);
-          }}
+          onOk={() =>
+            onOk(async (values) => {
+              const data = {
+                message: values.message,
+                productId: record.id,
+                attachment: imageUrl,
+                status: 0,
+              };
+              await request("/api/productAudit", { method: "POST", data });
+            })
+          }
           footer={(dom) => (record?.status === 2 ? dom : false)}
         >
           <div className={styles.modal_body}>
@@ -170,7 +153,11 @@ function ProductView() {
                       </div>
                       <div>{item.message}</div>
                       {attachmentList?.map((item) => (
-                        <a key={item.uid} href={getImageUrl(item.uid)} target="_blank">
+                        <a
+                          key={item.uid}
+                          href={getImageUrl(item.uid)}
+                          target="_blank"
+                        >
                           {item.name}
                         </a>
                       ))}
@@ -263,3 +250,4 @@ export default function Page() {
 }
 
 export { productColumns };
+

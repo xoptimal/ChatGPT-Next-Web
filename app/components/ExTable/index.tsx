@@ -10,8 +10,8 @@ import {
   type ProColumns,
 } from "@ant-design/pro-components";
 import type { ModalProps } from "antd";
-import { Button, Modal, Popconfirm, message } from "antd";
-import { ReactNode, use, useEffect, useMemo, useRef, useState } from "react";
+import { Button, Modal, message } from "antd";
+import { ReactNode, useMemo, useRef, useState } from "react";
 
 type ExTableProps<DataSource, U, ValueType = "text"> = {
   columns: ProColumns[];
@@ -28,17 +28,27 @@ type ExTableProps<DataSource, U, ValueType = "text"> = {
   optionRender?: (
     record: any,
     onClick: (type: number) => void,
+    doms: ReactNode[],
   ) => ReactNode | ReactNode[];
   children?: (
     record: any,
     modalProps: any,
-    onSubmitCallback: () => void,
-    type?: number,
+    config: {
+      type: number;
+      onOk: (
+        execute: (
+          values: any,
+          params: { selectItem: any; type: number; onOkCallback: any },
+        ) => Promise<any>,
+      ) => void;
+      onOkCallback: () => void;
+    },
   ) => ReactNode;
   modalProps?: ModalProps;
   onSubmit?: (selectItem: any) => void;
-  onModalOpen?: (selectItem: any) => void;
+  onModalChange?: (open: boolean, selectItem: any, type: number) => void;
   showCreateButton?: boolean;
+  form?: any;
 };
 
 export enum ModalType {
@@ -62,18 +72,15 @@ export default function ExTable(props: ExTableProps<any, any>) {
     optionRender,
     children,
     modalProps,
-    onModalOpen,
+    onModalChange: onModalChangeProps,
     showCreateButton = false,
+    form,
   } = props;
 
   const [open, setOpen] = useState(false);
   const [selectItem, setSelectItem] = useState<any>(null);
 
-  const [type, setType] = useState<number>();
-
-  //   useEffect(() => {
-
-  //   }, [modalTitle])
+  const [type, setType] = useState<number>(-1);
 
   const tableColumns: ProColumns[] = useMemo(() => {
     const temp = [...columns];
@@ -88,13 +95,18 @@ export default function ExTable(props: ExTableProps<any, any>) {
 
           const onClick = (type: number) => {
             setType(type);
-            setSelectItem(record)
-            onModalOpen?.(record);
+            setSelectItem(record);
+            onModalChange?.(true, record, type);
             setOpen(true);
           };
 
           if (optionRender) {
-            return optionRender(record, onClick);
+            const doms = [
+              <a key="editor" onClick={() => onClick(ModalType.editor)}>
+                编辑
+              </a>,
+            ];
+            return optionRender(record, onClick, doms);
           }
 
           if (showDetailAction) {
@@ -133,37 +145,69 @@ export default function ExTable(props: ExTableProps<any, any>) {
     return temp;
   }, [showColumnOption]);
 
-  //const [loading, setLoading] = useState(false);
+  function onModalChange(open: boolean, selectItem: any, type: number) {
+    if (onModalChangeProps) {
+      onModalChangeProps(open, selectItem, type);
+      return;
+    }
 
-  // const handleOk = async () => {
-  //   setLoading(true);
-  //   await onSubmit?.(selectItem);
-  //   setLoading(false);
-  //   setSelectItem(null);
-  // };
+    if (open) {
+      if (selectItem) {
+        form?.setFieldsValue(selectItem);
+      } else {
+        form?.resetFields();
+      }
+    }
+  }
 
   const onCancel = () => {
+    onModalChange?.(false, null, type);
     setOpen(false);
     setSelectItem(null);
   };
 
-  const currentModalProps = {
+  const [confirmLoading, setConfirmLoading] = useState(false);
+
+  async function onOk(
+    execute: (
+      values: any,
+      params: { selectItem: any; type: number; onOkCallback: any },
+    ) => Promise<any>,
+  ) {
+    try {
+      let values;
+      if (form) {
+        values = await form.validateFields();
+      }
+
+      setConfirmLoading(true);
+
+      const res = await execute(values, { selectItem, type, onOkCallback });
+      if (!res) {
+        onOkCallback();
+      }
+    } catch (e) {
+      const error = e as any;
+      if (error && error.message) {
+        message.error(error.message);
+      }
+    } finally {
+      setConfirmLoading(false);
+    }
+  }
+
+  const currentModalProps: any = {
     open,
     onCancel,
     title: modalTitle,
     width: 800,
-    //confirmLoading: loading,
-    //onOk: () => handleOk(),
+    confirmLoading,
     ...modalProps,
   };
 
-  // if (!onSubmit) {
-  //   currentModalProps.footer = false;
-  // }
-
   const actionRef = useRef<ActionType>();
 
-  const onSubmitCallback = () => {
+  const onOkCallback = () => {
     //  关闭窗口
     onCancel();
     //  刷新列表
@@ -213,6 +257,7 @@ export default function ExTable(props: ExTableProps<any, any>) {
                   setType(ModalType.create);
                   setOpen(true);
                   setSelectItem(null);
+                  onModalChange?.(true, null, type);
                 }}
                 type="primary"
               >
@@ -227,7 +272,7 @@ export default function ExTable(props: ExTableProps<any, any>) {
       />
 
       {children ? (
-        children(selectItem, currentModalProps, onSubmitCallback, type)
+        children(selectItem, currentModalProps, { type, onOk, onOkCallback })
       ) : (
         <Modal {...currentModalProps} footer={false}>
           <ProDescriptions

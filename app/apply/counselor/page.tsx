@@ -2,11 +2,10 @@
 
 import ExTable, { ModalType } from "@/app/components/ExTable";
 import request from "@/app/utils/api";
-import { productEnum, productStatusEnum, scheduleStatusType } from "@/app/utils/dic";
+import { productEnum, productStatusEnum } from "@/app/utils/dic";
 import { ProColumns } from "@ant-design/pro-components";
-import { Empty, Form, Input, Modal, Radio } from "antd";
+import { Form, Input, Modal, Radio } from "antd";
 import dayjs from "dayjs";
-import { useState } from "react";
 
 import styles from "@/app/service/product/page.module.scss";
 
@@ -20,33 +19,7 @@ const auditOptions = [
 ];
 
 export default function Page() {
-  const [loading, setLoading] = useState(false);
-
   const [form] = Form.useForm();
-
-  const onSubmit = async (
-    record: any,
-    onSubmitCallback: any,
-    type?: number,
-  ) => {
-    setLoading(true);
-
-    form
-      .validateFields()
-      .then(async (values) => {
-        const  target = record.productAudit[record.productAudit.length - 1];
-        const data = {
-          ...values,
-          productId: record.id,
-          targetId: target.id,
-        };
-        await request("/api/productAudit", { method: "PUT", data });
-        onSubmitCallback();
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
 
   const columns: ProColumns[] = [
     {
@@ -78,33 +51,40 @@ export default function Page() {
 
   return (
     <ExTable
+      form={form}
       columns={columns}
       apiUrl={"/api/product"}
       title={"顾问申请列表"}
       optionRender={(record, onClick) => (
-        <a key="edit" onClick={() => onClick(ModalType.detail)}>
+        <a key="detail" onClick={() => onClick(ModalType.detail)}>
           审核详情
         </a>
       )}
     >
-      {(record, modalProps, onSubmitCallback, type) => {
+      {(record, modalProps, { onOk }) => {
         const temp = {
           ...modalProps,
           title: "审核详情",
-          confirmLoading: loading,
-          onCancel: () => {
-            form.resetFields();
-            modalProps.onCancel();
-          },
-          onOk: async () => {
-            await onSubmit(record, onSubmitCallback, type);
-          },
           footer: (dom: any) => (record?.status === 0 ? dom : false),
           width: 640,
         };
 
         return (
-          <Modal {...temp}>
+          <Modal
+            {...temp}
+            onOk={() =>
+              onOk(async (values) => {
+                const target =
+                  record.productAudit[record.productAudit.length - 1];
+                const data = {
+                  ...values,
+                  productId: record.id,
+                  targetId: target.id,
+                };
+                await request("/api/productAudit", { method: "PUT", data });
+              })
+            }
+          >
             <div className={styles.modal_body}>
               <div className={styles.modal_body_list}>
                 {record?.productAudit.map((item: any, index: number) => {
