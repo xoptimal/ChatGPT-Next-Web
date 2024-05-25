@@ -1,6 +1,6 @@
 "use client";
 
-import ExContainer from "@/app/components/ExContainer";
+import ExContainer, { ExContainerRef } from "@/app/components/ExContainer";
 import ExUpload from "@/app/components/ExUpload";
 import { scrollToTop } from "@/app/components/ScrollToTopButton";
 import request from "@/app/utils/api";
@@ -43,6 +43,8 @@ export default function Page() {
 
     await request("/api/product", { method: "POST", data });
     message.success("成功!");
+
+    containerRef.current?.refresh();
   };
 
   const next = (index: number) => {
@@ -56,7 +58,7 @@ export default function Page() {
     router.replace("/");
   };
 
-  const containerRef = useRef();
+  const containerRef = useRef<ExContainerRef>(null);
 
   return (
     <div className={styles.root}>

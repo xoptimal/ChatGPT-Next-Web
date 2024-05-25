@@ -28,12 +28,12 @@ model psq {
 }
 
 model User {
-  id                 String     @id @default(uuid())
+  id                 String         @id @default(uuid())
   username           String?
-  email              String     @unique
+  email              String         @unique
   password           String
-  createdAt          DateTime   @default(now())
-  updatedAt          DateTime   @updatedAt
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
   school             String?
   role               Int?
   age                Int?
@@ -43,16 +43,19 @@ model User {
   companyName        String?
   address            String?
   score              Float?
-  phone              String     @unique
+  phone              String         @unique
   entityType         Int?
-  isDeleted          Int?       @default(0)
+  isDeleted          Int?           @default(0)
   parentIds          String?
   childIds           String?
   type               Int?
   psqs               psq[] // 添加与 psq 模型关系字段的反向关系字段
   products           product[]
-  userSchedules      schedule[] @relation("UserSchedule")
-  counselorSchedules schedule[] @relation("CounselorSchedule")
+  userSchedules      schedule[]     @relation("UserSchedule")
+  counselorSchedules schedule[]     @relation("CounselorSchedule")
+  userTask           task[]         @relation("UserTask")
+  counselorTask      task[]         @relation("CounselorTask")
+  subtask_list       subtask_list[] @relation("SubTaskList")
 
   @@map("users")
 }
@@ -126,4 +129,50 @@ model scheduleAudit {
   schedule     schedule @relation(fields: [scheduleId], references: [id])
 
   @@map("schedule_audit")
+}
+
+model task {
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  isDeleted   Int?      @default(0)
+  title       String
+  remark      String?
+  status      Int       @default(0) //  0=待开始, 1=进行中, 2=已完成, 3=中断任务
+  userId      String?   @map("user_id")
+  counselorId String    @map("counselor_id")
+  user        User?     @relation("UserTask", fields: [userId], references: [id])
+  counselor   User      @relation("CounselorTask", fields: [counselorId], references: [id])
+  subtask     subtask[]
+}
+
+model subtask {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isDeleted Int?     @default(0)
+
+  title     String
+  remark    String?
+  status    Int      @default(0) //  0=待开始, 1=进行中, 2=已完成, 3=中断任务
+  startTime DateTime
+  endTime   DateTime
+  task      task     @relation(fields: [taskId], references: [id])
+  taskId    Int
+
+  subtaskList subtask_list[]
+}
+
+model subtask_list {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isDeleted Int?     @default(0)
+
+  subtask    subtask @relation(fields: [subtaskId], references: [id])
+  subtaskId  Int
+  attachment String? @db.LongText //  附件
+
+  userId String? @map("user_id")
+  user   User?   @relation("SubTaskList", fields: [userId], references: [id])
 }

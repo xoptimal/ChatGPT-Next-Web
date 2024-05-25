@@ -95,41 +95,19 @@ export default function Page() {
 
   const columns: ProColumns[] = [
     {
-      title: "开始时间",
-      dataIndex: "startTime",
-      valueType: "dateTime",
-      fieldProps: {
-        format: "YYYY-MM-DD HH:mm",
-      },
+      title: "标题",
+      dataIndex: "title",
     },
     {
-      title: "结束时间",
-      dataIndex: "endTime",
-      valueType: "dateTime",
-      fieldProps: {
-        format: "YYYY-MM-DD HH:mm",
-      },
-    },
-    {
-      title: "预约顾问",
+      title: "顾问",
       dataIndex: "counselorId",
-      render: (dom, record) => record.counselor.username,
+      render: (dom, record) => record.counselor?.username,
     },
-    // {
-    //   title: "学生",
-    //   dataIndex: "studentId",
-    //   render: (dom, record) => record.user?.username || '-'
-    // },
-    // {
-    //   title: "学生就位",
-    //   dataIndex: "userReady",
-    //   valueEnum: scheduleReadyType,
-    // },
-    // {
-    //   title: "顾问就位",
-    //   dataIndex: "counselorReady",
-    //   valueEnum: scheduleReadyType,
-    // },
+    {
+      title: "学生",
+      dataIndex: "studentId",
+      render: (dom, record) => record.user?.username
+    },
     {
       title: "状态",
       valueEnum: scheduleStatusType,
@@ -144,47 +122,25 @@ export default function Page() {
     },
   ];
 
-  const cellRender: CalendarProps<Dayjs>["cellRender"] = (current, info) => {
-    if (monthData) {
-      const key = dayjs(current).format("YYYY-MM-DD");
-
-      if (monthData[key]) {
-        const options = (monthData[key] as any).map((item: any) => ({
-          label: `${item.startTime}-${item.endTime}`,
-          value: `${key} ${item.startTime}-${item.endTime}`,
-        }));
-        return (
-          <Radio.Group
-            value={selectedItem}
-            onChange={(e) => setSelectedItem(e.target.value)}
-            options={options}
-          ></Radio.Group>
-        );
-      }
-    }
-    return <span></span>;
-  };
-
-  useAsyncEffect(async () => {
-    const res = await request("/api/appointment", {
-      params: { level, date: selectedDay.toISOString() },
-    });
-    setMonthData(res.data);
-  }, [level]);
-
   return (
     <ExTable
       columns={columns}
-      apiUrl={"/api/schedule"}
-      title={"预约管理"}
+      apiUrl={"/api/task"}
+      title={"任务列表"}
       showCreateButton
       showDetailAction={false}
-      optionRender={(record, onClick) => (
-        <a key="edit" onClick={() => onClick(ModalType.detail)}>
-          审核详情
-        </a>
-      )}
+      // optionRender={(record, onClick) => (
+      //   <a key="edit" onClick={() => onClick(ModalType.detail)}>
+      //     审核详情
+      //   </a>
+      // )}
     >
+      {(record, modalProps, onSubmitCallback, type) => {
+
+        return (
+          <div>123</div>
+        )
+  }}
     </ExTable>
   );
 }
