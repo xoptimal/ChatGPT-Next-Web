@@ -98,16 +98,18 @@ export default function Page() {
         return (
           <Modal
             {...temp}
-            onOk={onOk(async (values) => {
-              const target =
-                record.scheduleAudit[record.scheduleAudit.length - 1];
-              const data = {
-                ...values,
-                scheduleId: record.id,
-                targetId: target.id,
-              };
-              await request("/api/schedule", { method: "PUT", data });
-            })}
+            onOk={() =>
+              onOk(async (values) => {
+                const target =
+                  record.scheduleAudit[record.scheduleAudit.length - 1];
+                const data = {
+                  ...values,
+                  scheduleId: record.id,
+                  targetId: target.id,
+                };
+                await request("/api/schedule", { method: "PUT", data });
+              })
+            }
           >
             <div className={styles.modal_body}>
               {record?.status === 0 && <Empty />}
