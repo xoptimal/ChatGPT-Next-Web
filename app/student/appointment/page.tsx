@@ -168,8 +168,7 @@ export default function Page() {
             onOk: () =>
               onOk(async () => {
                 if (!selectedItem) {
-                  message.warning("请选择预约时间再提交");
-                  return;
+                  throw new Error('请选择预约时间再提交')
                 }
 
                 const arr = selectedItem.split(" ");

@@ -42,7 +42,6 @@ export default function Page() {
     };
 
     await request("/api/product", { method: "POST", data });
-    message.success("成功!");
 
     containerRef.current?.refresh();
   };

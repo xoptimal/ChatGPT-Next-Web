@@ -1,3 +1,5 @@
+import { ProSchemaValueEnumObj } from "@ant-design/pro-components";
+
 const WEI_XIN_CONTACT = `wxid_tojveiaug3mi22`;
 
 const INVITATION_CODE = "ENDAI-8120512";
@@ -72,26 +74,38 @@ const productStatusEnum = {
   },
 };
 
+
+
 const taskEnum = {
-  2: {
+  '4': {
     text: "已完成",
-    status: "Success",
+    status: "success",
   },
-  3: {
-    status: "Error",
+  '3': {
+    status: "error",
     text: "驳回",
   },
-  1: {
-    status: "Processing",
+  '2': {
+    status: "processing",
     text: "进行中",
   },
-  0: {
-    status: "Processing",
+  '1': {
+    status: "processing",
     text: "待开始",
   },
 }
 
+
+const subTaskStatus = {
+  4: "已完成",
+  3: "驳回",
+  2: "进行中",
+  1: "待开始",
+}
+
+
 export {
+  subTaskStatus,
   taskEnum,
   productEnum,
   productStatusEnum,
@@ -105,3 +119,4 @@ export {
   scheduleReadyType,
   counselorLevelOptions,
 };
+

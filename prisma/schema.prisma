@@ -132,34 +132,36 @@ model scheduleAudit {
 }
 
 model task {
-  id          Int       @id @default(autoincrement())
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  isDeleted   Int?      @default(0)
-  title       String
-  remark      String?
-  status      Int       @default(0) //  0=待开始, 1=进行中, 2=已完成, 3=中断任务
-  userId      String?   @map("user_id")
-  counselorId String    @map("counselor_id")
-  user        User?     @relation("UserTask", fields: [userId], references: [id])
-  counselor   User      @relation("CounselorTask", fields: [counselorId], references: [id])
-  subtask     subtask[]
+  id           Int       @id @default(autoincrement())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  isDeleted    Int?      @default(0)
+  title        String
+  remark       String?
+  status      String  //  0=待开始, 1=进行中, 2=已完成, 3=中断任务
+  userId       String?   @map("user_id")
+  counselorId  String    @map("counselor_id")
+  user         User?     @relation("UserTask", fields: [userId], references: [id])
+  counselor    User      @relation("CounselorTask", fields: [counselorId], references: [id])
+  subtask      subtask[]
+  createUserId String
 }
 
 model subtask {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  isDeleted Int?     @default(0)
+  id           Int      @id @default(autoincrement())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  isDeleted    Int?     @default(0)
+  createUserId String
 
-  title     String
-  remark    String?
-  status    Int      @default(0) //  0=待开始, 1=进行中, 2=已完成, 3=中断任务
-  startTime DateTime
-  endTime   DateTime
-  task      task     @relation(fields: [taskId], references: [id])
-  taskId    Int
-
+  title       String
+  remark      String?
+  status      String  //  0=待开始, 1=进行中, 2=已完成, 3=中断任务
+  startTime   DateTime
+  endTime     DateTime
+  task        task           @relation(fields: [taskId], references: [id])
+  taskId      Int
+  attachment  String?        @db.LongText //  附件
   subtaskList subtask_list[]
 }
 
@@ -175,4 +177,5 @@ model subtask_list {
 
   userId String? @map("user_id")
   user   User?   @relation("SubTaskList", fields: [userId], references: [id])
+  remark String?
 }

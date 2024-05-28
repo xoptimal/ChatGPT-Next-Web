@@ -1,6 +1,5 @@
 import {NextRequest} from "next/server";
 import axios from "axios";
-import {message} from "antd";
 
 export function getQuery<T = any>(req: NextRequest): T {
     const url = new URL(req.url);

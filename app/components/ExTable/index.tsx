@@ -152,10 +152,9 @@ export default function ExTable(props: ExTableProps<any, any>) {
     }
 
     if (open) {
+      form?.resetFields();
       if (selectItem) {
         form?.setFieldsValue(selectItem);
-      } else {
-        form?.resetFields();
       }
     }
   }

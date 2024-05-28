@@ -4,6 +4,7 @@ import ExUpload from "@/app/components/ExUpload";
 import styles from "@/app/service/product/page.module.scss";
 import request from "@/app/utils/api";
 import { UNIVERSITIES } from "@/app/utils/dic";
+import { getImageUrl } from "@/app/utils/helper";
 import { MailOutlined } from "@ant-design/icons";
 import { BetaSchemaForm, ProCard, ProForm } from "@ant-design/pro-components";
 import { Form, Image, Input, Menu, Modal, message } from "antd";
@@ -285,38 +286,43 @@ function ProductView() {
         >
           <div className={styles.modal_body}>
             <div className={styles.modal_body_list}>
-              {record?.productAudit.map((item: any, index: number) => (
-                <div>
-                  <div key={index}>
-                    <div>
-                      <h1>您</h1>
-                      <span>
-                        {dayjs(item.createdAt).format("YYYY-MM-DD HH:mm")}
-                      </span>
-                    </div>
-                    <div>{item.message}</div>
-                    {item.attachment && (
+              {record?.productAudit.map((item: any, index: number) => {
+
+                const attachment = JSON.parse(item.attachment)
+
+                return (
+                  <div>
+                    <div key={index}>
                       <div>
-                        <Image
-                          className={styles.attachment}
-                          src={item.attachment}
-                        />
+                        <h1>您</h1>
+                        <span>
+                          {dayjs(item.createdAt).format("YYYY-MM-DD HH:mm")}
+                        </span>
+                      </div>
+                      <div>{item.message}</div>
+                      {item.attachment &&  (
+                        <div>
+                          <Image
+                            className={styles.attachment}
+                            src={getImageUrl(attachment.uid)}
+                          />
+                        </div>
+                      )}
+                    </div>
+                    {item.auditMessage && (
+                      <div key={index} className={styles.admin}>
+                        <div>
+                          <h1>系统管理员</h1>
+                          <span>
+                            {dayjs(item.updatedAt).format("YYYY-MM-DD HH:mm")}
+                          </span>
+                        </div>
+                        <div>{item.auditMessage}</div>
                       </div>
                     )}
                   </div>
-                  {item.auditMessage && (
-                    <div key={index} className={styles.admin}>
-                      <div>
-                        <h1>系统管理员</h1>
-                        <span>
-                          {dayjs(item.updatedAt).format("YYYY-MM-DD HH:mm")}
-                        </span>
-                      </div>
-                      <div>{item.auditMessage}</div>
-                    </div>
-                  )}
-                </div>
-              ))}
+                )
+              })}
             </div>
             {record?.status === 2 && (
               <Form

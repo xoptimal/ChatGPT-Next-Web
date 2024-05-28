@@ -9,6 +9,7 @@ import {
 } from "@ant-design/pro-components";
 import { Form, Modal } from "antd";
 import request from "../utils/api";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
   const [form] = Form.useForm();
@@ -21,7 +22,7 @@ export default function Page() {
     }));
   };
 
-  const columns: ProColumns[] = [
+  const columns: any[] = [
     {
       title: "标题",
       dataIndex: "title",
@@ -32,6 +33,19 @@ export default function Page() {
             message: "此项为必填项",
           },
         ],
+      },
+      colProps: {
+        xs: 24,
+        md: 19,
+      },
+    },
+    {
+      title: "状态",
+      valueEnum: taskEnum,
+      dataIndex: "status",
+      colProps: {
+        xs: 24,
+        md: 5,
       },
     },
     {
@@ -52,6 +66,10 @@ export default function Page() {
           },
         ],
       },
+      colProps: {
+        xs: 24,
+        md: 12,
+      },
     },
     {
       title: "学生",
@@ -70,15 +88,13 @@ export default function Page() {
           },
         ],
       },
+      colProps: {
+        xs: 24,
+        md: 12,
+      },
       render: (dom, record) => record.user?.username,
     },
-    {
-      title: "状态",
-      valueEnum: taskEnum,
-      dataIndex: "status",
-      search: false,
-      hideInForm: true,
-    },
+
     {
       title: "描述",
       dataIndex: "remark",
@@ -94,6 +110,12 @@ export default function Page() {
     },
   ];
 
+  const router = useRouter();
+
+  const jump = (id: string) => {
+    router.push(`/task/${id}`);
+  };
+
   return (
     <ExTable
       form={form}
@@ -102,7 +124,12 @@ export default function Page() {
       title={"任务列表"}
       showCreateButton
       showDetailAction={false}
-      optionRender={(record, onClick, doms) => doms}
+      optionRender={(record, onClick, doms) => [
+        doms[0],
+        <a key="info" onClick={() => jump(record.id)}>
+          详情
+        </a>,
+      ]}
     >
       {(record, modalProps, { type, onOk }) => {
         const tempModalProps: any = {};
@@ -116,7 +143,7 @@ export default function Page() {
           <Modal
             {...modalProps}
             {...tempModalProps}
-            width={600}
+            width={800}
             onOk={() =>
               onOk(async (values) => {
                 if (type === ModalType.create) {
@@ -132,6 +159,7 @@ export default function Page() {
           >
             {type === ModalType.create || type === ModalType.editor ? (
               <BetaSchemaForm
+                grid
                 form={form}
                 columns={columns as ProFormColumnsType[]}
                 submitter={false}

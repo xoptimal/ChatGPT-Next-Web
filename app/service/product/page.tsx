@@ -1,12 +1,13 @@
 "use client";
 
 import ExTable, { ModalType } from "@/app/components/ExTable";
-import { productColumns } from "@/app/profile/page";
+import { productColumns } from "@/app/student/profile/page";
 import { Form, Image, Input, Modal, Radio } from "antd";
 
 import request from "@/app/utils/api";
 import dayjs from "dayjs";
 import styles from "./page.module.scss";
+import { getImageUrl } from "@/app/utils/helper";
 
 const TextArea = Input.TextArea;
 
@@ -50,36 +51,42 @@ export default function Page() {
         >
           <div className={styles.modal_body}>
             <div className={styles.modal_body_list}>
-              {record?.productAudit.map((item: any, index: number) => (
-                <div>
-                  <div key={index}>
-                    <div>
-                      <h1>{record.username}</h1>
-                      <span>
-                        {dayjs(item.createdAt).format("YYYY-MM-DD HH:mm")}
-                      </span>
-                    </div>
-                    <div>{item.message}</div>
-                    <div>
-                      <Image
-                        className={styles.attachment}
-                        src={item.attachment}
-                      />
-                    </div>
-                  </div>
-                  {item.auditMessage && (
-                    <div key={index} className={styles.admin}>
+              {record?.productAudit.map((item: any, index: number) => {
+                const attachment = JSON.parse(item.attachment);
+
+                return (
+                  <div>
+                    <div key={index}>
                       <div>
-                        <h1>系统管理员</h1>
+                        <h1>{record.username}</h1>
                         <span>
-                          {dayjs(item.updatedAt).format("YYYY-MM-DD HH:mm")}
+                          {dayjs(item.createdAt).format("YYYY-MM-DD HH:mm")}
                         </span>
                       </div>
-                      <div>{item.auditMessage}</div>
+                      <div>{item.message}</div>
+                      {item.attachment &&  (
+                        <div>
+                          <Image
+                            className={styles.attachment}
+                            src={getImageUrl(attachment.uid)}
+                          />
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              ))}
+                    {item.auditMessage && (
+                      <div key={index} className={styles.admin}>
+                        <div>
+                          <h1>系统管理员</h1>
+                          <span>
+                            {dayjs(item.updatedAt).format("YYYY-MM-DD HH:mm")}
+                          </span>
+                        </div>
+                        <div>{item.auditMessage}</div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
             {record?.status === 0 && (
               <Form form={form} style={{ marginTop: "16px" }}>

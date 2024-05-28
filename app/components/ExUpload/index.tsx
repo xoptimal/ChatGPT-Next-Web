@@ -7,7 +7,7 @@ import * as qiniu from "qiniu-js";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
-import styles from './index.module.scss'
+import styles from "./index.module.scss";
 
 const getBase64 = (img: FileType, callback: (url: string) => void) => {
   const reader = new FileReader();
@@ -36,34 +36,30 @@ async function manualUpload(file: any, callback: any) {
 
 export default function (props: any) {
   const {
-    imageClassName,
     className,
     onChange,
     maxCount = 1,
     uploadProps,
+    fileList = [],
   } = props;
 
-  const [fileList, setFileList] = useState<any[]>([]);
-  const [imageUrl, setImageUrl] = useState<any>();
-
   const handleChange: UploadProps["onChange"] = (info) => {
+    // if (info.fileList?.length === 1) {
+    //   const file = info.fileList[0];
 
-    if (info.fileList?.length === 1) {
-      const file = info.fileList[0];
-
-      if (file.type === "image/jpeg") {
-        getBase64(file.originFileObj as FileType, (url) => {
-          setImageUrl(url);
-        });
-      }
-    }
+    //   if (file.type === "image/jpeg") {
+    //     getBase64(file.originFileObj as FileType, (url) => {
+    //       setImageUrl(url);
+    //     });
+    //   }
+    // }
     onChange?.(info);
   };
 
   const onRemove = (file: any) => {
-    setFileList((prev: any) =>
-      prev.filter((item: any) => item.uid !== file.uid),
-    );
+    onChange?.({
+      fileList: fileList.filter((item: any) => item.uid !== file.uid),
+    });
   };
 
   const beforeUpload = async (file: FileType) => {
@@ -95,14 +91,10 @@ export default function (props: any) {
         onRemove={onRemove}
         beforeUpload={beforeUpload}
         onChange={handleChange}
-        showUploadList={!imageUrl}
+        showUploadList={true}
         {...uploadProps}
       >
-        {fileList.length < maxCount
-          ? uploadButton
-          : imageUrl && (
-              <img src={imageUrl} alt="" className={`${styles.img} ${imageClassName}`} />
-            )}
+        {fileList.length < maxCount && uploadButton}
       </Upload>
     </div>
   );

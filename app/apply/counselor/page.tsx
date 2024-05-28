@@ -9,7 +9,7 @@ import dayjs from "dayjs";
 
 import styles from "@/app/service/product/page.module.scss";
 
-import { getImageUrl } from "@/app/utils/helper";
+import { formatAttachmentToList, getImageUrl } from "@/app/utils/helper";
 
 const TextArea = Input.TextArea;
 
@@ -88,14 +88,7 @@ export default function Page() {
             <div className={styles.modal_body}>
               <div className={styles.modal_body_list}>
                 {record?.productAudit.map((item: any, index: number) => {
-                  let attachmentList;
-                  if (item.attachment) {
-                    attachmentList = JSON.parse(item.attachment);
-                    if (!Array.isArray(attachmentList)) {
-                      attachmentList = [attachmentList];
-                    }
-                  }
-
+                  const attachmentList = formatAttachmentToList(item.attachment)
                   return (
                     <div>
                       <div key={index}>

@@ -114,6 +114,18 @@ export async function POST(req: NextRequest, res: NextResponse) {
       },
     });
 
+    console.log("schedule", schedule);
+    console.log("where", {
+      startTime: dayjs.utc(startTime).toDate(),
+      endTime: dayjs.utc(endTime).toDate(),
+      counselor: {
+        type: parseInt(level),
+      },
+      status: 0, //  只查询未预约的
+      isDeleted: 0, //  未删除的
+    });
+    
+
     if (schedule) {
 
       const data = await prisma.schedule.update({

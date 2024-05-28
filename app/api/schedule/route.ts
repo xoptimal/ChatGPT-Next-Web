@@ -27,7 +27,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
     where = {
       userId: session!.user.userId,
     };
-  } else if (session?.user.role === ROLE.ADMIN) {
+  } else if (session?.user.role === ROLE.COUNSELOR) {
     //  顾问
     where = {
       counselorId: session!.user.userId,
