@@ -2,7 +2,7 @@
 
 import ExContainer, { ExContainerRef } from "@/app/components/ExContainer";
 import request from "@/app/utils/api";
-import { subTaskStatus, taskEnum } from "@/app/utils/dic";
+import { getRole, subTaskStatus, taskEnum } from "@/app/utils/dic";
 import {
   BetaSchemaForm,
   ProCard,
@@ -31,9 +31,11 @@ import {
   formatDate,
   formatDateToFromNow,
   getImageUrl,
+  transformAttachment,
 } from "@/app/utils/helper";
 import { useAsyncEffect } from "ahooks";
 import styles from "./page.module.scss";
+import { useSession } from "next-auth/react";
 
 const TaskEnum = taskEnum as Record<string, { text: string; status: string }>;
 
@@ -163,7 +165,7 @@ function SubtaskButton(
     },
   ];
 
-  let title = "新建任务";
+  let title = "新建任务"; 
   if (record) {
     title = "编辑";
   }
@@ -275,19 +277,12 @@ function MessageButton(
 
     setConfirmLoading(true);
 
-    let fileJson;
-    if (fileList.length > 0) {
-      fileJson = JSON.stringify(
-        fileList.map((item) => ({ uid: item.uid, name: item.name })),
-      );
-    }
-
     try {
       await request("/api/task/subtaskMessage", {
         data: {
           subtaskId: record.id,
           remark,
-          attachment: fileJson,
+          attachment: transformAttachment(fileList),
         },
         method: "POST",
       });
@@ -336,34 +331,12 @@ function MessageButton(
 
                 const user = item.user;
 
-                let tagInfo;
-                if (user.role === 99) {
-                  tagInfo = {
-                    color: "processing",
-                    text: "管理员",
-                  };
-                } else if (user.role === 1) {
-                  tagInfo = {
-                    color: "magenta",
-                    text: "顾问",
-                  };
-                } else if (user.role === 0) {
-                  tagInfo = {
-                    color: "green",
-                    text: "学生",
-                  };
-                } else if (user.role === 2) {
-                  tagInfo = {
-                    color: "cyan",
-                    text: "家长",
-                  };
-                }
-
+                const [color, text] = getRole(user.role, user.type)
                 return (
                   <div>
                     <Space className={styles.message_title}>
-                      <Tag bordered={false} color={tagInfo?.color}>
-                        {tagInfo?.text}
+                      <Tag bordered={false} color={color}>
+                        {text}
                       </Tag>
                       <h1>{user.username}</h1>
                       <h2>{formatDateToFromNow(item.createdAt)}</h2>
@@ -431,6 +404,10 @@ export default function Page() {
     containerRef.current?.refresh();
   };
 
+  const { data: session } = useSession();
+
+  const role = session?.user.role;
+
   return (
     <ExContainer
       ref={containerRef}
@@ -476,7 +453,8 @@ export default function Page() {
         title="任务规划"
         extra={
           data &&
-          (data.status === 1 || data.status === 2) && (
+          (data.status === 1 || data.status === 2) &&
+          (role === 1 || role === 99) && (
             <SubtaskButton
               buttonProps={{ ghost: true }}
               onOkCallback={handleSubTaskOkCallback}
@@ -487,9 +465,11 @@ export default function Page() {
       >
         {data?.subtask.length === 0 ? (
           <Empty>
-            <SubtaskButton onOkCallback={handleSubTaskOkCallback} task={data}>
-              添加任务
-            </SubtaskButton>
+            {(role === 1 || role === 99) && (
+              <SubtaskButton onOkCallback={handleSubTaskOkCallback} task={data}>
+                添加任务
+              </SubtaskButton>
+            )}
           </Empty>
         ) : (
           <div className={styles.subtask}>
@@ -523,21 +503,30 @@ export default function Page() {
                   onCollapse={(collapse) => console.log(collapse)}
                   extra={
                     <Space>
-                      <SubtaskButton
-                        record={item}
-                        task={data}
-                        onOkCallback={handleSubTaskOkCallback}
-                        buttonProps={{ type: "link" }}
-                      >
-                        编辑
-                      </SubtaskButton>
-                      <Divider type="vertical" />
-                      <DeleteButton
-                        delId={item.id}
-                        apiUrl={"/api/task/subtask"}
-                        onCallback={handleSubTaskOkCallback}
-                      />
-                      <Divider type="vertical" />
+                      {(role === 1 || role === 99) && (
+                        <>
+                          <SubtaskButton
+                            record={item}
+                            task={data}
+                            onOkCallback={handleSubTaskOkCallback}
+                            buttonProps={{ type: "link" }}
+                          >
+                            编辑
+                          </SubtaskButton>
+                          <Divider type="vertical" />
+                        </>
+                      )}
+
+                      {(role === 1 || role === 99) && (
+                        <>
+                          <DeleteButton
+                            delId={item.id}
+                            apiUrl={"/api/task/subtask"}
+                            onCallback={handleSubTaskOkCallback}
+                          />
+                          <Divider type="vertical" />
+                        </>
+                      )}
                       <MessageButton
                         task={data}
                         record={item}

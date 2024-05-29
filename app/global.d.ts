@@ -33,6 +33,7 @@ declare module "next-auth" {
       class: string;
       phone: string;
       studentId: string;
+      type: number;
     }
   }
 }

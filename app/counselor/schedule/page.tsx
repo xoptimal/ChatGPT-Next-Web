@@ -3,6 +3,7 @@
 import ExTable from "@/app/components/ExTable";
 import request from "@/app/utils/api";
 import { scheduleStatusType } from "@/app/utils/dic";
+import dayjs from "@/lib/dayjs";
 import {
   BetaSchemaForm,
   ProColumns,
@@ -141,7 +142,13 @@ export default function Page() {
             onOk={() =>
               onOk(async (values) => {
                 const { list } = values;
-                await request("/api/schedule", { method: "POST", data: list });
+                await request("/api/schedule", {
+                  method: "POST",
+                  data: list.map((item: any) => ({
+                    startTime: dayjs(item.startTime).startOf("hour").toDate(),
+                    endTime: dayjs(item.endTime).startOf("hour").toDate(),
+                  })),
+                });
               })
             }
             width={600}

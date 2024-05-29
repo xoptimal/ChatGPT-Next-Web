@@ -52,8 +52,8 @@ export async function GET(req: NextRequest, res: NextResponse) {
     (acc, [dateKey, schedules]) => {
       const timeGroups = schedules.reduce(
         (timeAcc, schedule) => {
-          const startTime = dayjs.utc(schedule.startTime).format("HH:mm");
-          const endTime = dayjs.utc(schedule.endTime).format("HH:mm");
+          const startTime = dayjs(schedule.startTime).format("HH:mm");
+          const endTime = dayjs(schedule.endTime).format("HH:mm");
           const timeKey = `${startTime}-${endTime}`;
 
           if (!timeAcc[timeKey]) {
@@ -101,8 +101,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     const schedule = await prisma.schedule.findFirst({
       where: {
-        startTime: dayjs.utc(startTime).toDate(),
-        endTime: dayjs.utc(endTime).toDate(),
+        startTime: dayjs(startTime).toDate(),
+        endTime: dayjs(endTime).toDate(),
         counselor: {
           type: parseInt(level),
         },
@@ -113,18 +113,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
         counselor: true,
       },
     });
-
-    console.log("schedule", schedule);
-    console.log("where", {
-      startTime: dayjs.utc(startTime).toDate(),
-      endTime: dayjs.utc(endTime).toDate(),
-      counselor: {
-        type: parseInt(level),
-      },
-      status: 0, //  只查询未预约的
-      isDeleted: 0, //  未删除的
-    });
-    
 
     if (schedule) {
 
@@ -148,12 +136,17 @@ export async function POST(req: NextRequest, res: NextResponse) {
         statusText: "OK",
         data: schedule,
       });
+    } else {
+      throw new Error("Schedule not found");
     }
 
     //  已经被预约了, 单独处理
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: "System exception" }, { status: 500 });
+
+    const msg = (error as Error).message
+
+    return NextResponse.json({ error: "System exception " + msg }, { status: 500 });
   }
 }
 

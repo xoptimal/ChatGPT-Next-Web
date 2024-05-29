@@ -1,6 +1,6 @@
 "use client";
 import { ProCard } from "@ant-design/pro-components";
-import { Button, message, Modal, Radio } from "antd";
+import { Button, message, Modal, Radio, Result } from "antd";
 import Image from "next/image";
 
 import ExUpload from "@/app/components/ExUpload";
@@ -8,8 +8,10 @@ import request from "@/app/utils/api";
 import { ROLE } from "@/app/utils/dic";
 import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./page.module.scss";
+import ExContainer, { ExContainerRef } from "@/app/components/ExContainer";
+import { useRouter } from "next/navigation";
 
 const vvvipObj = {
   price: 120000,
@@ -122,6 +124,7 @@ export default function () {
   const [userOptions, setUserOptions] = useState<
     { label: string; value: string; phone: string }[]
   >([]);
+  
   const [consent, setConsent] = useState(false);
   const [fileList, setFileList] = useState<any[]>();
   const [open, setOpen] = useState(false);
@@ -131,6 +134,14 @@ export default function () {
 
   const [userIndex, setUserIndex] = useState(-1);
 
+  const router = useRouter();
+
+  const jump = () => {
+    router.replace("/");
+  };
+
+  const [loading, setLoading] = useState(false)
+  
   useEffect(() => {
     const role = session?.user.role;
     if (role === ROLE.PARENT) {
@@ -154,6 +165,8 @@ export default function () {
     setOpen(true);
   };
 
+  const containerRef = useRef<ExContainerRef>(null);
+
   async function handleSubmit() {
     if (!consent) {
       message.warning("请查看服务条款后, 统一并接受");
@@ -164,6 +177,8 @@ export default function () {
       message.warning("请上传转账凭证");
       return;
     }
+
+    setLoading(true)
 
     const { content, ...rest } = selectItem;
 
@@ -179,131 +194,173 @@ export default function () {
       message: "银行转账凭证",
     };
     await request("/api/product", { method: "POST", data });
-    message.success("成功!");
+
+    setLoading(false)
+
+    setOpen(false);
+    containerRef.current?.refresh();
   }
 
-  return (
-    <>
-      <div className={styles.content1}>
-        <p className={styles.title}>选择最合适的版本</p>
-        <div className={styles.cards}>
-          <ProCard bordered>
-            <div className={styles.card}>
-              <div>
-                <h1>普通用户</h1>
-                <h2>初步咨询</h2>
-                <h3>￥0</h3>
-                <div>
-                  <p>功能1</p>
-                  <p>功能2</p>
-                  <p>功能3</p>
-                </div>
-              </div>
-              <Button block size={"large"} disabled>
-                默认
-              </Button>
-            </div>
-          </ProCard>
-          <ProCard bordered>
-            <div className={styles.card}>
-              <div>
-                <h1>VVVIP</h1>
-                <h2>说明1</h2>
-                <h3>￥12000</h3>
-                <div>
-                  <p>功能1</p>
-                  <p>功能2</p>
-                  <p>功能3</p>
-                </div>
-              </div>
-              <Button
-                type={"primary"}
-                block
-                size={"large"}
-                onClick={() => sign(vvvipObj)}
-              >
-                签约
-              </Button>
-            </div>
-          </ProCard>
-          <ProCard bordered>
-            <div className={styles.card}>
-              <div>
-                <h1>加州精英</h1>
-                <h2>说明1</h2>
-                <h3>￥30000</h3>
-                <div>
-                  <p>功能1</p>
-                  <p>功能2</p>
-                  <p>功能3</p>
-                </div>
-              </div>
-              <Button
-                type={"primary"}
-                block
-                size={"large"}
-                onClick={() => sign(vvvipObj)}
-              >
-                签约
-              </Button>
-            </div>
-          </ProCard>
-        </div>
-      </div>
-      <div className={styles.content2}>
-        <p className={styles.title}>套餐权益对比详情</p>
-        <div className={styles.list}>
-          <div>
-            <div>功能</div>
-            <div>普通用户</div>
-            <div>VVVIP</div>
-            <div>加州精英</div>
-          </div>
-          {featureList.map((item, index) => (
-            <div key={index}>
-              <div>{item.title}</div>
-              <div>
-                {item.user1 ? (
-                  <CheckCircleOutlined
-                    style={{ color: "#0d9cf5", fontSize: "18px" }}
-                  />
-                ) : (
-                  <CloseCircleOutlined
-                    style={{ color: "#999", fontSize: "18px" }}
-                  />
-                )}
-              </div>
-              <div>
-                {item.user2 ? (
-                  <CheckCircleOutlined
-                    style={{ color: "#0d9cf5", fontSize: "18px" }}
-                  />
-                ) : (
-                  <CloseCircleOutlined
-                    style={{ color: "#999", fontSize: "18px" }}
-                  />
-                )}
-              </div>
-              <div>
-                {item.user3 ? (
-                  <CheckCircleOutlined
-                    style={{ color: "#0d9cf5", fontSize: "18px" }}
-                  />
-                ) : (
-                  <CloseCircleOutlined
-                    style={{ color: "#999", fontSize: "18px" }}
-                  />
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+  const [data, setData] = useState<any>();
 
-      <div className={styles.customer}>
-        <Image width={70} height={70} src={"/wechat-qrcode.png"} alt={""} />
-        <span>{"咨询客服"}</span>
-      </div>
+  return (
+    <ExContainer
+      ref={containerRef}
+      request={async () => {
+        const { data } = await request("/api/product/find");
+        setData(data);
+      }}
+    >
+      {data ? (
+        <div className={styles.container}>
+          {data.status === 0 ? (
+            <Result
+              status="info"
+              title="申请已提交"
+              subTitle="请等待后台客服审核, 这个过程需要些时间, 请不定期刷新页面获取结果"
+              extra={[
+                <Button key="buy" onClick={jump}>
+                  返回首页
+                </Button>,
+              ]}
+            />
+          ) : (
+            <Result
+              status="success"
+              title="申请成功!"
+              subTitle="您的申请已通过, 现在你可以开始预约高级顾问等高级功能"
+              extra={[
+                <Button key="buy" onClick={jump}>
+                  返回首页
+                </Button>,
+              ]}
+            />
+          )}
+        </div>
+      ) : (
+        <>
+          <div className={styles.content1}>
+            <p className={styles.title}>选择最合适的版本</p>
+            <div className={styles.cards}>
+              <ProCard bordered>
+                <div className={styles.card}>
+                  <div>
+                    <h1>普通用户</h1>
+                    <h2>初步咨询</h2>
+                    <h3>￥0</h3>
+                    <div>
+                      <p>功能1</p>
+                      <p>功能2</p>
+                      <p>功能3</p>
+                    </div>
+                  </div>
+                  <Button block size={"large"} disabled>
+                    默认
+                  </Button>
+                </div>
+              </ProCard>
+              <ProCard bordered>
+                <div className={styles.card}>
+                  <div>
+                    <h1>VVVIP</h1>
+                    <h2>说明1</h2>
+                    <h3>￥12000</h3>
+                    <div>
+                      <p>功能1</p>
+                      <p>功能2</p>
+                      <p>功能3</p>
+                    </div>
+                  </div>
+                  <Button
+                    type={"primary"}
+                    block
+                    size={"large"}
+                    onClick={() => sign(vvvipObj)}
+                  >
+                    签约
+                  </Button>
+                </div>
+              </ProCard>
+              <ProCard bordered>
+                <div className={styles.card}>
+                  <div>
+                    <h1>加州精英</h1>
+                    <h2>说明1</h2>
+                    <h3>￥30000</h3>
+                    <div>
+                      <p>功能1</p>
+                      <p>功能2</p>
+                      <p>功能3</p>
+                    </div>
+                  </div>
+                  <Button
+                    type={"primary"}
+                    block
+                    size={"large"}
+                    onClick={() => sign(vvvipObj)}
+                  >
+                    签约
+                  </Button>
+                </div>
+              </ProCard>
+            </div>
+          </div>
+          <div className={styles.content2}>
+            <p className={styles.title}>套餐权益对比详情</p>
+            <div className={styles.list}>
+              <div>
+                <div>功能</div>
+                <div>普通用户</div>
+                <div>VVVIP</div>
+                <div>加州精英</div>
+              </div>
+              {featureList.map((item, index) => (
+                <div key={index}>
+                  <div>{item.title}</div>
+                  <div>
+                    {item.user1 ? (
+                      <CheckCircleOutlined
+                        style={{ color: "#0d9cf5", fontSize: "18px" }}
+                      />
+                    ) : (
+                      <CloseCircleOutlined
+                        style={{ color: "#999", fontSize: "18px" }}
+                      />
+                    )}
+                  </div>
+                  <div>
+                    {item.user2 ? (
+                      <CheckCircleOutlined
+                        style={{ color: "#0d9cf5", fontSize: "18px" }}
+                      />
+                    ) : (
+                      <CloseCircleOutlined
+                        style={{ color: "#999", fontSize: "18px" }}
+                      />
+                    )}
+                  </div>
+                  <div>
+                    {item.user3 ? (
+                      <CheckCircleOutlined
+                        style={{ color: "#0d9cf5", fontSize: "18px" }}
+                      />
+                    ) : (
+                      <CloseCircleOutlined
+                        style={{ color: "#999", fontSize: "18px" }}
+                      />
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className={styles.customer}>
+            <Image width={70} height={70} src={"/wechat-qrcode.png"} alt={""} />
+            <span>{"咨询客服"}</span>
+          </div>
+        </>
+      )}
 
       <Modal
         open={open}
@@ -365,13 +422,16 @@ export default function () {
                   </div>
 
                   <h3>转账凭证</h3>
-                  <ExUpload
-                    className={styles.upload}
-                    imageClassName={styles.imageClassName}
-                    onChange={(info: any) => {
-                      setFileList(info.fileList);
-                    }}
-                  />
+                  <div>
+                    <ExUpload
+                      className={styles.upload}
+                      imageClassName={styles.imageClassName}
+                      fileList={fileList}
+                      onChange={(info: any) => {
+                        setFileList(info.fileList);
+                      }}
+                    />
+                  </div>
                 </div>
 
                 <div>
@@ -380,6 +440,7 @@ export default function () {
                     type={"primary"}
                     block
                     onClick={handleSubmit}
+                    loading={loading}
                   >
                     提交
                   </Button>
@@ -392,6 +453,6 @@ export default function () {
           </ProCard>
         )}
       </Modal>
-    </>
+    </ExContainer>
   );
 }

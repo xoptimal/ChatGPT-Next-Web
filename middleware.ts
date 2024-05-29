@@ -1,32 +1,61 @@
-import {withAuth} from "next-auth/middleware"
-import {NextResponse} from "next/server"
+import { withAuth } from "next-auth/middleware";
+import { NextResponse } from "next/server";
+// // import { NextResponse } from "next/server";
+
+// import { NextResponse } from "next/server";
+
+// // export const config = {
+// //   // https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
+
+// //   matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
+
+// //   //  这里写的就是要授权, 才可以访问的页面
+// // //   matcher: [
+// // //     "/",
+// // //     "/task",
+// // //     "/task/27",
+// // //     "/guide",
+// // //     "/psq",
+// // //     "/report",
+// // //     "/unauthorized",
+// // //     "/api/user/profile",
+// // //     "/api/psq",
+// // //     "/api/report",
+// // //     // {
+// // //     //     source: '/((?!api|_next/static|_next/image|favicon.ico).*)',
+// // //     //     missing: [
+// // //     //       { type: 'header', key: 'next-router-prefetch' },
+// // //     //       { type: 'header', key: 'purpose', value: 'prefetch' },
+// // //     //     ],
+// // //     // }
+// // //   ],
+// // };
+
 
 export default withAuth(
-    function middleware(req) {
+  function middleware(req) {
+    const { token } = req.nextauth;
+    const { pathname, origin } = req.nextUrl;
 
-        const {token} = req.nextauth
-        const {pathname, origin} = req.nextUrl
+    if (token) {
+      return NextResponse.next();
+    } else {
+        if(pathname.startsWith("/login")) {
 
-        if (pathname.startsWith("/psq") && token?.role !== 1) {
-            return NextResponse.redirect(`${origin}/unauthorized`)
+        } else {
+            return NextResponse.redirect(`${origin}/login`);
         }
-
-        if (pathname.startsWith("/report") && token?.role !== 2) {
-            return NextResponse.redirect(`${origin}/unauthorized`)
-        }
-
-    },
-    {
-        callbacks: {
-            authorized: ({token}) => !!token
-        },
     }
-)
-
+  },
+  {
+    callbacks: {
+      authorized: ({ token }) => {
+        return true;
+      },
+    },
+  },
+);
 
 export const config = {
-    // https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
-
-    //  这里写的就是要授权, 才可以访问的页面
-    matcher: ['/', '/guide', '/psq', '/report', '/unauthorized', '/api/user/profile', '/api/psq', '/api/report'],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };

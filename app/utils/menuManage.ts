@@ -2,11 +2,11 @@ import {ROLE} from "@/app/utils/dic";
 
 
 const student = [
-    {
-        path: '/welcome',
-        name: '欢迎',
-        icon: 'SmileFilled'
-    },
+    // {
+    //     path: '/welcome',
+    //     name: '欢迎',
+    //     icon: 'SmileFilled'
+    // },
     {
         path: '/student/appointment',
         name: '预约咨询',
@@ -17,16 +17,16 @@ const student = [
         name: '任务中心',
         icon: 'SmileFilled'
     },
-    {
-        path: '/profile',
-        name: '信息中心',
-        icon: 'SmileFilled'
-    },
-    {
-        path: '/product',
-        name: '产品中心',
-        icon: 'SmileFilled'
-    },
+    // {
+    //     path: '/student/profile',
+    //     name: '个人中心',
+    //     icon: 'SmileFilled'
+    // },
+    // {
+    //     path: '/student/product',
+    //     name: '产品中心',
+    //     icon: 'SmileFilled'
+    // },
     {
         path: '/gpt',
         name: 'GPT',
@@ -35,11 +35,11 @@ const student = [
 ]
 
 const admin = [
-    {
-        path: '/welcome',
-        name: '欢迎',
-        icon: 'SmileFilled'
-    },
+    // {
+    //     path: '/welcome',
+    //     name: '欢迎',
+    //     icon: 'SmileFilled'
+    // },
     {
         path: '/users',
         name: '用户管理',
@@ -75,7 +75,7 @@ const admin = [
 
     {
         path: '/apply',
-        name: '用户申请管理',
+        name: '申请管理',
         icon: 'SmileFilled',
         routes: [
             {
@@ -114,39 +114,50 @@ const admin = [
         ]
     },
     {
-        path: '/data',
-        name: '信息中心',
+        path: '/task',
+        name: '任务中心',
+        icon: 'SmileFilled'
+    },
+    {
+        path: '/statistics',
+        name: '数据管理',
         icon: 'SmileFilled'
     },
 ]
 
 const counselor = [
-    {
-        path: '/welcome',
-        name: '欢迎',
-        icon: 'SmileFilled'
-    },
-    {
-        path: '/counselor/apply',
-        name: '顾问申请',
-        icon: 'SmileFilled'
-    },
+    // {
+    //     path: '/welcome',
+    //     name: '欢迎',
+    //     icon: 'SmileFilled'
+    // },
+    // {
+    //     path: '/counselor/apply',
+    //     name: '顾问申请',
+    //     icon: 'SmileFilled'
+    // },
     {
         path: '/counselor/schedule',
         name: '管理日程',
         icon: 'SmileFilled'
     },
     {
-        path: '/counselor/profile',
-        name: '信息中心',
+        path: '/task',
+        name: '任务中心',
         icon: 'SmileFilled'
     },
+    // {
+    //     path: '/counselor/profile',
+    //     name: '个人中心',
+    //     icon: 'SmileFilled'
+    // },
     {
         path: '/gpt',
         name: 'GPT',
         icon: 'SmileFilled'
     },
 ]
+
 
 export function getMenus(role: number = -1) {
 

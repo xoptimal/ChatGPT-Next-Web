@@ -1,3 +1,7 @@
+$primary-font: 'Arial, sans-serif';
+$heading-color: #2c3e50;
+$text-color: #34495e;
+
 
 .content1 {
   background: rgb(245, 248, 255);
@@ -35,7 +39,6 @@
   height: 460px;
 
   > div {
-
     flex: 1;
     width: 100%;
 
@@ -69,12 +72,10 @@
       }
     }
   }
-
 }
 
 .list {
-
-  border: 1px solid rgba(13, 13, 13, .058823529411764705);
+  border: 1px solid rgba(13, 13, 13, 0.058823529411764705);
   border-radius: 8px;
   overflow: hidden;
 
@@ -103,7 +104,6 @@
       justify-content: center;
     }
   }
-
 }
 
 .clause {
@@ -118,11 +118,11 @@
     font-size: 20px;
   }
 
-  h2, h3 {
+  h2,
+  h3 {
     font-size: 14px;
     margin-top: 12px;
   }
-
 }
 
 .clause_footer {
@@ -137,7 +137,6 @@
     font-size: 14px;
     margin-left: 8px;
   }
-
 }
 
 .icon_consent {
@@ -155,7 +154,6 @@
     height: 16px;
     color: #1f6feb;
   }
-
 }
 
 .action {
@@ -163,7 +161,7 @@
   flex-direction: column;
   height: 720px;
 
-  div:first-child {
+  > div:first-child {
     flex: 1;
     font-size: 14px;
 
@@ -205,9 +203,7 @@
   }
 
   > button {
-
   }
-
 }
 
 .customer {
@@ -235,7 +231,6 @@
   &:hover {
     scale: 1.2;
   }
-
 }
 
 .upload {
@@ -246,3 +241,45 @@
   width: 100%;
   height: 240px;
 }
+
+.container {
+  width: 100%;
+  background-color: #fff;
+
+  padding: 24px;
+  border-radius: 16px;
+
+  font-family: $primary-font;
+  line-height: 1.6;
+  color: $text-color;
+
+  h1, h2 {
+    color: $heading-color;
+    margin-top: 20px;
+  }
+
+  h1 {
+    font-size: 2em;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+
+  ol {
+    margin: 20px 0;
+    padding-left: 20px;
+
+    li {
+      margin-bottom: 10px;
+
+      strong {
+        color: $heading-color;
+      }
+    }
+  }
+}
+

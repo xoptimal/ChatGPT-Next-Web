@@ -304,6 +304,7 @@ export default function Page() {
                     </Descriptions.Item>
                     <Descriptions.Item label={"附件"}>
                       <ExUpload
+                        fileList={fileList}
                         onChange={(info: any) => {
                           setFileList(info.fileList);
                         }}

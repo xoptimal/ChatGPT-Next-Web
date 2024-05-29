@@ -1,5 +1,3 @@
-import { ProSchemaValueEnumObj } from "@ant-design/pro-components";
-
 const WEI_XIN_CONTACT = `wxid_tojveiaug3mi22`;
 
 const INVITATION_CODE = "ENDAI-8120512";
@@ -11,6 +9,51 @@ enum ROLE {
   PARENT,
   ADMIN = 99,
   STUDENT_PARENT,
+}
+
+export function getRole(role: ROLE = ROLE.STUDENT, type: number = 0) {
+  let color = "default";
+  let name;
+
+  if (role === ROLE.ADMIN) {
+    color = "red";
+    name = "管理员";
+
+  } else if (role === ROLE.STUDENT) {
+    switch (type) {
+      case 1:
+        color = "orange";
+        name = "VVVIP";
+        break;
+      case 2:
+        color = "volcano";
+        name = "加州精英";
+        break;
+      default:
+        name = "普通会员";
+        color = "gold";
+    }
+  } else if (role === ROLE.COUNSELOR) {
+    switch (type) {
+      case 1:
+        color = "geekblue";
+        name = "初级顾问";
+        break;
+      case 2:
+        color = "blue";
+        name = "中级顾问";
+        break;
+      case 3:
+        color = "cyan";
+        name = "高级顾问";
+        break;
+      default:
+        color = "purple";
+        name = "未认证顾问";
+    }
+  }
+
+  return [color, name];
 }
 
 const UNIVERSITIES = {
@@ -32,13 +75,34 @@ const ENTITY_TYPE = {
 };
 
 const scheduleStatusType = {
-  0: "未预约",
-  1: "已预约",
-  2: "顾问取消",
-  3: "学生取消",
-  4: "已过期",
-  5: "审核中",
-  6: "驳回",
+  0: {
+    text: "未预约",
+    status: "default",
+  },
+  1: {
+    text: "已预约",
+    status: "success",
+  },
+  2: {
+    text: "顾问取消",
+    status: "default",
+  },
+  3: {
+    text: "学生取消",
+    status: "default",
+  },
+  4: {
+    text: "已过期",
+    status: "default",
+  },
+  5: {
+    text: "审核中",
+    status: "processing",
+  },
+  6: {
+    text: "驳回",
+    status: "error",
+  },
 };
 
 const scheduleReadyType = {
@@ -52,11 +116,25 @@ const counselorLevelOptions = [
   { label: "高级顾问", value: 3 },
 ];
 
-
 const productEnum = {
   1: "初级顾问",
   2: "中级顾问",
   3: "高级顾问",
+};
+
+const counselorLevelEnum: any = {
+  1: {
+    text: "初级顾问",
+    status: "success",
+  },
+  2: {
+    text: "中级顾问",
+    status: "success",
+  },
+  3: {
+    text: "高级顾问",
+    status: "success",
+  },
 };
 
 const productStatusEnum = {
@@ -74,49 +152,44 @@ const productStatusEnum = {
   },
 };
 
-
-
 const taskEnum = {
-  '4': {
+  "4": {
     text: "已完成",
     status: "success",
   },
-  '3': {
+  "3": {
     status: "error",
     text: "驳回",
   },
-  '2': {
+  "2": {
     status: "processing",
     text: "进行中",
   },
-  '1': {
+  "1": {
     status: "processing",
     text: "待开始",
   },
-}
-
+};
 
 const subTaskStatus = {
   4: "已完成",
   3: "驳回",
   2: "进行中",
   1: "待开始",
-}
-
+};
 
 export {
-  subTaskStatus,
-  taskEnum,
-  productEnum,
-  productStatusEnum,
-  
-  WEI_XIN_CONTACT,
+  counselorLevelEnum,
+  ENTITY_TYPE,
   INVITATION_CODE,
   ROLE,
   UNIVERSITIES,
-  ENTITY_TYPE,
-  scheduleStatusType,
-  scheduleReadyType,
+  WEI_XIN_CONTACT,
   counselorLevelOptions,
+  productEnum,
+  productStatusEnum,
+  scheduleReadyType,
+  scheduleStatusType,
+  subTaskStatus,
+  taskEnum,
 };
-

@@ -1,18 +1,26 @@
 "use client";
-import ScrollToTopButton from "@/app/components/ScrollToTopButton";
 import Icon from "@/app/components/icon";
+import { ROLE, getRole } from "@/app/utils/dic";
 import { getMenus } from "@/app/utils/menuManage";
-import { UserOutlined } from "@ant-design/icons";
+import {
+  LogoutOutlined,
+  SolutionOutlined,
+  TeamOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import type {
-    PageContainerProps,
-    ProLayoutProps,
-    ProSettings,
+  PageContainerProps,
+  ProLayoutProps,
+  ProSettings,
 } from "@ant-design/pro-components";
 import { PageContainer, ProLayout } from "@ant-design/pro-components";
-import { useSession } from "next-auth/react";
+import type { MenuProps } from "antd";
+import { Button, Dropdown, Space, Tag } from "antd";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React from "react";
+import ScrollToTopButton from "../ScrollToTopButton";
 
 const settings: ProSettings = {
   fixSiderbar: true,
@@ -24,12 +32,73 @@ type ExContentProps = {
   pageContainerProps?: PageContainerProps;
   proLayoutProps?: ProLayoutProps;
 };
+
+export function getSideMenus(role: number = -1, other = true) {
+  let routes: any[] = [];
+
+  if (role === ROLE.STUDENT) {
+    routes = [
+      {
+        key: "/student/profile",
+        icon: <UserOutlined />,
+        label: "个人信息",
+      },
+      {
+        key: "/student/parent",
+        icon: <TeamOutlined />,
+        label: "家长信息",
+      },
+      {
+        key: "/student/apply",
+        icon: <SolutionOutlined />,
+        label: "我的签约",
+      },
+    ];
+  } else if (role === ROLE.COUNSELOR) {
+    routes = [
+      {
+        key: "/counselor/profile",
+        icon: <UserOutlined />,
+        label: "个人信息",
+      },
+      {
+        key: "/counselor/myApply",
+        icon: <SolutionOutlined />,
+        label: "我的申请",
+      },
+    ];
+  }
+
+  if (other) {
+    routes.push(
+      {
+        type: "divider",
+      },
+      {
+        key: "logout",
+        icon: <LogoutOutlined />,
+        label: "退出登录",
+      },
+    );
+  }
+
+  return routes;
+}
+
+function RoleTag(props: { role?: number; type?: number }) {
+  const { role, type } = props;
+  const [color, text] = getRole(role, type);
+  return <Tag color={color}>{text}</Tag>;
+}
+
 export default (props: React.PropsWithChildren<ExContentProps>) => {
   const { pageContainerProps, proLayoutProps } = props;
 
   const { data: session } = useSession();
+  const router = useRouter();
 
   const role = session?.user.role;
+  const type = session?.user.type;
 
   const routes = getMenus(role);
 
@@ -58,6 +127,14 @@ export default (props: React.PropsWithChildren<ExContentProps>) => {
   if (pathname === "/service") {
     pathname = "/service/product";
   }
+
+  const onChange: MenuProps["onClick"] = ({ key }) => {
+    if (key === "logout") {
+      signOut();
+    } else {
+      router.push(key);
+    }
+  };
 
   return (
     <div
@@ -94,65 +171,78 @@ export default (props: React.PropsWithChildren<ExContentProps>) => {
         menu={{
           type: "group",
         }}
+        title={``}
+        logo={"/logo.png"}
         avatarProps={{
           size: "small",
           icon: <UserOutlined />,
           style: {
             backgroundColor: "#1890ff",
           },
-          title: <div>{session?.user?.username}</div>,
+          title: (
+            <Space>
+              <span>{session?.user.username}</span>
+              <RoleTag role={role} type={type} />
+            </Space>
+          ),
+          render: (props, dom) => {
+            return (
+              <Dropdown
+                menu={{
+                  items: getSideMenus(role),
+                  onClick: onChange,
+                }}
+              >
+                {dom}
+              </Dropdown>
+            );
+          },
         }}
         actionsRender={(props) => {
           if (props.isMobile) return [];
-          return [
-            props.layout !== "side" && document.body.clientWidth > 1400 ? (
-              <div
-                key="SearchOutlined"
-                aria-hidden
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginInlineEnd: 24,
-                }}
-                onMouseDown={(e) => {
-                  e.stopPropagation();
-                  e.preventDefault();
-                }}
-              >
-                {/* {role === ROLE.COUNSELOR &&
-                                    <Button type={'primary'}>
-                                        顾问申请
-                                    </Button>
-                                } */}
-                {/* <Input
-                                    style={{
-                                        borderRadius: 4,
-                                        marginInlineEnd: 12,
-                                        backgroundColor: 'rgba(57,62,67,1)',
-                                        color: '#fff',
-                                    }}
-                                    prefix={
-                                        <SearchOutlined
-                                            style={{
-                                                color: '#dfdfdf',
-                                            }}
-                                        />
-                                    }
-                                    placeholder="搜索方案"
-                                    variant="borderless"
-                                />
-                                <PlusCircleFilled
-                                    style={{
-                                        color: 'var(--ant-primary-color)',
-                                        fontSize: 24,
-                                    }}
-                                />*/}
-              </div>
-            ) : undefined,
-            /*   <InfoCircleFilled key="InfoCircleFilled"/>,
-                           <QuestionCircleFilled key="QuestionCircleFilled"/>,
-                           <GithubFilled key="GithubFilled"/>,*/
-          ];
+
+          if (typeof document !== "undefined") {
+            // 在这里可以安全地访问 document 对象
+
+            return [
+              props.layout !== "side" && document.body.clientWidth > 700 ? (
+                <div
+                  key="SearchOutlined"
+                  aria-hidden
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginInlineEnd: 24,
+                  }}
+                  onMouseDown={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                  }}
+                >
+                  {role === ROLE.COUNSELOR && (!type || type === 0) && (
+                    <Button
+                      type={"primary"}
+                      size="small"
+                      onClick={() => router.push("/counselor/apply")}
+                    >
+                      顾问申请
+                    </Button>
+                  )}
+
+                  {role === ROLE.STUDENT && (!type || type === 0) && (
+                    <Button
+                      type={"primary"}
+                      size="small"
+                      onClick={() => router.push("/student/product")}
+                    >
+                      开通服务
+                    </Button>
+                  )}
+                </div>
+              ) : undefined,
+            ];
+          }
+          return [];
         }}
         // menuFooterRender={(props) => {
         //     if (props?.collapsed) return undefined;

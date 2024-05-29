@@ -10,9 +10,15 @@ import {
 import { Form, Modal } from "antd";
 import request from "../utils/api";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export default function Page() {
   const [form] = Form.useForm();
+
+  const { data: session } = useSession();
+
+  const role = session?.user.role;
+
 
   const onSearch = async (params: any) => {
     const { data } = await request("/api/user", { params });
@@ -122,14 +128,24 @@ export default function Page() {
       columns={columns}
       apiUrl={"/api/task"}
       title={"任务列表"}
-      showCreateButton
+      showCreateButton={role === 99 || role === 1}
       showDetailAction={false}
-      optionRender={(record, onClick, doms) => [
-        doms[0],
-        <a key="info" onClick={() => jump(record.id)}>
-          详情
-        </a>,
-      ]}
+      optionRender={(record, onClick, doms) => {
+        const arr = [];
+
+        console.log(role, "role");
+        
+
+        if (role === 99 || role === 1) {
+          arr.push(doms[0]);
+        }
+        arr.push(
+          <a key="info" onClick={() => jump(record.id)}>
+            详情
+          </a>,
+        );
+        return arr;
+      }}
     >
       {(record, modalProps, { type, onOk }) => {
         const tempModalProps: any = {};

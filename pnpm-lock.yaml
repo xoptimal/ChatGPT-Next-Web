@@ -6,10 +6,10 @@ dependencies:
     version: 5.3.1(react-dom@18.2.0)(react@18.2.0)
   '@ant-design/nextjs-registry':
     specifier: ^1.0.0
-    version: 1.0.0(@ant-design/cssinjs@1.18.4)(antd@5.15.0)(next@14.1.2)(react-dom@18.2.0)(react@18.2.0)
+    version: 1.0.0(@ant-design/cssinjs@1.20.0)(antd@5.15.0)(next@14.2.3)(react-dom@18.2.0)(react@18.2.0)
   '@ant-design/pro-components':
     specifier: ^2.6.49
-    version: 2.6.49(antd@5.15.0)(rc-field-form@1.43.0)(react-dom@18.2.0)(react@18.2.0)
+    version: 2.6.49(antd@5.15.0)(rc-field-form@1.44.0)(react-dom@18.2.0)(react@18.2.0)
   '@fortaine/fetch-event-source':
     specifier: ^3.0.6
     version: 3.0.6
@@ -62,11 +62,11 @@ dependencies:
     specifier: ^5.0.3
     version: 5.0.3
   next:
-    specifier: ^14.1.2
-    version: 14.1.2(@babel/core@7.24.0)(react-dom@18.2.0)(react@18.2.0)(sass@1.59.2)
+    specifier: ^14.2.3
+    version: 14.2.3(@babel/core@7.24.0)(react-dom@18.2.0)(react@18.2.0)(sass@1.59.2)
   next-auth:
     specifier: ^4.24.7
-    version: 4.24.7(next@14.1.2)(react-dom@18.2.0)(react@18.2.0)
+    version: 4.24.7(next@14.2.3)(react-dom@18.2.0)(react@18.2.0)
   next-connect:
     specifier: ^1.0.0
     version: 1.0.0
@@ -74,8 +74,8 @@ dependencies:
     specifier: ^3.3.1
     version: 3.3.1
   openai:
-    specifier: ^4.24.1
-    version: 4.24.1(encoding@0.1.13)
+    specifier: ^4.47.1
+    version: 4.47.1(encoding@0.1.13)
   qiniu:
     specifier: ^7.12.0
     version: 7.12.0
@@ -231,6 +231,23 @@ packages:
       stylis: 4.3.1
     dev: false
 
+  /@ant-design/cssinjs@1.20.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-uG3iWzJxgNkADdZmc6W0Ci3iQAUOvLMcM8SnnmWq3r6JeocACft4ChnY/YWvI2Y+rG/68QBla/O+udke1yH3vg==}
+    peerDependencies:
+      react: '>=16.0.0'
+      react-dom: '>=16.0.0'
+    dependencies:
+      '@babel/runtime': 7.24.6
+      '@emotion/hash': 0.8.0
+      '@emotion/unitless': 0.7.5
+      classnames: 2.5.1
+      csstype: 3.1.3
+      rc-util: 5.41.0(react-dom@18.2.0)(react@18.2.0)
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      stylis: 4.3.2
+    dev: false
+
   /@ant-design/icons-svg@4.4.2:
     resolution: {integrity: sha512-vHbT+zJEVzllwP+CM+ul7reTEfBR0vgxFe7+lREAsAA7YGsYpboiq2sQNeQeRvh09GfQgs/GyFEvZpJ9cLXpXA==}
     dev: false
@@ -251,7 +268,7 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /@ant-design/nextjs-registry@1.0.0(@ant-design/cssinjs@1.18.4)(antd@5.15.0)(next@14.1.2)(react-dom@18.2.0)(react@18.2.0):
+  /@ant-design/nextjs-registry@1.0.0(@ant-design/cssinjs@1.20.0)(antd@5.15.0)(next@14.2.3)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-kU1K1UOhwrF6DPv73MhuL5a6U4e6/TiFapeLUt/c/kch9h5qFwEaJPb4RSJKNw0PRBfqCAPS011wVm4wYcrqbQ==}
     peerDependencies:
       '@ant-design/cssinjs': ^1.18.2
@@ -260,9 +277,9 @@ packages:
       react: '>=16.0.0'
       react-dom: '>=16.0.0'
     dependencies:
-      '@ant-design/cssinjs': 1.18.4(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/cssinjs': 1.20.0(react-dom@18.2.0)(react@18.2.0)
       antd: 5.15.0(react-dom@18.2.0)(react@18.2.0)
-      next: 14.1.2(@babel/core@7.24.0)(react-dom@18.2.0)(react@18.2.0)(sass@1.59.2)
+      next: 14.2.3(@babel/core@7.24.0)(react-dom@18.2.0)(react@18.2.0)(sass@1.59.2)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
@@ -287,7 +304,7 @@ packages:
       - react-dom
     dev: false
 
-  /@ant-design/pro-components@2.6.49(antd@5.15.0)(rc-field-form@1.43.0)(react-dom@18.2.0)(react@18.2.0):
+  /@ant-design/pro-components@2.6.49(antd@5.15.0)(rc-field-form@1.44.0)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-BFgEX92okouwrrOrsit6viDC+rZH56hqvtz3XdCEwH1eWgmk9X8iSn4cpVGJGvI/nmfvcX/ti1mKAaHsLK/jWQ==}
     peerDependencies:
       antd: ^4.24.15 || ^5.11.2
@@ -295,14 +312,14 @@ packages:
       react-dom: '>=17.0.0'
     dependencies:
       '@ant-design/pro-card': 2.5.29(antd@5.15.0)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-descriptions': 2.5.33(antd@5.15.0)(rc-field-form@1.43.0)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-descriptions': 2.5.33(antd@5.15.0)(rc-field-form@1.44.0)(react-dom@18.2.0)(react@18.2.0)
       '@ant-design/pro-field': 2.14.6(antd@5.15.0)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-form': 2.24.4(antd@5.15.0)(rc-field-form@1.43.0)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-form': 2.24.4(antd@5.15.0)(rc-field-form@1.44.0)(react-dom@18.2.0)(react@18.2.0)
       '@ant-design/pro-layout': 7.17.19(antd@5.15.0)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-list': 2.5.48(antd@5.15.0)(rc-field-form@1.43.0)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-list': 2.5.48(antd@5.15.0)(rc-field-form@1.44.0)(react-dom@18.2.0)(react@18.2.0)
       '@ant-design/pro-provider': 2.13.5(antd@5.15.0)(react-dom@18.2.0)(react@18.2.0)
       '@ant-design/pro-skeleton': 2.1.10(antd@5.15.0)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-table': 3.14.2(antd@5.15.0)(rc-field-form@1.43.0)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-table': 3.14.2(antd@5.15.0)(rc-field-form@1.44.0)(react-dom@18.2.0)(react@18.2.0)
       '@ant-design/pro-utils': 2.15.4(antd@5.15.0)(react-dom@18.2.0)(react@18.2.0)
       '@babel/runtime': 7.24.0
       antd: 5.15.0(react-dom@18.2.0)(react@18.2.0)
@@ -313,14 +330,14 @@ packages:
       - rc-field-form
     dev: false
 
-  /@ant-design/pro-descriptions@2.5.33(antd@5.15.0)(rc-field-form@1.43.0)(react-dom@18.2.0)(react@18.2.0):
+  /@ant-design/pro-descriptions@2.5.33(antd@5.15.0)(rc-field-form@1.44.0)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-SpsxEiwEnbMSMynho6vFQLHTKbvYtL9P/hFPNRchhMaNqzPHcWQ9BfPetugeQ0eODmtYlQaIrho8lbd5kBtCLw==}
     peerDependencies:
       antd: ^4.24.15 || ^5.11.2
       react: '>=17.0.0'
     dependencies:
       '@ant-design/pro-field': 2.14.6(antd@5.15.0)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-form': 2.24.4(antd@5.15.0)(rc-field-form@1.43.0)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-form': 2.24.4(antd@5.15.0)(rc-field-form@1.44.0)(react-dom@18.2.0)(react@18.2.0)
       '@ant-design/pro-skeleton': 2.1.10(antd@5.15.0)(react-dom@18.2.0)(react@18.2.0)
       '@ant-design/pro-utils': 2.15.4(antd@5.15.0)(react-dom@18.2.0)(react@18.2.0)
       '@babel/runtime': 7.24.0
@@ -357,7 +374,7 @@ packages:
       - react-dom
     dev: false
 
-  /@ant-design/pro-form@2.24.4(antd@5.15.0)(rc-field-form@1.43.0)(react-dom@18.2.0)(react@18.2.0):
+  /@ant-design/pro-form@2.24.4(antd@5.15.0)(rc-field-form@1.44.0)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-WRFkUpMtF8oQKOdqNA6cr4zo97XZybleEfgNnfQyaWfu5VFLCOdTKT0ro+qwRdnNwbwtXCRmomd8HBzDuSCRgA==}
     peerDependencies:
       '@types/lodash.merge': ^4.6.7
@@ -381,7 +398,7 @@ packages:
       dayjs: 1.11.11
       lodash.merge: 4.6.2
       omit.js: 2.0.2
-      rc-field-form: 1.43.0(react-dom@18.2.0)(react@18.2.0)
+      rc-field-form: 1.44.0(react-dom@18.2.0)(react@18.2.0)
       rc-resize-observer: 1.4.0(react-dom@18.2.0)(react@18.2.0)
       rc-util: 5.39.1(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
@@ -414,7 +431,7 @@ packages:
       warning: 4.0.3
     dev: false
 
-  /@ant-design/pro-list@2.5.48(antd@5.15.0)(rc-field-form@1.43.0)(react-dom@18.2.0)(react@18.2.0):
+  /@ant-design/pro-list@2.5.48(antd@5.15.0)(rc-field-form@1.44.0)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-DJVfj63YcjfPx+TLGfn5w7IoPLeRQAiDnCzBXtUnkTBBYpO+OS1afGgrtWy7SA9OKZLjjkgud4tPBeB+/AYH5A==}
     peerDependencies:
       antd: ^4.24.15 || ^5.11.2
@@ -424,7 +441,7 @@ packages:
       '@ant-design/icons': 5.3.1(react-dom@18.2.0)(react@18.2.0)
       '@ant-design/pro-card': 2.5.29(antd@5.15.0)(react-dom@18.2.0)(react@18.2.0)
       '@ant-design/pro-field': 2.14.6(antd@5.15.0)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-table': 3.14.2(antd@5.15.0)(rc-field-form@1.43.0)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-table': 3.14.2(antd@5.15.0)(rc-field-form@1.44.0)(react-dom@18.2.0)(react@18.2.0)
       '@ant-design/pro-utils': 2.15.4(antd@5.15.0)(react-dom@18.2.0)(react@18.2.0)
       '@babel/runtime': 7.24.0
       antd: 5.15.0(react-dom@18.2.0)(react@18.2.0)
@@ -469,7 +486,7 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /@ant-design/pro-table@3.14.2(antd@5.15.0)(rc-field-form@1.43.0)(react-dom@18.2.0)(react@18.2.0):
+  /@ant-design/pro-table@3.14.2(antd@5.15.0)(rc-field-form@1.44.0)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-GwS3y6yUo2zXxWShroZb5N68Is10+xMF5mwXbyMxk12SBEaR3Ltld0ljrbO8QsAzQOTpp2B4C2NFDNF4OSrz9g==}
     peerDependencies:
       antd: ^4.24.15 || ^5.11.2
@@ -480,7 +497,7 @@ packages:
       '@ant-design/icons': 5.3.1(react-dom@18.2.0)(react@18.2.0)
       '@ant-design/pro-card': 2.5.29(antd@5.15.0)(react-dom@18.2.0)(react@18.2.0)
       '@ant-design/pro-field': 2.14.6(antd@5.15.0)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-form': 2.24.4(antd@5.15.0)(rc-field-form@1.43.0)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-form': 2.24.4(antd@5.15.0)(rc-field-form@1.44.0)(react-dom@18.2.0)(react@18.2.0)
       '@ant-design/pro-provider': 2.13.5(antd@5.15.0)(react-dom@18.2.0)(react@18.2.0)
       '@ant-design/pro-utils': 2.15.4(antd@5.15.0)(react-dom@18.2.0)(react@18.2.0)
       '@babel/runtime': 7.24.0
@@ -493,7 +510,7 @@ packages:
       dayjs: 1.11.11
       lodash.merge: 4.6.2
       omit.js: 2.0.2
-      rc-field-form: 1.43.0(react-dom@18.2.0)(react@18.2.0)
+      rc-field-form: 1.44.0(react-dom@18.2.0)(react@18.2.0)
       rc-resize-observer: 1.4.0(react-dom@18.2.0)(react@18.2.0)
       rc-util: 5.39.1(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
@@ -1804,6 +1821,13 @@ packages:
     dependencies:
       regenerator-runtime: 0.14.1
 
+  /@babel/runtime@7.24.6:
+    resolution: {integrity: sha512-Ja18XcETdEl5mzzACGd+DKgaGJzPTCow7EglgwTmHdwokzDFYh/MHua6lU6DV/hjF2IaOJ4oX2nqnjG7RElKOw==}
+    engines: {node: '>=6.9.0'}
+    dependencies:
+      regenerator-runtime: 0.14.1
+    dev: false
+
   /@babel/template@7.24.0:
     resolution: {integrity: sha512-Bkf2q8lMB0AFpX0NFEqSbx1OkTHf0f+0j82mkw+ZpzBnkk7e9Ql0891vlfgi+kHwOk8tQjiQHpqh4LaSa0fKEA==}
     engines: {node: '>=6.9.0'}
@@ -2074,11 +2098,11 @@ packages:
       next-auth: ^4
     dependencies:
       '@prisma/client': 5.10.2(prisma@5.10.2)
-      next-auth: 4.24.7(next@14.1.2)(react-dom@18.2.0)(react@18.2.0)
+      next-auth: 4.24.7(next@14.2.3)(react-dom@18.2.0)(react@18.2.0)
     dev: false
 
-  /@next/env@14.1.2:
-    resolution: {integrity: sha512-U0iEG+JF86j6qyu330sfPgsMmDVH8vWVmzZadl+an5EU3o5HqdNytOpM+HsFpl58PmhGBTKx3UmM9c+eoLK0mA==}
+  /@next/env@14.2.3:
+    resolution: {integrity: sha512-W7fd7IbkfmeeY2gXrzJYDx8D2lWKbVoTIj1o1ScPHNzvp30s1AuoEFSdr39bC5sjxJaxTtq3OTCZboNp0lNWHA==}
     dev: false
 
   /@next/eslint-plugin-next@14.1.2:
@@ -2087,8 +2111,8 @@ packages:
       glob: 10.3.10
     dev: true
 
-  /@next/swc-darwin-arm64@14.1.2:
-    resolution: {integrity: sha512-E4/clgk0ZrYMo9eMRwP/4IO/cvXF1yEYSnGcdGfH+NYTR8bNFy76TSlc1Vb2rK3oaQY4BVHRpx8f/sMN/D5gNw==}
+  /@next/swc-darwin-arm64@14.2.3:
+    resolution: {integrity: sha512-3pEYo/RaGqPP0YzwnlmPN2puaF2WMLM3apt5jLW2fFdXD9+pqcoTzRk+iZsf8ta7+quAe4Q6Ms0nR0SFGFdS1A==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [darwin]
@@ -2096,8 +2120,8 @@ packages:
     dev: false
     optional: true
 
-  /@next/swc-darwin-x64@14.1.2:
-    resolution: {integrity: sha512-j8mEOI+ZM0tU9B/L/OGa6F7d9FXYMkog5OWWuhTWzz3iZ91UKIGGpD/ojTNKuejainDMgbqOBTNnLg0jZywM/g==}
+  /@next/swc-darwin-x64@14.2.3:
+    resolution: {integrity: sha512-6adp7waE6P1TYFSXpY366xwsOnEXM+y1kgRpjSRVI2CBDOcbRjsJ67Z6EgKIqWIue52d2q/Mx8g9MszARj8IEA==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [darwin]
@@ -2105,8 +2129,8 @@ packages:
     dev: false
     optional: true
 
-  /@next/swc-linux-arm64-gnu@14.1.2:
-    resolution: {integrity: sha512-qpRrd5hl6BFTWiFLgHtJmqqQGRMs+ol0MN9pEp0SYoLs3j8OTErPiDMhbKWjMWHGdc2E3kg4RRBV3cSTZiePiQ==}
+  /@next/swc-linux-arm64-gnu@14.2.3:
+    resolution: {integrity: sha512-cuzCE/1G0ZSnTAHJPUT1rPgQx1w5tzSX7POXSLaS7w2nIUJUD+e25QoXD/hMfxbsT9rslEXugWypJMILBj/QsA==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
@@ -2115,8 +2139,8 @@ packages:
     dev: false
     optional: true
 
-  /@next/swc-linux-arm64-musl@14.1.2:
-    resolution: {integrity: sha512-HAhvVXAv+wnbj0wztT0YnpgJVoHtw1Mv4Y1R/JJcg5yXSU8FsP2uEGUwjQaqPoD76YSZjuKl32YbJlmPgQbLFw==}
+  /@next/swc-linux-arm64-musl@14.2.3:
+    resolution: {integrity: sha512-0D4/oMM2Y9Ta3nGuCcQN8jjJjmDPYpHX9OJzqk42NZGJocU2MqhBq5tWkJrUQOQY9N+In9xOdymzapM09GeiZw==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
@@ -2125,8 +2149,8 @@ packages:
     dev: false
     optional: true
 
-  /@next/swc-linux-x64-gnu@14.1.2:
-    resolution: {integrity: sha512-PCWC312woXLWOXiedi1E+fEw6B/ECP1fMiK1nSoGS2E43o56Z8kq4WeJLbJoufFQGVj5ZOKU3jIVyV//3CI4wQ==}
+  /@next/swc-linux-x64-gnu@14.2.3:
+    resolution: {integrity: sha512-ENPiNnBNDInBLyUU5ii8PMQh+4XLr4pG51tOp6aJ9xqFQ2iRI6IH0Ds2yJkAzNV1CfyagcyzPfROMViS2wOZ9w==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
@@ -2135,8 +2159,8 @@ packages:
     dev: false
     optional: true
 
-  /@next/swc-linux-x64-musl@14.1.2:
-    resolution: {integrity: sha512-KQSKzdWPNrYZjeTPCsepEpagOzU8Nf3Zzu53X1cLsSY6QlOIkYcSgEihRjsMKyeQW4aSvc+nN5pIpC2pLWNSMA==}
+  /@next/swc-linux-x64-musl@14.2.3:
+    resolution: {integrity: sha512-BTAbq0LnCbF5MtoM7I/9UeUu/8ZBY0i8SFjUMCbPDOLv+un67e2JgyN4pmgfXBwy/I+RHu8q+k+MCkDN6P9ViQ==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
@@ -2145,8 +2169,8 @@ packages:
     dev: false
     optional: true
 
-  /@next/swc-win32-arm64-msvc@14.1.2:
-    resolution: {integrity: sha512-3b0PouKd09Ulm2T1tjaRnwQj9+UwSsMO680d/sD4XAlm29KkNmVLAEIwWTfb3L+E11Qyw+jdcN3HtbDCg5+vYA==}
+  /@next/swc-win32-arm64-msvc@14.2.3:
+    resolution: {integrity: sha512-AEHIw/dhAMLNFJFJIJIyOFDzrzI5bAjI9J26gbO5xhAKHYTZ9Or04BesFPXiAYXDNdrwTP2dQceYA4dL1geu8A==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [win32]
@@ -2154,8 +2178,8 @@ packages:
     dev: false
     optional: true
 
-  /@next/swc-win32-ia32-msvc@14.1.2:
-    resolution: {integrity: sha512-CC1gaJY4h+wg6d5r2biggGM6nCFXh/6WEim2VOQI0WrA6easCQi2P2hzWyrU6moQ0g1GOiWzesGc6nn0a92Kgg==}
+  /@next/swc-win32-ia32-msvc@14.2.3:
+    resolution: {integrity: sha512-vga40n1q6aYb0CLrM+eEmisfKCR45ixQYXuBXxOOmmoV8sYST9k7E3US32FsY+CkkF7NtzdcebiFT4CHuMSyZw==}
     engines: {node: '>= 10'}
     cpu: [ia32]
     os: [win32]
@@ -2163,8 +2187,8 @@ packages:
     dev: false
     optional: true
 
-  /@next/swc-win32-x64-msvc@14.1.2:
-    resolution: {integrity: sha512-pfASwanOd+yP3D80O63DuQffrBySZPuB7wRN0IGSRq/0rDm9p/MvvnLzzgP2kSiLOUklOrFYVax7P6AEzjGykQ==}
+  /@next/swc-win32-x64-msvc@14.2.3:
+    resolution: {integrity: sha512-Q1/zm43RWynxrO7lW4ehciQVj+5ePBhOK+/K2P7pLFX3JaJ/IZVC69SHidrmZSOkqz7ECIOhhy7XhAFG4JYyHA==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
@@ -2500,9 +2524,14 @@ packages:
       - supports-color
     dev: false
 
-  /@swc/helpers@0.5.2:
-    resolution: {integrity: sha512-E4KcWTpoLHqwPHLxidpOqQbcrZVgi0rsmmZXUle1jXmJfuIf/UWpczUJ7MZZ5tlxytgJXyp0w4PGkkeLiuIdZw==}
+  /@swc/counter@0.1.3:
+    resolution: {integrity: sha512-e2BR4lsJkkRlKZ/qCHPw9ZaSxc0MVUd7gtbtaB7aMvHeJVYe8sOB8DBZkP2DtISHGSku9sCK6T6cnY0CtXrOCQ==}
+    dev: false
+
+  /@swc/helpers@0.5.5:
+    resolution: {integrity: sha512-KGYxvIOXcceOAbEk4bi/dVLEK9z8sZ0uBB3Il5b1rhfClSpcX0yfRO0KmTkqR2cnQDymwLB+25ZyMzICg/cm/A==}
     dependencies:
+      '@swc/counter': 0.1.3
       tslib: 2.6.2
     dev: false
 
@@ -2720,8 +2749,8 @@ packages:
       form-data: 4.0.0
     dev: false
 
-  /@types/node@18.19.23:
-    resolution: {integrity: sha512-wtE3d0OUfNKtZYAqZb8HAWGxxXsImJcPUAgZNw+dWFxO6s5tIwIjyKnY76tsTatsNCLJPkVYwUpq15D38ng9Aw==}
+  /@types/node@18.19.33:
+    resolution: {integrity: sha512-NR9+KrpSajr2qBVp/Yt5TU/rp+b5Mayi3+OlMlcg2cVCfRmcG5PWZ7S4+MG9PZ5gWBoc9Pd0BKSRViuBCRPu0A==}
     dependencies:
       undici-types: 5.26.5
     dev: false
@@ -3416,10 +3445,6 @@ packages:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
     dev: true
 
-  /base-64@0.1.0:
-    resolution: {integrity: sha512-Y5gU45svrR5tI2Vt/X9GPd3L0HNIKzGu202EjxrXMpuc2V2CiKgemAbUUsqYmZJvPtCXoUKjNZwBJzsNScUbXA==}
-    dev: false
-
   /bcrypt@5.1.1(encoding@0.1.13):
     resolution: {integrity: sha512-AGBHOG5hPYZ5Xl9KXzU5iKq9516yEmvCKDg3ecP5kX2aB6UqTeXZxk2ELnDgDm6BQSMlLt9rDB4LoSMx0rYwww==}
     engines: {node: '>= 10.0.0'}
@@ -3541,10 +3566,6 @@ packages:
 
   /character-entities@2.0.2:
     resolution: {integrity: sha512-shx7oQ0Awen/BRIdkjkvz54PnEEI/EjwXDSIZp86/KKdbafHh1Df/RYGBhn4hbe2+uKC9FnT5UCEdyPz3ai9hQ==}
-    dev: false
-
-  /charenc@0.0.2:
-    resolution: {integrity: sha512-yrLQ/yVUFXkzg7EDQsPieE/53+0RlaWTs+wBrvW36cyilJ2SaDWfl4Yj7MtLTXleV9uEKefbAGUPv2/iWSooRA==}
     dev: false
 
   /chokidar@3.6.0:
@@ -3761,10 +3782,6 @@ packages:
       shebang-command: 2.0.0
       which: 2.0.2
     dev: true
-
-  /crypt@0.0.2:
-    resolution: {integrity: sha512-mCxBlsHFYh9C+HVpiEacem8FEBnMXgU9gy4zmNC+SXAZNB/1idgp/aulFJ4FgCi7GPEVbfyng092GqL2k2rmow==}
-    dev: false
 
   /crypto-js@4.2.0:
     resolution: {integrity: sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==}
@@ -4229,13 +4246,6 @@ packages:
   /diff@5.2.0:
     resolution: {integrity: sha512-uIFDxqpRZGZ6ThOk84hEfqWoHx2devRFvpTZcTHur85vImfaxUbTW9Ryh4CpCuDnToOP1CEtXKIgytHBPVff5A==}
     engines: {node: '>=0.3.1'}
-    dev: false
-
-  /digest-fetch@1.3.0:
-    resolution: {integrity: sha512-CGJuv6iKNM7QyZlM2T3sPAdZWd/p9zQiRNS9G+9COUCwzWFTs0Xp8NF5iePx7wtvhDykReiRRrSeNb4oMmB8lA==}
-    dependencies:
-      base-64: 0.1.0
-      md5: 2.3.0
     dev: false
 
   /digest-header@1.1.0:
@@ -5452,10 +5462,6 @@ packages:
       has-tostringtag: 1.0.2
     dev: true
 
-  /is-buffer@1.1.6:
-    resolution: {integrity: sha512-NcdALwpXkTm5Zvvbk7owOUSvVvBKDgKP5/ewfXEznmQFfs4ZRmanOeKBTjRVjka3QFoN6XJ+9F3USqfHqTaU5w==}
-    dev: false
-
   /is-buffer@2.0.5:
     resolution: {integrity: sha512-i2R6zNFDwgEHJyQUtJEk0XFi1i0dPFn/oqjK3/vPCcDeJvW5NQ83V8QbicfF1SupOaB0h8ntgBC2YiE7dfyctQ==}
     engines: {node: '>=4'}
@@ -5906,14 +5912,6 @@ packages:
 
   /markdown-table@3.0.3:
     resolution: {integrity: sha512-Z1NL3Tb1M9wH4XESsCDEksWoKTdlUafKc4pt0GRwjUyXaCFZ+dc3g2erqB6zm3szA2IUSi7VnPI+o/9jnxh9hw==}
-    dev: false
-
-  /md5@2.3.0:
-    resolution: {integrity: sha512-T1GITYmFaKuO91vxyoQMFETst+O71VUPEU3ze5GNzDm0OWdP8v1ziTaAEPUr/3kLsY3Sftgz242A1SetQiDL7g==}
-    dependencies:
-      charenc: 0.0.2
-      crypt: 0.0.2
-      is-buffer: 1.1.6
     dev: false
 
   /mdast-util-definitions@5.1.2:
@@ -6493,7 +6491,7 @@ packages:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
     dev: true
 
-  /next-auth@4.24.7(next@14.1.2)(react-dom@18.2.0)(react@18.2.0):
+  /next-auth@4.24.7(next@14.2.3)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-iChjE8ov/1K/z98gdKbn2Jw+2vLgJtVV39X+rCP5SGnVQuco7QOr19FRNGMIrD8d3LYhHWV9j9sKLzq1aDWWQQ==}
     peerDependencies:
       next: ^12.2.5 || ^13 || ^14
@@ -6508,7 +6506,7 @@ packages:
       '@panva/hkdf': 1.1.1
       cookie: 0.5.0
       jose: 4.15.5
-      next: 14.1.2(@babel/core@7.24.0)(react-dom@18.2.0)(react@18.2.0)(sass@1.59.2)
+      next: 14.2.3(@babel/core@7.24.0)(react-dom@18.2.0)(react@18.2.0)(sass@1.59.2)
       oauth: 0.9.15
       openid-client: 5.6.5
       preact: 10.19.7
@@ -6526,23 +6524,26 @@ packages:
       regexparam: 2.0.2
     dev: false
 
-  /next@14.1.2(@babel/core@7.24.0)(react-dom@18.2.0)(react@18.2.0)(sass@1.59.2):
-    resolution: {integrity: sha512-p4RfNmopqkzRP1uUyBJnHii+qMg71f2udWhTTZopBB8b3T5QXNzn7yO+LCYHPWZG2kAvEn4l4neyJHqkXvo2wg==}
+  /next@14.2.3(@babel/core@7.24.0)(react-dom@18.2.0)(react@18.2.0)(sass@1.59.2):
+    resolution: {integrity: sha512-dowFkFTR8v79NPJO4QsBUtxv0g9BrS/phluVpMAt2ku7H+cbcBJlopXjkWlwxrk/xGqMemr7JkGPGemPrLLX7A==}
     engines: {node: '>=18.17.0'}
     hasBin: true
     peerDependencies:
       '@opentelemetry/api': ^1.1.0
+      '@playwright/test': ^1.41.2
       react: ^18.2.0
       react-dom: ^18.2.0
       sass: ^1.3.0
     peerDependenciesMeta:
       '@opentelemetry/api':
         optional: true
+      '@playwright/test':
+        optional: true
       sass:
         optional: true
     dependencies:
-      '@next/env': 14.1.2
-      '@swc/helpers': 0.5.2
+      '@next/env': 14.2.3
+      '@swc/helpers': 0.5.5
       busboy: 1.6.0
       caniuse-lite: 1.0.30001597
       graceful-fs: 4.2.11
@@ -6552,15 +6553,15 @@ packages:
       sass: 1.59.2
       styled-jsx: 5.1.1(@babel/core@7.24.0)(react@18.2.0)
     optionalDependencies:
-      '@next/swc-darwin-arm64': 14.1.2
-      '@next/swc-darwin-x64': 14.1.2
-      '@next/swc-linux-arm64-gnu': 14.1.2
-      '@next/swc-linux-arm64-musl': 14.1.2
-      '@next/swc-linux-x64-gnu': 14.1.2
-      '@next/swc-linux-x64-musl': 14.1.2
-      '@next/swc-win32-arm64-msvc': 14.1.2
-      '@next/swc-win32-ia32-msvc': 14.1.2
-      '@next/swc-win32-x64-msvc': 14.1.2
+      '@next/swc-darwin-arm64': 14.2.3
+      '@next/swc-darwin-x64': 14.2.3
+      '@next/swc-linux-arm64-gnu': 14.2.3
+      '@next/swc-linux-arm64-musl': 14.2.3
+      '@next/swc-linux-x64-gnu': 14.2.3
+      '@next/swc-linux-x64-musl': 14.2.3
+      '@next/swc-win32-arm64-msvc': 14.2.3
+      '@next/swc-win32-ia32-msvc': 14.2.3
+      '@next/swc-win32-x64-msvc': 14.2.3
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
@@ -6740,15 +6741,14 @@ packages:
       mimic-fn: 4.0.0
     dev: true
 
-  /openai@4.24.1(encoding@0.1.13):
-    resolution: {integrity: sha512-ezm/O3eiZMnyBqirUnWm9N6INJU1WhNtz+nK/Zj/2oyKvRz9pgpViDxa5wYOtyGYXPn1sIKBV0I/S4BDhtydqw==}
+  /openai@4.47.1(encoding@0.1.13):
+    resolution: {integrity: sha512-WWSxhC/69ZhYWxH/OBsLEirIjUcfpQ5+ihkXKp06hmeYXgBBIUCa9IptMzYx6NdkiOCsSGYCnTIsxaic3AjRCQ==}
     hasBin: true
     dependencies:
-      '@types/node': 18.19.23
+      '@types/node': 18.19.33
       '@types/node-fetch': 2.6.11
       abort-controller: 3.0.0
       agentkeepalive: 4.5.0
-      digest-fetch: 1.3.0
       form-data-encoder: 1.7.2
       formdata-node: 4.4.1
       node-fetch: 2.7.0(encoding@0.1.13)
@@ -7145,16 +7145,16 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /rc-field-form@1.43.0(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-s5JEtCrTTLqLD4JjdinqKZFKkRQPZcJ4ai8pwUWgtwpWSulfo32tqQHTMJtx8HQE9yU3ZFiqx/3zGNaPKGDTAg==}
+  /rc-field-form@1.44.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-el7w87fyDUsca63Y/s8qJcq9kNkf/J5h+iTdqG5WsSHLH0e6Usl7QuYSmSVzJMgtp40mOVZIY/W/QP9zwrp1FA==}
     engines: {node: '>=8.x'}
     peerDependencies:
       react: '>=16.9.0'
       react-dom: '>=16.9.0'
     dependencies:
-      '@babel/runtime': 7.24.0
+      '@babel/runtime': 7.24.6
       async-validator: 4.2.5
-      rc-util: 5.39.1(react-dom@18.2.0)(react@18.2.0)
+      rc-util: 5.41.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
@@ -7579,6 +7579,18 @@ packages:
       react-is: 18.2.0
     dev: false
 
+  /rc-util@5.41.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-xtlCim9RpmVv0Ar2Nnc3WfJCxjQkTf3xHPWoFdjp1fSs2NirQwqiQrfqdU9HUe0kdfb168M/T8Dq0IaX50xeKg==}
+    peerDependencies:
+      react: '>=16.9.0'
+      react-dom: '>=16.9.0'
+    dependencies:
+      '@babel/runtime': 7.24.6
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      react-is: 18.3.1
+    dev: false
+
   /rc-virtual-list@3.11.4(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-NbBi0fvyIu26gP69nQBiWgUMTPX3mr4FcuBQiVqagU0BnuX8WQkiivnMs105JROeuUIFczLrlgUhLQwTWV1XDA==}
     engines: {node: '>=8.x'}
@@ -7609,6 +7621,10 @@ packages:
 
   /react-is@18.2.0:
     resolution: {integrity: sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==}
+    dev: false
+
+  /react-is@18.3.1:
+    resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
     dev: false
 
   /react-lifecycles-compat@3.0.4:
@@ -8295,6 +8311,10 @@ packages:
 
   /stylis@4.3.1:
     resolution: {integrity: sha512-EQepAV+wMsIaGVGX1RECzgrcqRRU/0sYOHkeLsZ3fzHaHXZy4DaOOX0vOlGQdlsjkh3mFHAIlVimpwAs4dslyQ==}
+    dev: false
+
+  /stylis@4.3.2:
+    resolution: {integrity: sha512-bhtUjWd/z6ltJiQwg0dUfxEJ+W+jdqQd8TbWLWyeIJHlnsqmGLRFFd8e5mA0AZi/zx90smXRlN66YMTcaSFifg==}
     dev: false
 
   /supports-color@5.5.0:

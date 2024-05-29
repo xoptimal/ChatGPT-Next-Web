@@ -40,26 +40,34 @@ export default function (props: any) {
     onChange,
     maxCount = 1,
     uploadProps,
-    fileList = [],
+    fileList: fileListProps = [],
   } = props;
 
-  const handleChange: UploadProps["onChange"] = (info) => {
-    // if (info.fileList?.length === 1) {
-    //   const file = info.fileList[0];
+  const [loading, setLoading] = useState(false)
 
-    //   if (file.type === "image/jpeg") {
-    //     getBase64(file.originFileObj as FileType, (url) => {
-    //       setImageUrl(url);
-    //     });
-    //   }
-    // }
-    onChange?.(info);
+  const handleChange: UploadProps["onChange"] = (info) => {
+    if (onChange) {
+      onChange?.(info);
+    } else {
+      setFileList(info.fileList);
+    }
   };
 
+  const [fileList, setFileList] = useState(fileListProps);
+
+  useEffect(() => {
+    setFileList(fileListProps);
+  }, [fileListProps]);
+
   const onRemove = (file: any) => {
-    onChange?.({
+    const info = {
       fileList: fileList.filter((item: any) => item.uid !== file.uid),
-    });
+    };
+    if (onChange) {
+      onChange?.(info);
+    } else {
+      setFileList(info.fileList);
+    }
   };
 
   const beforeUpload = async (file: FileType) => {
@@ -74,14 +82,24 @@ export default function (props: any) {
       }
     }
 
+    setLoading(true)
+
     await manualUpload(file, (uploadFile: any) => {
-      setFileList((prev: any) => [...prev, uploadFile]);
+      const info = {
+        fileList: [...fileList, uploadFile],
+      };
+      if (onChange) {
+        onChange?.(info);
+      } else {
+        setFileList(info.fileList);
+      }
+      setLoading(false)
     });
 
     return false;
   };
 
-  const uploadButton = <Button icon={<UploadOutlined />}>点击上传</Button>;
+  const uploadButton = <Button loading={loading} icon={<UploadOutlined />}>点击上传</Button>;
 
   return (
     <div className={className}>

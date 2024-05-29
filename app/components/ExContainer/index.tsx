@@ -1,9 +1,11 @@
 "use client";
 
 import { useAsyncEffect } from "ahooks";
-import { Empty } from "antd";
+import { Empty, Spin } from "antd";
 import React, { useImperativeHandle } from "react";
 import { useState } from "react";
+
+import styles from './index.module.scss'
 
 type ExContainerProps = {
   request: () => void;
@@ -37,7 +39,9 @@ const ExContainer = React.forwardRef<
   return (
     <>
       {loading ? (
-        <span>loading...</span>
+        <div className={styles.loading}>
+           <Spin size="large" />
+        </div>
       ) : showEmpty ? (
         <Empty></Empty>
       ) : (

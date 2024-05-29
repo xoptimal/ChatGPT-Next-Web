@@ -1,13 +1,13 @@
 "use client";
 
 import ExTable, { ModalType } from "@/app/components/ExTable";
-import { productColumns } from "@/app/student/profile/page";
 import { Form, Image, Input, Modal, Radio } from "antd";
 
 import request from "@/app/utils/api";
 import dayjs from "dayjs";
 import styles from "./page.module.scss";
 import { getImageUrl } from "@/app/utils/helper";
+import { productColumns } from "@/app/student/apply/page";
 
 const TextArea = Input.TextArea;
 

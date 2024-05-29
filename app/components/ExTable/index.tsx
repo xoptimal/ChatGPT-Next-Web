@@ -143,7 +143,7 @@ export default function ExTable(props: ExTableProps<any, any>) {
       });
     }
     return temp;
-  }, [showColumnOption]);
+  }, [showColumnOption, optionRender]);
 
   function onModalChange(open: boolean, selectItem: any, type: number) {
     if (onModalChangeProps) {

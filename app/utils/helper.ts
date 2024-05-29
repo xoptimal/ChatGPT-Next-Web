@@ -1,7 +1,7 @@
 import dayjs from "@/lib/dayjs";
 import { message } from "antd";
 
-export function handlerError(e: unknown) {
+function handlerError(e: unknown) {
   let msg;
   if (typeof e === "string") {
     msg = e.toUpperCase();
@@ -11,41 +11,59 @@ export function handlerError(e: unknown) {
   message.error(msg).then(() => {});
 }
 
-export function getImageUrl(uid: String) {
+function getImageUrl(uid: String) {
   const uploadUrl = "http://sdn3icoqm.hn-bkt.clouddn.com/" + uid;
   return uploadUrl;
 }
 
-export function formatDateToFromNow(date: Date) {
+function formatDateToFromNow(date: Date) {
   const now = dayjs();
   const target = dayjs(date);
-  const diff = now.diff(target, 'day');
+  const diff = now.diff(target, "day");
 
   if (diff > 1) {
-    return target.format('YYYY-MM-DD HH:mm:ss');
+    return target.format("YYYY-MM-DD HH:mm:ss");
   } else {
     return target.fromNow();
   }
 }
 
-
-export function formatDate(date: Date, config?: {showTime: boolean}) {
-  let format="YYYY-MM-DD"
-  if(config && config.showTime) {
+function formatDate(date: Date, config?: { showTime: boolean }) {
+  let format = "YYYY-MM-DD";
+  if (config && config.showTime) {
     format = "YYYY-MM-DD HH:mm:ss";
   }
   return dayjs(date).format(format);
 }
 
-export function formatAttachmentToList(
+function formatAttachmentToList(
   attachment?: string,
 ): { uid: string; name: string }[] {
-  let attachmentList: any[] =[];
+  let attachmentList: any[] = [];
   if (attachment) {
     attachmentList = JSON.parse(attachment);
     if (!Array.isArray(attachmentList)) {
       attachmentList = [attachmentList];
     }
   }
-  return attachmentList //.map(item => ({...item, status: 'done'}));
+  return attachmentList; //.map(item => ({...item, status: 'done'}));
 }
+
+function transformAttachment(fileList: any[]) {
+  let fileJson;
+  if (fileList.length > 0) {
+    fileJson = JSON.stringify(
+      fileList.map((item) => ({ uid: item.uid, name: item.name })),
+    );
+  }
+  return fileJson;
+}
+
+export {
+  transformAttachment,
+  handlerError,
+  getImageUrl,
+  formatDateToFromNow,
+  formatAttachmentToList,
+  formatDate,
+};
