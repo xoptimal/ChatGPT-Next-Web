@@ -424,8 +424,6 @@ export default function () {
                   <h3>转账凭证</h3>
                   <div>
                     <ExUpload
-                      className={styles.upload}
-                      imageClassName={styles.imageClassName}
                       fileList={fileList}
                       onChange={(info: any) => {
                         setFileList(info.fileList);

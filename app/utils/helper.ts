@@ -49,9 +49,9 @@ function formatAttachmentToList(
   return attachmentList; //.map(item => ({...item, status: 'done'}));
 }
 
-function transformAttachment(fileList: any[]) {
+function transformAttachment(fileList?: any[]) {
   let fileJson;
-  if (fileList.length > 0) {
+  if (fileList && fileList.length > 0) {
     fileJson = JSON.stringify(
       fileList.map((item) => ({ uid: item.uid, name: item.name })),
     );

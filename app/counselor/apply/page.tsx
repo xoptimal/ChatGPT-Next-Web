@@ -4,12 +4,13 @@ import ExContainer, { ExContainerRef } from "@/app/components/ExContainer";
 import ExUpload from "@/app/components/ExUpload";
 import { scrollToTop } from "@/app/components/ScrollToTopButton";
 import request from "@/app/utils/api";
+import { counselorLevelOptions } from "@/app/utils/dic";
+import { transformAttachment } from "@/app/utils/helper";
 import { Button, Descriptions, message, Radio, Result, Space } from "antd";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import styles from "./page.module.scss";
-import { counselorLevelOptions } from "@/app/utils/dic";
 
 export default function Page() {
   const [index, setIndex] = useState(0);
@@ -29,10 +30,7 @@ export default function Page() {
     }
 
     const data = {
-      attachment: JSON.stringify({
-        uid: fileList[0].uid,
-        name: fileList[0].name,
-      }),
+      attachment: transformAttachment(fileList),
       message: "顾问申请",
       username: session?.user.username,
       phone: session?.user.phone,

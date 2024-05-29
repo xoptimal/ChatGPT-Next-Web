@@ -1,27 +1,34 @@
 "use client";
-import ExUpload from "@/app/components/ExUpload";
+
+import { Form, Input, Radio } from "antd";
+
 import styles from "@/app/service/product/page.module.scss";
+
 import {
-  formatAttachmentToList,
-  formatDate,
-  getImageUrl,
+    formatAttachmentToList,
+    formatDate,
+    getImageUrl,
 } from "@/app/utils/helper";
-import { Form, Input } from "antd";
+
+const defAuditOptions = [
+  { label: "通过", value: 1 },
+  { label: "驳回", value: 2 },
+];
 
 const TextArea = Input.TextArea;
 
-export default function AuditContent(props: any) {
+export default function AdminAuditContent(props: any) {
   const {
     record,
     form,
-    fileList,
-    setFileList,
     showEditor = false,
-    listKey = "productAudit",
+    auditOptions = defAuditOptions,
+    listKey = 'productAudit',
   } = props;
 
   return (
     <div className={styles.modal_body}>
+        {props.children}
       <div className={styles.modal_body_list}>
         {record?.[listKey].map((item: any, index: number) => {
           const attachmentList = formatAttachmentToList(item.attachment);
@@ -29,7 +36,7 @@ export default function AuditContent(props: any) {
             <div>
               <div key={index}>
                 <div>
-                  <h1>您</h1>
+                  <h1>{record.username}</h1>
                   <span>{formatDate(item.createdAt, { showTime: true })}</span>
                 </div>
                 <div>{item.message}</div>
@@ -59,21 +66,20 @@ export default function AuditContent(props: any) {
         })}
       </div>
       {showEditor && (
-        <Form form={form} labelCol={{ span: 2 }} style={{ marginTop: "16px" }}>
+        <Form form={form} style={{ marginTop: "16px" }}>
           <Form.Item
-            name={"message"}
+            name={"status"}
+            label="审核"
+            rules={[{ required: true, message: "请选择" }]}
+          >
+            <Radio.Group options={auditOptions}></Radio.Group>
+          </Form.Item>
+          <Form.Item
+            name={"auditMessage"}
             label="说明"
             rules={[{ required: true, message: "请说明" }]}
           >
             <TextArea />
-          </Form.Item>
-          <Form.Item label="附件">
-            <ExUpload
-              fileList={fileList}
-              onChange={(info: any) => {
-                setFileList(info.fileList);
-              }}
-            />
           </Form.Item>
         </Form>
       )}

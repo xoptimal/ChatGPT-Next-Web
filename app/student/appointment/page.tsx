@@ -10,31 +10,26 @@ import {
   CalendarProps,
   DatePicker,
   Form,
-  Input,
   Modal,
   Radio,
   Select,
-  message,
 } from "antd";
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
 
 import { useAsyncEffect } from "ahooks";
 
-import styles from "@/app/service/product/page.module.scss";
 import styles2 from "./page.module.scss";
 
-import ExUpload from "@/app/components/ExUpload";
-import { getImageUrl } from "@/app/utils/helper";
-
-const TextArea = Input.TextArea;
+import AuditContent from "@/app/components/AuditContent";
+import { transformAttachment } from "@/app/utils/helper";
 
 export default function Page() {
   const [level, setLevel] = useState(1);
   const [monthData, setMonthData] = useState();
   const [selectedDay, setSelectDay] = useState(dayjs());
   const [selectedItem, setSelectedItem] = useState<string>();
-  const [fileList, setFileList] = useState<any[]>();
+  const [fileList, setFileList] = useState<any[]>([]);
 
   const [form] = Form.useForm();
 
@@ -144,14 +139,8 @@ export default function Page() {
                   message: values.message,
                   scheduleId: record.id,
                   status: 5,
+                  attachment: transformAttachment(fileList),
                 };
-
-                if (fileList) {
-                  data.attachment = JSON.stringify({
-                    uid: fileList[0].uid,
-                    name: fileList[0].name,
-                  });
-                }
 
                 await request("/api/appointment/audit", {
                   method: "POST",
@@ -168,7 +157,7 @@ export default function Page() {
             onOk: () =>
               onOk(async () => {
                 if (!selectedItem) {
-                  throw new Error('请选择预约时间再提交')
+                  throw new Error("请选择预约时间再提交");
                 }
 
                 const arr = selectedItem.split(" ");
@@ -218,77 +207,14 @@ export default function Page() {
                 />
               </div>
             ) : (
-              <div className={styles.modal_body}>
-                <div className={styles.modal_body_list}>
-                  {record?.scheduleAudit.map((item: any, index: number) => {
-                    let attachmentList;
-                    if (item.attachment) {
-                      attachmentList = JSON.parse(item.attachment);
-                      if (!Array.isArray(attachmentList)) {
-                        attachmentList = [attachmentList];
-                      }
-                    }
-
-                    return (
-                      <div>
-                        <div key={index}>
-                          <div>
-                            <h1>您</h1>
-                            <span>
-                              {dayjs(item.createdAt).format("YYYY-MM-DD HH:mm")}
-                            </span>
-                          </div>
-                          <div>{item.message}</div>
-                          {attachmentList?.map((item) => (
-                            <a
-                              key={item.uid}
-                              href={getImageUrl(item.uid)}
-                              target="_blank"
-                            >
-                              {item.name}
-                            </a>
-                          ))}
-                        </div>
-                        {item.auditMessage && (
-                          <div key={index} className={styles.admin}>
-                            <div>
-                              <h1>系统管理员</h1>
-                              <span>
-                                {dayjs(item.updatedAt).format(
-                                  "YYYY-MM-DD HH:mm",
-                                )}
-                              </span>
-                            </div>
-                            <div>{item.auditMessage}</div>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-                {record?.status === 6 && (
-                  <Form
-                    form={form}
-                    labelCol={{ span: 2 }}
-                    style={{ marginTop: "16px" }}
-                  >
-                    <Form.Item
-                      name={"message"}
-                      label="说明"
-                      rules={[{ required: true, message: "请说明" }]}
-                    >
-                      <TextArea />
-                    </Form.Item>
-                    <Form.Item label="附件">
-                      <ExUpload
-                        onChange={(info: any) => {
-                          setFileList(info.fileList);
-                        }}
-                      />
-                    </Form.Item>
-                  </Form>
-                )}
-              </div>
+              <AuditContent
+                record={record}
+                form={form}
+                fileList={fileList}
+                setFileList={setFileList}
+                listKey={"scheduleAudit"}
+                showEditor={record?.status === 6}
+              />
             )}
           </Modal>
         );

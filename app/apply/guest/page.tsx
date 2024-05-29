@@ -4,14 +4,9 @@ import ExTable, { ModalType } from "@/app/components/ExTable";
 import request from "@/app/utils/api";
 import { scheduleStatusType } from "@/app/utils/dic";
 import { ProColumns } from "@ant-design/pro-components";
-import { Empty, Form, Input, Modal, Radio } from "antd";
-import dayjs from "dayjs";
+import { Empty, Form, Modal } from "antd";
 
-import styles from "@/app/service/product/page.module.scss";
-
-import { getImageUrl } from "@/app/utils/helper";
-
-const TextArea = Input.TextArea;
+import AdminAuditContent from "@/app/components/AdminAuditContent";
 
 const auditOptions = [
   { label: "通过", value: 1 },
@@ -111,72 +106,15 @@ export default function Page() {
               })
             }
           >
-            <div className={styles.modal_body}>
+            <AdminAuditContent
+              record={record}
+              form={form}
+              showEditor={record?.status === 5}
+              auditOptions={auditOptions}
+              listKey={"scheduleAudit"}
+            >
               {record?.status === 0 && <Empty />}
-              <div className={styles.modal_body_list}>
-                {record?.scheduleAudit.map((item: any, index: number) => {
-                  let attachmentList;
-                  if (item.attachment) {
-                    attachmentList = JSON.parse(item.attachment);
-                    if (!Array.isArray(attachmentList)) {
-                      attachmentList = [attachmentList];
-                    }
-                  }
-
-                  return (
-                    <div>
-                      <div key={index}>
-                        <div>
-                          <h1>{record.user.username}</h1>
-                          <span>
-                            {dayjs(item.createdAt).format("YYYY-MM-DD HH:mm")}
-                          </span>
-                        </div>
-                        <div>{item.message}</div>
-                        {attachmentList?.map((item) => (
-                          <a
-                            key={item.uid}
-                            href={getImageUrl(item.uid)}
-                            target="_blank"
-                          >
-                            {item.name}
-                          </a>
-                        ))}
-                      </div>
-                      {item.auditMessage && (
-                        <div key={index} className={styles.admin}>
-                          <div>
-                            <h1>系统管理员</h1>
-                            <span>
-                              {dayjs(item.updatedAt).format("YYYY-MM-DD HH:mm")}
-                            </span>
-                          </div>
-                          <div>{item.auditMessage}</div>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-              {record?.status === 5 && (
-                <Form form={form} style={{ marginTop: "16px" }}>
-                  <Form.Item
-                    name={"status"}
-                    label="审核"
-                    rules={[{ required: true, message: "请选择" }]}
-                  >
-                    <Radio.Group options={auditOptions}></Radio.Group>
-                  </Form.Item>
-                  <Form.Item
-                    name={"auditMessage"}
-                    label="说明"
-                    rules={[{ required: true, message: "请说明" }]}
-                  >
-                    <TextArea />
-                  </Form.Item>
-                </Form>
-              )}
-            </div>
+            </AdminAuditContent>
           </Modal>
         );
       }}

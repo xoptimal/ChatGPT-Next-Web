@@ -165,7 +165,7 @@ function SubtaskButton(
     },
   ];
 
-  let title = "新建任务"; 
+  let title = "新建任务";
   if (record) {
     title = "编辑";
   }
@@ -189,15 +189,7 @@ function SubtaskButton(
             const values = await form.validateFields();
             setConfirmLoading(true);
             let config: any;
-            let attachment = "";
-            if (fileList.length) {
-              attachment = JSON.stringify(
-                fileList.map((item) => ({
-                  uid: item.uid,
-                  name: item.name,
-                })),
-              );
-            }
+            let attachment = transformAttachment(fileList);
 
             if (record) {
               config = {
@@ -331,7 +323,7 @@ function MessageButton(
 
                 const user = item.user;
 
-                const [color, text] = getRole(user.role, user.type)
+                const [color, text] = getRole(user.role, user.type);
                 return (
                   <div>
                     <Space className={styles.message_title}>
@@ -453,7 +445,7 @@ export default function Page() {
         title="任务规划"
         extra={
           data &&
-          (data.status === 1 || data.status === 2) &&
+          (data.status === '1' || data.status === '2') &&
           (role === 1 || role === 99) && (
             <SubtaskButton
               buttonProps={{ ghost: true }}
