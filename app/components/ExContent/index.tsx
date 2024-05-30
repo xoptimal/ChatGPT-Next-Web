@@ -70,16 +70,17 @@ export function getSideMenus(role: number = -1, other = true) {
   }
 
   if (other) {
-    routes.push(
-      {
+    if (routes.length > 0) {
+      routes.push({
         type: "divider",
-      },
-      {
-        key: "logout",
-        icon: <LogoutOutlined />,
-        label: "退出登录",
-      },
-    );
+      });
+    }
+
+    routes.push({
+      key: "logout",
+      icon: <LogoutOutlined />,
+      label: "退出登录",
+    });
   }
 
   return routes;
@@ -136,6 +137,8 @@ export default (props: React.PropsWithChildren<ExContentProps>) => {
     }
   };
 
+  const title = role === 99 ? '管理端' : role === 1 ? '顾问端' : '用户端'
+
   return (
     <div
       id="test-pro-layout"
@@ -171,7 +174,7 @@ export default (props: React.PropsWithChildren<ExContentProps>) => {
         menu={{
           type: "group",
         }}
-        title={``}
+        title={title}
         logo={"/logo.png"}
         avatarProps={{
           size: "small",

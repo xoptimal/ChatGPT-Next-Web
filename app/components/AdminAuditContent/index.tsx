@@ -24,6 +24,7 @@ export default function AdminAuditContent(props: any) {
     showEditor = false,
     auditOptions = defAuditOptions,
     listKey = 'productAudit',
+    name
   } = props;
 
   return (
@@ -33,10 +34,10 @@ export default function AdminAuditContent(props: any) {
         {record?.[listKey].map((item: any, index: number) => {
           const attachmentList = formatAttachmentToList(item.attachment);
           return (
-            <div>
-              <div key={index}>
+            <div key={item.id}>
+              <div>
                 <div>
-                  <h1>{record.username}</h1>
+                  <h1>{name || record.username}</h1>
                   <span>{formatDate(item.createdAt, { showTime: true })}</span>
                 </div>
                 <div>{item.message}</div>

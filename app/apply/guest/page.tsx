@@ -112,6 +112,7 @@ export default function Page() {
               showEditor={record?.status === 5}
               auditOptions={auditOptions}
               listKey={"scheduleAudit"}
+              name={record?.user.username}
             >
               {record?.status === 0 && <Empty />}
             </AdminAuditContent>
