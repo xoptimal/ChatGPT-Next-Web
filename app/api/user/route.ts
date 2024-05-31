@@ -36,6 +36,7 @@ export async function GET(req: NextRequest) {
                 age: true,
                 score: true,
                 address: true,
+                type: true,
             }
         }
 
@@ -88,4 +89,23 @@ export async function DELETE(req: NextRequest) {
         return NextResponse.json({error: 'System exception'}, {status: 500});
     }
 
+}
+
+export async function PUT(req: NextRequest, res: NextResponse) {
+    try {
+        const {id, ...rest} = await req.json();
+
+        await prisma.user.update({
+            where: {
+                id
+            },
+            data: rest
+        });
+
+        return NextResponse.json({status: 200, statusText: "OK"});
+
+    } catch (error) {
+        console.error(error);
+        return NextResponse.json({error: "System exception"}, {status: 500});
+    }
 }

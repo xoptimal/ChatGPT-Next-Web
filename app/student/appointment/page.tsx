@@ -2,10 +2,15 @@
 
 import ExTable, { ModalType } from "@/app/components/ExTable";
 import request from "@/app/utils/api";
-import { counselorLevelOptions, scheduleStatusType } from "@/app/utils/dic";
+import {
+  counselorLevelOptions,
+  counselorLevelToStudentOptions,
+  scheduleStatusType,
+} from "@/app/utils/dic";
 import { ProColumns } from "@ant-design/pro-components";
 import {
   Alert,
+  Button,
   Calendar,
   CalendarProps,
   DatePicker,
@@ -13,6 +18,7 @@ import {
   Modal,
   Radio,
   Select,
+  message,
 } from "antd";
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
@@ -23,6 +29,8 @@ import styles2 from "./page.module.scss";
 
 import AuditContent from "@/app/components/AuditContent";
 import { transformAttachment } from "@/app/utils/helper";
+import { PlusOutlined } from "@ant-design/icons";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
   const [level, setLevel] = useState(1);
@@ -30,6 +38,7 @@ export default function Page() {
   const [selectedDay, setSelectDay] = useState(dayjs());
   const [selectedItem, setSelectedItem] = useState<string>();
   const [fileList, setFileList] = useState<any[]>([]);
+  const router = useRouter();
 
   const [form] = Form.useForm();
 
@@ -120,6 +129,29 @@ export default function Page() {
       title={"预约管理"}
       showCreateButton
       showDetailAction={false}
+      renderAddButton={(onClick) => (
+        <Button
+          key="create"
+          icon={<PlusOutlined />}
+          onClick={async () => {
+            const { data } = await request("/api/psq");
+            if (data) {
+              // 说明可以预约
+              onClick();
+            } else {
+              message.warning(
+                "您需要先完善消息, 再进行预约, 2秒后自动跳转到个人信息页面",
+              );
+              setTimeout(() => {
+                router.replace("/student/profile");
+              }, 2000);
+            }
+          }}
+          type="primary"
+        >
+          预约咨询
+        </Button>
+      )}
       optionRender={(record, onClick) => (
         <a key="edit" onClick={() => onClick(ModalType.detail)}>
           审核详情
@@ -152,7 +184,7 @@ export default function Page() {
         } else {
           temp = {
             ...modalProps,
-            title: "新建预约",
+            title: "预约咨询",
             width: 1200,
             onOk: () =>
               onOk(async () => {
@@ -196,7 +228,7 @@ export default function Page() {
                         <Select
                           size="large"
                           value={level}
-                          options={counselorLevelOptions}
+                          options={counselorLevelToStudentOptions}
                           style={{ width: "120px" }}
                           onChange={setLevel}
                         />

@@ -134,6 +134,7 @@ export default function Page() {
       title={"预约管理"}
       showCreateButton
       showDetailAction={false}
+      addButtonText="提供预约时间"
     >
       {(record, modalProps, { onOk }) => {
         return (
@@ -152,7 +153,7 @@ export default function Page() {
               })
             }
             width={600}
-            title="新建预约"
+            title="提供预约时间"
           >
             <BetaSchemaForm
               form={form}

@@ -49,6 +49,8 @@ type ExTableProps<DataSource, U, ValueType = "text"> = {
   onModalChange?: (open: boolean, selectItem: any, type: number) => void;
   showCreateButton?: boolean;
   form?: any;
+  addButtonText?: string
+  renderAddButton?: (onClick: () => void) => ReactNode
 };
 
 export enum ModalType {
@@ -75,6 +77,8 @@ export default function ExTable(props: ExTableProps<any, any>) {
     onModalChange: onModalChangeProps,
     showCreateButton = false,
     form,
+    addButtonText = '添加',
+    renderAddButton,
   } = props;
 
   const [open, setOpen] = useState(false);
@@ -248,21 +252,29 @@ export default function ExTable(props: ExTableProps<any, any>) {
           const arr = [];
 
           if (showCreateButton) {
-            arr.push(
-              <Button
-                key="create"
-                icon={<PlusOutlined />}
-                onClick={() => {
-                  setType(ModalType.create);
-                  setOpen(true);
-                  setSelectItem(null);
-                  onModalChange?.(true, null, type);
-                }}
-                type="primary"
-              >
-                新建
-              </Button>,
-            );
+
+            let addDom;
+            const onClick =() => {
+              setType(ModalType.create);
+              setOpen(true);
+              setSelectItem(null);
+              onModalChange?.(true, null, type);
+            }
+
+            if(renderAddButton) {
+              addDom = renderAddButton(onClick);
+            } else {
+              addDom = <Button
+              key="create"
+              icon={<PlusOutlined />}
+              onClick={onClick}
+              type="primary"
+            >
+              {addButtonText}
+            </Button>
+            }
+
+            arr.push(addDom);
           }
 
           return arr;

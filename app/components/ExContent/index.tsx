@@ -48,11 +48,11 @@ export function getSideMenus(role: number = -1, other = true) {
         icon: <TeamOutlined />,
         label: "家长信息",
       },
-      {
-        key: "/student/apply",
-        icon: <SolutionOutlined />,
-        label: "我的签约",
-      },
+      // {
+      //   key: "/student/apply",
+      //   icon: <SolutionOutlined />,
+      //   label: "我的签约",
+      // },
     ];
   } else if (role === ROLE.COUNSELOR) {
     routes = [
@@ -238,7 +238,7 @@ export default (props: React.PropsWithChildren<ExContentProps>) => {
                       size="small"
                       onClick={() => router.push("/student/product")}
                     >
-                      开通服务
+                      恩代服务
                     </Button>
                   )}
                 </div>

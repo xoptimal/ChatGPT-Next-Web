@@ -96,22 +96,27 @@ const admin = [
         ]
     },
 
+    // {
+    //     path: '/service',
+    //     name: '服务管理',
+    //     icon: 'SmileFilled',
+    //     routes: [
+    //         // {
+    //         //     path: '/service/product',
+    //         //     name: '签约客户',
+    //         //     icon: 'SmileFilled'
+    //         // },
+    //         {
+    //             path: '/service/schedule',
+    //             name: '服务进度监督',
+    //             icon: 'SmileFilled'
+    //         },
+    //     ]
+    // },
     {
-        path: '/service',
-        name: '服务管理',
-        icon: 'SmileFilled',
-        routes: [
-            {
-                path: '/service/product',
-                name: '签约客户',
-                icon: 'SmileFilled'
-            },
-            {
-                path: '/service/schedule',
-                name: '服务进度监督',
-                icon: 'SmileFilled'
-            },
-        ]
+        path: '/admin/psq',
+        name: '问卷管理',
+        icon: 'SmileFilled'
     },
     {
         path: '/task',

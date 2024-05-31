@@ -31,14 +31,14 @@ export async function PUT(req: NextRequest, res: NextResponse) {
 
         const body = await req.json()
 
-        await prisma.user.update({
+        const data = await prisma.user.update({
             where: {
                 id: session!.user.userId
             },
             data: body
         });
 
-        return NextResponse.json({status: 200, statusText: 'OK'});
+        return NextResponse.json({status: 200, statusText: 'OK', data});
 
     } catch (error) {
         console.error(error)

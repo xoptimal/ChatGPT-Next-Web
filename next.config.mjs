@@ -90,7 +90,7 @@ if (mode !== "export") {
       },
       {
         source: "/service",
-        destination: "/service/product",
+        destination: "/service/schedule",
       }, {
         source: "/apply",
         destination: "/apply/guest",

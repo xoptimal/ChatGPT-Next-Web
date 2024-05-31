@@ -18,7 +18,6 @@ export function getRole(role: ROLE = ROLE.STUDENT, type: number = 0) {
   if (role === ROLE.ADMIN) {
     color = "red";
     name = "管理员";
-
   } else if (role === ROLE.STUDENT) {
     switch (type) {
       case 1:
@@ -110,15 +109,21 @@ const scheduleReadyType = {
   1: "已就位",
 };
 
+const counselorLevelToStudentOptions = [
+  { label: "初级咨询", value: 1 },
+  //{ label: "中级顾问", value: 2 },
+  { label: "高级咨询", value: 3 },
+];
+
 const counselorLevelOptions = [
   { label: "初级顾问", value: 1 },
-  { label: "中级顾问", value: 2 },
+  //{ label: "中级顾问", value: 2 },
   { label: "高级顾问", value: 3 },
 ];
 
 const productEnum = {
   1: "初级顾问",
-  2: "中级顾问",
+  //2: "中级顾问",
   3: "高级顾问",
 };
 
@@ -178,7 +183,21 @@ const subTaskStatus = {
   1: "待开始",
 };
 
+const studentEnum = {
+  1: "普通会员",
+  2: "VVVIP",
+  3: "加州精英",
+};
+const studentOptions = [
+  { label: "普通会员", value: 1 },
+  { label: "VVVIP", value: 2 },
+  { label: "加州精英", value: 3 },
+];
+
 export {
+  counselorLevelToStudentOptions,
+  studentEnum,
+  studentOptions,
   counselorLevelEnum,
   ENTITY_TYPE,
   INVITATION_CODE,
