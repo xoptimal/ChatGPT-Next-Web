@@ -21,6 +21,7 @@
 
     > div {
       //margin-bottom: 8px;
+      white-space: pre-wrap;
 
       .attachment {
         margin-top: 8px;
@@ -31,31 +32,38 @@
       > a {
         display: block;
       }
-
-      > div {
-        display: flex;
-
-        > h1 {
-          font-size: 16px;
-          color: #333;
-          font-weight: normal;
-        }
-
-        > span {
-          font-size: 16px;
-          color: #999;
-          padding-left: 8px;
-        }
-      }
     }
   }
 }
 
+.modal_body_title {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+
+  .right {
+    font-size: 14px;
+  }
+
+  .left {
+    display: flex;
+    flex-shrink: 0;
+
+    > h1 {
+      font-size: 16px;
+      color: #333;
+      font-weight: normal;
+    }
+
+    > span {
+      font-size: 16px;
+      color: #999;
+      padding-left: 8px;
+    }
+  }
+}
 
 .icon_attachment {
   width: 64px;
   height: 64px;
-}
-
-.modal_body {
 }

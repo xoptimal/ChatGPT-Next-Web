@@ -3,23 +3,12 @@
 import ExTable, { ModalType } from "@/app/components/ExTable";
 import request from "@/app/utils/api";
 import {
-  counselorLevelOptions,
-  counselorLevelToStudentOptions,
+  COUNSELOR_TYPE,
+  STUDENT_TYPE,
   scheduleStatusType,
 } from "@/app/utils/dic";
-import { ProColumns } from "@ant-design/pro-components";
-import {
-  Alert,
-  Button,
-  Calendar,
-  CalendarProps,
-  DatePicker,
-  Form,
-  Modal,
-  Radio,
-  Select,
-  message,
-} from "antd";
+import { BetaSchemaForm, ProColumns } from "@ant-design/pro-components";
+import { Button, CalendarProps, Form, Modal, Radio, message } from "antd";
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
 
@@ -28,8 +17,9 @@ import { useAsyncEffect } from "ahooks";
 import styles2 from "./page.module.scss";
 
 import AuditContent from "@/app/components/AuditContent";
-import { transformAttachment } from "@/app/utils/helper";
+import { formatDate, transformAttachment } from "@/app/utils/helper";
 import { PlusOutlined } from "@ant-design/icons";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 export default function Page() {
@@ -63,6 +53,10 @@ export default function Page() {
       title: "预约顾问",
       dataIndex: "counselorId",
       render: (dom, record) => record.counselor.username,
+    },
+    {
+      title: "咨询内容",
+      dataIndex: "remark",
     },
     // {
     //   title: "学生",
@@ -114,12 +108,25 @@ export default function Page() {
     return <span></span>;
   };
 
+  const { data: session } = useSession();
+
   useAsyncEffect(async () => {
-    const res = await request("/api/appointment", {
-      params: { level, date: selectedDay.toISOString() },
-    });
-    setMonthData(res.data);
-  }, [level]);
+    if (session && session.user && !monthData) {
+      const type = session.user.type;
+
+      let level =
+        type === STUDENT_TYPE.INTERMEDIATE || type === STUDENT_TYPE.ADVANCED
+          ? COUNSELOR_TYPE.ADVANCED
+          : COUNSELOR_TYPE.BEGINNER;
+
+      setLevel(level);
+
+      const res = await request("/api/appointment", {
+        params: { level, date: selectedDay.toISOString() },
+      });
+      setMonthData(res.data);
+    }
+  }, [session]);
 
   return (
     <ExTable
@@ -185,22 +192,16 @@ export default function Page() {
           temp = {
             ...modalProps,
             title: "预约咨询",
-            width: 1200,
+            width: 600,
             onOk: () =>
-              onOk(async () => {
-                if (!selectedItem) {
-                  throw new Error("请选择预约时间再提交");
-                }
-
-                const arr = selectedItem.split(" ");
-                const date = arr[0];
-                const times = arr[1].split("-");
+              onOk(async (values) => {
+                const times = values.time.split("-");
                 const data = {
                   level,
-                  startTime: `${date} ${times[0]}`,
-                  endTime: `${date} ${times[1]}`,
+                  startTime: `${values.date} ${times[0]}`,
+                  endTime: `${values.date} ${times[1]}`,
+                  remark: values.remark,
                 };
-
                 await request("/api/appointment", { method: "POST", data });
               }),
           };
@@ -210,7 +211,81 @@ export default function Page() {
           <Modal {...temp}>
             {type === ModalType.create ? (
               <div className={styles2.body}>
-                <Calendar
+                <BetaSchemaForm
+                  form={form}
+                  submitter={false}
+                  grid
+                  columns={[
+                    {
+                      title: "咨询内容",
+                      dataIndex: "remark",
+                      valueType: "textarea",
+                      formItemProps: {
+                        rules: [{ required: true, message: "此项为必填项" }],
+                      },
+                    },
+                    {
+                      title: "咨询日期",
+                      dataIndex: "date",
+                      valueType: "select",
+                      formItemProps: {
+                        rules: [{ required: true, message: "此项为必填项" }],
+                      },
+                      fieldProps: {
+                        style: { width: "100%" },
+                        options: monthData
+                          ? Object.keys(monthData).map((item) => ({
+                              label: item,
+                              value: item,
+                            }))
+                          : [],
+                      },
+                    },
+                    {
+                      valueType: "dependency",
+                      name: ["date"],
+                      columns: ({ date }) => {
+                        let list: any[] = [];
+                        if (date && monthData) {
+                          const key = formatDate(date);
+                          list = monthData[key];
+                        }
+
+                        return [
+                          {
+                            title: "咨询时间段",
+                            dataIndex: "time",
+                            valueType: "select",
+                            fieldProps: {
+                              options: list.map((item: any) => ({
+                                label: `${item.startTime}-${item.endTime}`,
+                                value: `${item.startTime}-${item.endTime}`,
+                              })),
+                            },
+                            formItemProps: {
+                              shouldUpdate: (
+                                prevValues: any,
+                                curValues: any,
+                              ) => {
+                                if (prevValues.date !== curValues.date) {
+                                  form.setFieldValue("time", undefined);
+                                  form.resetFields(["time"]);
+                                }
+
+                                return prevValues.date !== curValues.date;
+                              },
+                              rules: [
+                                { required: true, message: "此项为必填项" },
+                              ],
+                            },
+                          },
+                        ];
+                      },
+                    },
+                  ]}
+                ></BetaSchemaForm>
+
+                {/* <Calendar
                   value={selectedDay}
                   onSelect={setSelectDay}
                   headerRender={(config) => (
@@ -236,7 +311,7 @@ export default function Page() {
                     </div>
                   )}
                   cellRender={cellRender}
-                />
+                /> */}
               </div>
             ) : (
               <AuditContent

@@ -5,6 +5,28 @@ import { Modal } from "antd";
 
 import styles from "./page.module.scss";
 
+export function PreviewPsqList(props: any) {
+  const {  name, psqList } = props;
+
+  return (
+    <>
+      <div className={styles.title}>
+        <div className={styles.drawer_title}>
+          来自<a>{name}</a>同学问卷调查
+        </div>
+      </div>
+      {psqList.map((item: any, index: number) => (
+        <div key={index} className={styles.item}>
+          <div>
+            <h1>{item.question}</h1>
+            <p>{item.value}</p>
+          </div>
+        </div>
+      ))}
+    </>
+  );
+}
+
 export default function Page() {
   const columns: ProColumns[] = [
     {
@@ -44,22 +66,12 @@ export default function Page() {
     <ExTable columns={columns} apiUrl={"/api/psq/list"} title={"问卷管理"}>
       {(record, modalProps) => {
         const psqList = record ? JSON.parse(record.content) : [];
-
         return (
           <Modal {...modalProps} footer={false} title="问卷预览">
-            <div className={styles.title}>
-              <div className={styles.drawer_title}>
-                来自<a>{record?.user.username}</a>同学问卷调查
-              </div>
-            </div>
-            {psqList.map((item: any, index: number) => (
-              <div key={index} className={styles.item}>
-                <div>
-                  <h1>{item.question}</h1>
-                  <p>{item.value}</p>
-                </div>
-              </div>
-            ))}
+            <PreviewPsqList
+              psqList={psqList}
+              name={record?.user.username}
+            />
           </Modal>
         );
       }}

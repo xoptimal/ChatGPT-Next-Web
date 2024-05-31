@@ -15,66 +15,73 @@ import {
 } from "@ant-design/pro-components";
 import { Form, Modal } from "antd";
 
-export default function Page() {
-  const columns: ProColumns[] = [
-    {
-      title: "学号",
-      dataIndex: "id",
-      search: false,
-    },
-    {
-      title: "姓名",
-      dataIndex: "username",
-    },
-    {
-      title: "身份",
-      dataIndex: "type",
-      valueEnum: studentEnum,
-    },
-    {
-      title: "学校",
-      key: "school",
-      dataIndex: "school",
-      valueEnum: UNIVERSITIES,
-      search: false,
-    },
-    {
-      title: "年级",
-      dataIndex: "class",
-      search: false,
-    },
-    {
-      title: "电话",
-      dataIndex: "phone",
-    },
-    {
-      title: "邮箱",
-      dataIndex: "email",
-    },
-    {
-      title: "注册时间",
-      search: false,
-      dataIndex: "createdAt",
-      valueType: "dateTime",
-    },
-  ];
+const columns: ProColumns[] = [
+  {
+    title: "学号",
+    dataIndex: "studentId",
+    search: false,
+  },
+  {
+    title: "姓名",
+    dataIndex: "username",
+  },
+  {
+    title: "身份",
+    dataIndex: "type",
+    valueEnum: studentEnum,
+  },
+  {
+    title: "学校",
+    key: "school",
+    dataIndex: "school",
+    valueEnum: UNIVERSITIES,
+    search: false,
+  },
+  {
+    title: "年级",
+    dataIndex: "class",
+    search: false,
+  },
+  {
+    title: "成绩",
+    dataIndex: "score",
+    search: false,
+  },
+  {
+    title: "电话",
+    dataIndex: "phone",
+  },
+  {
+    title: "邮箱",
+    dataIndex: "email",
+  },
+  {
+    title: "注册时间",
+    search: false,
+    dataIndex: "createdAt",
+    valueType: "dateTime",
+  },
+];
 
-  const viewColumns: ProDescriptionsItemProps[] = [
-    ...(columns as any),
-    {
-      title: "年龄",
-      dataIndex: "age",
-    },
-    {
-      title: "成绩",
-      dataIndex: "score",
-    },
-    {
-      title: "地址",
-      dataIndex: "address",
-      span: 2,
-    },
-  ];
+const studentViewColumns: ProDescriptionsItemProps[] = [
+  ...(columns as any),
+  {
+    title: "年龄",
+    dataIndex: "age",
+  },
+  {
+    title: "成绩",
+    dataIndex: "score",
+  },
+  {
+    title: "地址",
+    dataIndex: "address",
+    span: 2,
+  },
+];
+
+
+export default function Page() {
 
   const [form] = Form.useForm();
 
@@ -82,7 +89,7 @@ export default function Page() {
     <ExTable
       form={form}
       columns={columns}
-      viewColumns={viewColumns}
+      viewColumns={studentViewColumns}
       apiUrl={"/api/user"}
       title={"学生列表"}
       params={{ role: ROLE.STUDENT }}
@@ -148,7 +155,7 @@ export default function Page() {
               />
             ) : (
               <ProDescriptions
-                columns={viewColumns || (columns as any)}
+                columns={studentViewColumns || (columns as any)}
                 dataSource={record}
                 column={2}
               ></ProDescriptions>
@@ -159,3 +166,5 @@ export default function Page() {
     </ExTable>
   );
 }
+
+export {studentViewColumns}

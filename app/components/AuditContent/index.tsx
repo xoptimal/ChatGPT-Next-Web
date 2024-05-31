@@ -26,8 +26,8 @@ export default function AuditContent(props: any) {
         {record?.[listKey].map((item: any, index: number) => {
           const attachmentList = formatAttachmentToList(item.attachment);
           return (
-            <div>
-              <div key={index}>
+            <div key={item.id}>
+              <div>
                 <div>
                   <h1>您</h1>
                   <span>{formatDate(item.createdAt, { showTime: true })}</span>

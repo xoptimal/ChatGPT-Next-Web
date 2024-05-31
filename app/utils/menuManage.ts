@@ -41,32 +41,32 @@ const admin = [
     //     icon: 'SmileFilled'
     // },
     {
-        path: '/users',
+        path: '/admin/users',
         name: '用户管理',
         icon: 'SmileFilled',
         routes: [
             {
-                path: '/users/guest',
+                path: '/admin/users/guest',
                 name: '签约客户',
                 icon: 'SmileFilled',
                 routes: [
                     {
-                        path: '/users/guest/student',
+                        path: '/admin/users/guest/student',
                         name: '学生',
                     },
                     {
-                        path: '/users/guest/parent',
+                        path: '/admin/users/guest/parent',
                         name: '家长',
                     },
                 ]
             },
             {
-                path: '/users/counselor',
+                path: '/admin/users/counselor',
                 name: '顾问',
                 icon: 'SmileFilled'
             },
             {
-                path: '/users/channel',
+                path: '/admin/users/channel',
                 name: '渠道',
                 icon: 'SmileFilled'
             },
@@ -74,22 +74,22 @@ const admin = [
     },
 
     {
-        path: '/apply',
+        path: '/admin/apply',
         name: '申请管理',
         icon: 'SmileFilled',
         routes: [
             {
-                path: '/apply/guest',
+                path: '/admin/apply/guest',
                 name: '普通用户',
                 icon: 'SmileFilled',
             },
             {
-                path: '/apply/counselor',
+                path: '/admin/apply/counselor',
                 name: '顾问',
                 icon: 'SmileFilled'
             },
             {
-                path: '/apply/channel',
+                path: '/admin/apply/channel',
                 name: '渠道',
                 icon: 'SmileFilled'
             },

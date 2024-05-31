@@ -25,10 +25,12 @@ const SideContainer = (
         ></Menu>
       </ProCard>
       <ProCard
-        title={props.title}
+        //title={props.title}
         bodyStyle={{ minHeight: "calc(100vh - 200px)" }}
       >
-        {props.children}
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          {props.children}
+        </div>
       </ProCard>
     </ProCard>
   );

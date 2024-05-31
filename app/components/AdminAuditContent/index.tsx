@@ -1,13 +1,13 @@
 "use client";
 
-import { Form, Input, Radio } from "antd";
+import { Form, Input, Radio, Space } from "antd";
 
 import styles from "@/app/service/product/page.module.scss";
 
 import {
-    formatAttachmentToList,
-    formatDate,
-    getImageUrl,
+  formatAttachmentToList,
+  formatDate,
+  getImageUrl,
 } from "@/app/utils/helper";
 
 const defAuditOptions = [
@@ -23,24 +23,31 @@ export default function AdminAuditContent(props: any) {
     form,
     showEditor = false,
     auditOptions = defAuditOptions,
-    listKey = 'productAudit',
-    name
+    listKey = "productAudit",
+    name,
+    renderAction,
   } = props;
 
   return (
     <div className={styles.modal_body}>
-        {props.children}
+      {props.children}
       <div className={styles.modal_body_list}>
         {record?.[listKey].map((item: any, index: number) => {
           const attachmentList = formatAttachmentToList(item.attachment);
           return (
             <div key={item.id}>
               <div>
-                <div>
-                  <h1>{name || record.username}</h1>
-                  <span>{formatDate(item.createdAt, { showTime: true })}</span>
+                <div className={styles.modal_body_title}>
+                  <div className={styles.left}>
+                    <h1>{name || record?.username}</h1>
+                    <span>
+                      {formatDate(item.createdAt, { showTime: true })}
+                    </span>
+                  </div>
+
+                  {index === 0 && <Space className={styles.right}>{renderAction?.(item)}</Space>}
                 </div>
-                <div>{item.message}</div>
+                <div dangerouslySetInnerHTML={{ __html: item.message }}></div>
                 {attachmentList?.map((item) => (
                   <a
                     key={item.uid}

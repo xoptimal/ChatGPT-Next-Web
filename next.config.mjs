@@ -81,19 +81,19 @@ if (mode !== "export") {
         destination: "/welcome",
       },
       {
-        source: "/users",
-        destination: "/users/guest/student",
+        source: "/admin/users",
+        destination: "/admin/users/guest/student",
       },
       {
-        source: "/users/guest",
-        destination: "/users/guest/student",
+        source: "/admin/users/guest",
+        destination: "/admin/users/guest/student",
       },
       {
         source: "/service",
         destination: "/service/schedule",
       }, {
-        source: "/apply",
-        destination: "/apply/guest",
+        source: "/admin/apply",
+        destination: "/admin/apply/guest",
       },
     ];
 

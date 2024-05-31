@@ -193,8 +193,21 @@ const studentOptions = [
   { label: "VVVIP", value: 2 },
   { label: "加州精英", value: 3 },
 ];
+enum STUDENT_TYPE {
+  BEGINNER = 1,
+  INTERMEDIATE = 2,
+  ADVANCED = 3,
+}
+
+enum COUNSELOR_TYPE {
+  BEGINNER = 1,
+  INTERMEDIATE = 2,
+  ADVANCED = 3,
+}
 
 export {
+  STUDENT_TYPE,
+  COUNSELOR_TYPE,
   counselorLevelToStudentOptions,
   studentEnum,
   studentOptions,

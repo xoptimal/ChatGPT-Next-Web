@@ -28,26 +28,18 @@ model psq {
 }
 
 model User {
-  id                 String         @id @default(uuid())
-  username           String?
-  email              String         @unique
-  password           String
-  createdAt          DateTime       @default(now())
-  updatedAt          DateTime       @updatedAt
-  school             String?
-  role               Int?
-  age                Int?
-  class              String?
-  studentId          String?
-  country            String?
-  companyName        String?
-  address            String?
-  score              Float?
-  phone              String         @unique
-  entityType         Int?
-  isDeleted          Int?           @default(0)
-  parentIds          String?
-  childIds           String?
+  id        String   @id @default(uuid())
+  username  String?
+  email     String   @unique
+  phone     String   @unique
+  role      Int?
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isDeleted Int?     @default(0)
+
+  info String? @db.LongText
+
   type               Int?
   psqs               psq[] // 添加与 psq 模型关系字段的反向关系字段
   products           product[]
@@ -58,6 +50,12 @@ model User {
   subtask_list       subtask_list[] @relation("SubTaskList")
 
   @@map("users")
+}
+
+model parent {
+  id       String @id @default(uuid())
+  userId   String @map("user_id")
+  parentId String @map("parentId")
 }
 
 model product {
@@ -138,7 +136,7 @@ model task {
   isDeleted    Int?      @default(0)
   title        String
   remark       String?
-  status      String  //  0=待开始, 1=进行中, 2=已完成, 3=中断任务
+  status       String //  0=待开始, 1=进行中, 2=已完成, 3=中断任务
   userId       String?   @map("user_id")
   counselorId  String    @map("counselor_id")
   user         User?     @relation("UserTask", fields: [userId], references: [id])
@@ -156,7 +154,7 @@ model subtask {
 
   title       String
   remark      String?
-  status      String  //  0=待开始, 1=进行中, 2=已完成, 3=中断任务
+  status      String //  0=待开始, 1=进行中, 2=已完成, 3=中断任务
   startTime   DateTime
   endTime     DateTime
   task        task           @relation(fields: [taskId], references: [id])

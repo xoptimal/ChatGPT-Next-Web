@@ -52,8 +52,6 @@ export const authOptions: NextAuthOptions = {
         phone: profile!.phone,
         email: profile!.email,
         role: profile!.role,
-        class: profile!.class,
-        studentId: profile!.studentId,
         type: profile!.type,
       };
     },
@@ -66,8 +64,6 @@ export const authOptions: NextAuthOptions = {
           phone: token.phone,
           email: token.email,
           role: token.role,
-          class: token!.class,
-          studentId: token!.studentId,
           type: token!.type,
         },
       };

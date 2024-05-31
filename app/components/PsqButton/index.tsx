@@ -2,7 +2,7 @@
 import request from "@/app/utils/api";
 import { BetaSchemaForm } from "@ant-design/pro-components";
 import { useAsyncEffect } from "ahooks";
-import { Button, Form, Modal, message } from "antd";
+import { Alert, Button, Form, Modal, message } from "antd";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -75,8 +75,31 @@ export default function PsqButton(props: React.PropsWithChildren) {
         onOk={handleSubmit}
         confirmLoading={loading}
         width={800}
+        styles={{
+          header: {
+            padding: '20px 24px 0',
+          },
+          content: {
+            padding: 0,
+          },
+          body: {
+            padding: 0,
+          },
+          footer: {
+            margin: 0,
+            padding: '20px 24px',
+          }
+        }}
       >
+        <Alert
+          type="info"
+          showIcon
+          banner
+          message="请根据实际情况认真填写"
+        ></Alert>
+        <div style={{padding: '20px 24px 0'}}>
         <BetaSchemaForm form={form} columns={columns} submitter={false} />
+        </div>
       </Modal>
     </>
   );

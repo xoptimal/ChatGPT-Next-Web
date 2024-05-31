@@ -32,7 +32,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
       startTime: "asc",
     },
     include: {
-      counselor: true
+      counselor: true,
     },
   });
 
@@ -97,7 +97,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 export async function POST(req: NextRequest, res: NextResponse) {
   const session = await getServerSession(authOptions);
   try {
-    let { level, startTime, endTime } = await req.json();
+    let { level, startTime, endTime, remark } = await req.json();
 
     const schedule = await prisma.schedule.findFirst({
       where: {
@@ -115,21 +115,26 @@ export async function POST(req: NextRequest, res: NextResponse) {
     });
 
     if (schedule) {
-
       const data = await prisma.schedule.update({
         data: {
           userId: session?.user.userId,
           status: 5, //  审核
+          remark,
         },
         where: {
           id: schedule.id,
         },
       });
 
-      await prisma.scheduleAudit.create({data: {
-        scheduleId: data.id,
-        message:"发起预约"
-      } })
+      await prisma.scheduleAudit.create({
+        data: {
+          scheduleId: data.id,
+          message: `发起预约
+        咨询内容: ${remark}
+        咨询时间: ${startTime} - ${endTime}
+        `,
+        },
+      });
 
       return NextResponse.json({
         status: 200,
@@ -144,10 +149,11 @@ export async function POST(req: NextRequest, res: NextResponse) {
   } catch (error) {
     console.error(error);
 
-    const msg = (error as Error).message
+    const msg = (error as Error).message;
 
-    return NextResponse.json({ error: "System exception " + msg }, { status: 500 });
+    return NextResponse.json(
+      { error: "System exception " + msg },
+      { status: 500 },
+    );
   }
 }
-
-

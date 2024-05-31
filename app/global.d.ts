@@ -18,21 +18,19 @@ declare module "next-auth" {
 
   interface Session {
 
-    email: string;
-    username: string;
-    role: number;
     userId: string;
-    class: string;
-    studentId: string;
+    username: string;
+    email: string;
+    phone: string;
+    role: number;
+    type: number;
 
     user: {
-      email: string;
-      username: string;
-      role: number;
       userId: string;
-      class: string;
+      username: string;
+      email: string;
       phone: string;
-      studentId: string;
+      role: number;
       type: number;
     }
   }

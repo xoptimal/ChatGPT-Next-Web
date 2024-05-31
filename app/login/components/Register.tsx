@@ -13,13 +13,7 @@ import React, {useRef, useState} from 'react';
 import {ClusterOutlined, SolutionOutlined, TeamOutlined, UserOutlined} from "@ant-design/icons";
 import {ENTITY_TYPE, ROLE} from "@/app/utils/dic";
 
-const waitTime = (time: number = 100) => {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve(true);
-        }, time);
-    });
-};
+
 const universities = [
     {"label": "上海交通大学", "value": "SHJTU"},
     {"label": "复旦大学", "value": "FUDAN"},
@@ -32,8 +26,6 @@ const universities = [
     {"label": "华东理工大学", "value": "ECUST"},
     {"label": "上海海事大学", "value": "SMU"}
 ]
-
-
 
 const roleOptions = [
     {

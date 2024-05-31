@@ -43,11 +43,11 @@ export function getSideMenus(role: number = -1, other = true) {
         icon: <UserOutlined />,
         label: "个人信息",
       },
-      {
-        key: "/student/parent",
-        icon: <TeamOutlined />,
-        label: "家长信息",
-      },
+      // {
+      //   key: "/student/parent",
+      //   icon: <TeamOutlined />,
+      //   label: "家长信息",
+      // },
       // {
       //   key: "/student/apply",
       //   icon: <SolutionOutlined />,
