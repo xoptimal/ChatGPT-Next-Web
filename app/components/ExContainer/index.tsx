@@ -10,6 +10,7 @@ import styles from './index.module.scss'
 type ExContainerProps = {
   request: () => void;
   showEmpty?: boolean;
+  emptyRender?: React.ReactNode
 };
 
 type ExContainerRef = {
@@ -20,7 +21,7 @@ const ExContainer = React.forwardRef<
   ExContainerRef,
   React.PropsWithChildren<ExContainerProps>
 >((props, ref) => {
-  const { children, request, showEmpty = false } = props;
+  const { children, request, showEmpty = false, emptyRender } = props;
 
   const [loading, setLoading] = useState(true);
 
@@ -43,7 +44,7 @@ const ExContainer = React.forwardRef<
            <Spin size="large" />
         </div>
       ) : showEmpty ? (
-        <Empty></Empty>
+        <Empty>{emptyRender}</Empty>
       ) : (
         children
       )}

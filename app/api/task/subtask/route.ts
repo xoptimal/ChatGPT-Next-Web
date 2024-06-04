@@ -39,7 +39,7 @@ export async function DELETE(req: NextRequest, res: NextResponse) {
 
     const referencingRecords = await prisma.subtask_list.findMany({
       where: {
-        subtaskId: id,
+        subtaskId: parseInt(id),
       },
     });
 
@@ -47,12 +47,12 @@ export async function DELETE(req: NextRequest, res: NextResponse) {
       // 如果有引用记录，先删除它们
       await prisma.subtask_list.deleteMany({
         where: {
-          subtaskId: id,
+          subtaskId: parseInt(id),
         },
       });
     }
 
-    await prisma.subtask.delete({ where: { id } });
+    await prisma.subtask.delete({ where: { id: parseInt(id) } });
 
     return NextResponse.json({ status: 200, statusText: "OK", data: res });
   } catch (error) {

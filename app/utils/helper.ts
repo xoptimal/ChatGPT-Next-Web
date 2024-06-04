@@ -39,22 +39,31 @@ function formatDate(date: Date, config?: { showTime: boolean }) {
 function formatAttachmentToList(
   attachment?: string,
 ): { uid: string; name: string }[] {
-  let attachmentList: any[] = [];
-  if (attachment) {
-    attachmentList = JSON.parse(attachment);
-    if (!Array.isArray(attachmentList)) {
-      attachmentList = [attachmentList];
-    }
+  let attachmentList: any = [];
+
+  if (!attachment) {
+    return attachmentList;
   }
-  return attachmentList; //.map(item => ({...item, status: 'done'}));
+
+  if (typeof attachment === "string") {
+    attachmentList = JSON.parse(attachment);
+  } else {
+    attachmentList = attachment;
+  }
+
+  if (!Array.isArray(attachmentList)) {
+    attachmentList = [attachmentList];
+  }
+
+  return attachmentList.map((item: any) => ({ ...item, status: "done" }));
 }
 
-function transformAttachment(fileList?: any[]) {
+function transformAttachment(fileList?: any[], toJson = true) {
   let fileJson;
   if (fileList && fileList.length > 0) {
-    fileJson = JSON.stringify(
-      fileList.map((item) => ({ uid: item.uid, name: item.name })),
-    );
+    fileJson = fileList.map((item) => ({ uid: item.uid, name: item.name }));
+
+    if (toJson) fileJson = JSON.stringify(fileJson);
   }
   return fileJson;
 }

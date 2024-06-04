@@ -97,7 +97,8 @@
 .message_title {
   display: flex;
 
-  h1, h2 {
+  h1,
+  h2 {
     //padding-right: 4px;
     font-size: 14px;
     color: #666;
@@ -129,4 +130,68 @@
   margin-top: 4px;
   border-radius: 4px;
   width: fit-content;
+}
+
+$primary-font: "Arial, sans-serif";
+$heading-color: #2c3e50;
+$text-color: #34495e;
+
+.tab_content {
+  font-family: $primary-font;
+  color: $text-color;
+  padding-left: 8px;
+
+  > div {
+    margin-bottom: 32px;
+  }
+
+  h1,
+  h2 {
+    color: $heading-color;
+    margin-top: 20px;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  h1 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+
+  h2 {
+    font-size: 1.2em;
+    font-weight: normal;
+  }
+
+  ol {
+    margin: 20px 0;
+    padding-left: 20px;
+
+    li {
+      margin-bottom: 10px;
+
+      strong {
+        color: $heading-color;
+      }
+    }
+  }
+}
+
+.tab_footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.history {
+  h3,
+  span {
+    font-size: 1.1em;
+    font-weight: normal;
+    color: #999;
+  }
+  margin-bottom: 4px;
+}
+
+.empty {
+  width: 160px;
 }

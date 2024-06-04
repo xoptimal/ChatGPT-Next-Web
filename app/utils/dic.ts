@@ -20,11 +20,11 @@ export function getRole(role: ROLE = ROLE.STUDENT, type: number = 0) {
     name = "管理员";
   } else if (role === ROLE.STUDENT) {
     switch (type) {
-      case 1:
+      case 2:
         color = "orange";
         name = "VVVIP";
         break;
-      case 2:
+      case 3:
         color = "volcano";
         name = "加州精英";
         break;

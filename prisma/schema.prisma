@@ -152,16 +152,35 @@ model subtask {
   isDeleted    Int?     @default(0)
   createUserId String
 
-  title       String
-  remark      String?
-  status      String //  0=待开始, 1=进行中, 2=已完成, 3=中断任务
-  startTime   DateTime
-  endTime     DateTime
-  task        task           @relation(fields: [taskId], references: [id])
-  taskId      Int
-  attachment  String?        @db.LongText //  附件
-  subtaskList subtask_list[]
+  title         String //  标题
+  requireRemark String //  要求描述
+  remark        String //描述
+  targetRemark  String //  任务目标
+
+  status       String //  0=待开始, 1=进行中, 2=已完成, 3=中断任务
+  startTime    DateTime
+  endTime      DateTime
+  task         task           @relation(fields: [taskId], references: [id])
+  taskId       Int
+  list         String?        @db.LongText //  附件
+  //subtaskList subtask_list[]
+  subtask_list subtask_list[]
 }
+
+// model subtask_service_list {
+//   id           Int      @id @default(autoincrement())
+//   createdAt    DateTime @default(now())
+//   updatedAt    DateTime @updatedAt
+//   isDeleted    Int?     @default(0)
+//   createUserId String
+
+//   title      String
+//   remark     String
+//   attachment String? @db.LongText //  附件
+
+//   subtaskId   String
+//   subtaskList subtask_list[]
+// }
 
 model subtask_list {
   id        Int      @id @default(autoincrement())

@@ -2,16 +2,16 @@
 
 import ExContainer, { ExContainerRef } from "@/app/components/ExContainer";
 import request from "@/app/utils/api";
-import { getRole, subTaskStatus, taskEnum } from "@/app/utils/dic";
+import { ROLE, getRole, subTaskStatus, taskEnum } from "@/app/utils/dic";
 import {
   BetaSchemaForm,
   ProCard,
   ProDescriptions,
+  ProFormColumnsType,
 } from "@ant-design/pro-components";
 import {
   Button,
   ButtonProps,
-  Divider,
   Drawer,
   Empty,
   Form,
@@ -22,9 +22,14 @@ import {
   message,
 } from "antd";
 import { useParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 
-import DeleteButton from "@/app/components/DeleteButton";
 import ExUpload from "@/app/components/ExUpload";
 import {
   formatAttachmentToList,
@@ -33,70 +38,133 @@ import {
   getImageUrl,
   transformAttachment,
 } from "@/app/utils/helper";
+import { PlusOutlined } from "@ant-design/icons";
 import { useAsyncEffect } from "ahooks";
-import styles from "./page.module.scss";
 import { useSession } from "next-auth/react";
+import styles from "./page.module.scss";
 
 const TaskEnum = taskEnum as Record<string, { text: string; status: string }>;
 
-function SubtaskButton(
-  props: React.PropsWithChildren<{
-    record?: any;
-    task: any;
-    onOkCallback: () => void;
-    buttonProps?: ButtonProps;
-  }>,
-) {
+const formItemProps = {
+  rules: [
+    {
+      required: true,
+      message: "此项为必填项",
+    },
+  ],
+};
+
+const rules =  [
+  {
+    required: true,
+    message: "此项为必填项",
+  },
+]
+
+type SubtaskButtonProps = {
+  record?: any;
+  task: any;
+  onOkCallback: () => void;
+  buttonProps?: ButtonProps;
+};
+
+type SubtaskButtonRef = {
+  open: () => void;
+};
+
+const SubtaskButton = forwardRef<
+  SubtaskButtonRef,
+  React.PropsWithChildren<SubtaskButtonProps>
+>((props, ref) => {
   const [form] = Form.useForm<{ name: string; company: string }>();
-  const { task, record, onOkCallback, buttonProps } = props;
+  const { task, record, onOkCallback, buttonProps, children } = props;
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [fileList, setFileList] = useState<any[]>([]);
 
   useEffect(() => {
-    setFileList([]);
     if (form && record) {
-      if (record.attachment) {
-        setFileList(formatAttachmentToList(record.attachment));
-      }
       form.setFieldsValue(record);
     }
   }, [record, open]);
 
-  const columns = [
+  useImperativeHandle(ref, () => ({
+    open: () => {
+      setOpen(true);
+    },
+  }));
+
+  const normFile = (e: any) => {
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e?.fileList;
+  };
+
+  const columns: ProFormColumnsType[] = [
     {
       title: "标题",
       dataIndex: "title",
       formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "此项为必填项",
-          },
-        ],
+        // labelCol: {
+        //   span: 24,
+        // },
+        rules,
       },
-      colProps: {
-        xs: 24,
-        md: 19,
-      },
+      // colProps: {
+      //   xs: 24,
+      //   md: 18,
+      // },
+    },
+    // {
+    //   title: "状态",
+    //   dataIndex: "status",
+    //   valueType: "select",
+    //   valueEnum: subTaskStatus,
+    //   formItemProps,
+    //   hideInForm: !!record,
+    //   colProps: {
+    //     xs: 24,
+    //     md: 6,
+    //   },
+    // },
+    {
+      title: "任务描述",
+      dataIndex: "remark",
+      valueType: "textarea",
+      formItemProps,
+      // fieldProps: {
+      //   autoSize: { minRows: 10 },
+      // },
+      // colProps: {
+      //   xs: 24,
+      //   md: 8,
+      // },
     },
     {
-      title: "状态",
-      dataIndex: "status",
-      valueType: "select",
-      valueEnum: subTaskStatus,
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "此项为必填项",
-          },
-        ],
-      },
-      colProps: {
-        xs: 24,
-        md: 5,
-      },
+      title: "任务目标",
+      dataIndex: "targetRemark",
+      valueType: "textarea",
+      formItemProps,
+      // colProps: {
+      //   xs: 24,
+      //   md: 8,
+      // },
+      // fieldProps: {
+      //   autoSize: { minRows: 10 },
+      // },
+    },
+    {
+      title: "要求描述",
+      dataIndex: "requireRemark",
+      valueType: "textarea",
+      formItemProps,
+      // colProps: {
+      //   xs: 24,
+      //   md: 8,
+      // },
+      // fieldProps: {
+      //   autoSize: { minRows: 10 },
+      // },
     },
 
     {
@@ -105,17 +173,10 @@ function SubtaskButton(
       valueType: "date",
       colProps: {
         xs: 24,
-        md: 12,
+        md: 24,
       },
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "此项为必填项",
-          },
-        ],
-      },
-      width: "100%",
+      formItemProps,
+      width: "md",
     },
     {
       title: "截止时间",
@@ -123,49 +184,156 @@ function SubtaskButton(
       valueType: "date",
       colProps: {
         xs: 24,
-        md: 12,
+        md: 24,
       },
-      width: "100%",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "此项为必填项",
-          },
-        ],
-      },
+      width: "md",
+      formItemProps,
     },
     {
-      title: "描述",
-      dataIndex: "remark",
-      valueType: "textarea",
+      title: "服务记录",
+      valueType: "formList",
+      dataIndex: "list",
       formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "此项为必填项",
+        // @ts-ignore
+        creatorButtonProps: {
+          creatorButtonText: "添加服务记录",
+        },
+        copyIconProps: false,
+        alwaysShowItemLabel: true,
+        itemRender:({ listDom, action }: any, { record }: any) => {
+          return (
+            <ProCard
+              bordered
+              extra={action}
+              title={record?.name}
+              style={{
+                marginBlockEnd: 8,
+              }}
+              size="small"
+            >
+              {listDom}
+            </ProCard>
+          );
+        }
+      },
+      hideInForm: !record,
+      columns: [
+        {
+          title: "标题",
+          dataIndex: "title",
+          formItemProps: {
+            // labelCol: {
+            //   span: 24,
+            // },
+            // wrapperCol: {
+            //   span: 24,
+            // },
+            rules: [
+              {
+                required: true,
+                message: "此项为必填项",
+              },
+            ],
           },
-        ],
-      },
+          // colProps: {
+          //   span: 4
+          // }
+        },
+        {
+          title: "内容",
+          dataIndex: "content",
+          valueType: 'textarea',
+          formItemProps: {
+            rules: [
+              {
+                required: true,
+                message: "此项为必填项",
+              },
+            ],
+          },
+        
+        },
+        {
+          title: "附件",
+          key: "attachment",
+          dataIndex: "attachment",
+          formItemProps: {
+            valuePropName: "fileList",
+            getValueFromEvent: normFile,
+          },
+          renderFormItem: (value: any, obj: any, form: any) => {
+            return <ExUpload />;
+          },
+        },
+      ],
+      // columns: [
+      //   {
+      //     valueType: "group",
+      //     columns: [
+      //       {
+      //         title: "标题",
+      //         dataIndex: "title",
+      //         formItemProps: {
+      //           rules: [
+      //             {
+      //               required: true,
+      //               message: "此项为必填项",
+      //             },
+      //           ],
+      //         },
+      //         // colProps: {
+      //         //   span: 4
+      //         // }
+      //       },
+      //       {
+      //         title: "内容",
+      //         dataIndex: "content",
+      //         valueType: 'textarea',
+      //         formItemProps: {
+      //           rules: [
+      //             {
+      //               required: true,
+      //               message: "此项为必填项",
+      //             },
+      //           ],
+      //         },
+            
+      //       },
+      //       {
+      //         title: "附件",
+      //         key: "attachment",
+      //         dataIndex: "attachment",
+      //         formItemProps: {
+      //           valuePropName: "fileList",
+      //           getValueFromEvent: normFile,
+      //         },
+      //         renderFormItem: (value: any, obj: any, form: any) => {
+      //           return <ExUpload />;
+      //         },
+      //       },
+      //     ],
+      //   },
+      // ],
     },
-    {
-      title: "附件",
-      colProps: {
-        xs: 24,
-        sm: 24,
-      },
-      renderFormItem: () => (
-        <ExUpload
-          fileList={fileList}
-          onChange={(info: any) => {
-            setFileList(info.fileList);
-          }}
-        />
-      ),
-    },
+
+    // {
+    //   title: "附件",
+    //   colProps: {
+    //     xs: 24,
+    //     sm: 24,
+    //   },
+    //   renderFormItem: () => (
+    //     <ExUpload
+    //       fileList={fileList}
+    //       onChange={(info: any) => {
+    //         setFileList(info.fileList);
+    //       }}
+    //     />
+    //   ),
+    // },
   ];
 
-  let title = "新建任务";
+  let title = "添加任务";
   if (record) {
     title = "编辑";
   }
@@ -176,7 +344,7 @@ function SubtaskButton(
         <a onClick={() => setOpen(true)}>编辑</a>
       ) : (
         <Button type="primary" {...buttonProps} onClick={() => setOpen(true)}>
-          {title}
+          {children || title}
         </Button>
       )}
       <Modal
@@ -186,20 +354,24 @@ function SubtaskButton(
         confirmLoading={confirmLoading}
         onOk={async () => {
           try {
-            const values = await form.validateFields();
-            setConfirmLoading(true);
-            let config: any;
-            let attachment = transformAttachment(fileList);
+            let { list, ...rest }: any = await form.validateFields();
 
+            list = list?.map((item: any) => ({
+              ...item,
+              attachment: transformAttachment(item.attachment, false),
+            }));
+            list = JSON.stringify(list);
+
+            let config;
             if (record) {
               config = {
                 method: "PUT",
-                data: { id: record.id, attachment, ...values },
+                data: { id: record.id, list, ...rest },
               };
             } else {
               config = {
                 method: "POST",
-                data: { taskId: task.id, attachment, ...values },
+                data: { taskId: task.id, list, ...rest },
               };
             }
 
@@ -220,13 +392,17 @@ function SubtaskButton(
         }}
       >
         <BetaSchemaForm
-          grid
-          rowProps={{
-            gutter: [16, 16],
+        layout="horizontal"
+          // grid
+          // rowProps={{
+          //   gutter: [16, 16],
+          // }}
+          labelCol={{
+            span: 3
           }}
-          colProps={{
-            span: 24,
-          }}
+          // colProps={{
+          //   span: 24,
+          // }}
           form={form}
           columns={columns}
           submitter={false}
@@ -234,7 +410,7 @@ function SubtaskButton(
       </Modal>
     </>
   );
-}
+});
 
 function MessageButton(
   props: React.PropsWithChildren<{
@@ -292,7 +468,7 @@ function MessageButton(
 
   return (
     <>
-      <a onClick={() => setOpen(true)}>留言</a>
+      <Button onClick={() => setOpen(true)}>留言</Button>
       <Drawer
         title={"留言详情"}
         open={open}
@@ -384,8 +560,9 @@ function MessageButton(
   );
 }
 
-export default function Page() {
-  const { id } = useParams();
+export function TaskDetailPage(props: any) {
+
+  const {taskId} = props;
 
   const [data, setData] = useState<any>();
   const [items, setItems] = useState<any[]>([]);
@@ -400,23 +577,191 @@ export default function Page() {
 
   const role = session?.user.role;
 
+  const handleTabChange = (
+    e: React.MouseEvent | React.KeyboardEvent | string,
+    action: "add" | "remove",
+  ) => {
+    if (action === "remove") {
+      Modal.confirm({
+        title: "删除提示",
+        content: `您确认要删除该任务吗?`,
+        onOk: () => {
+          request("/api/task/subtask", {
+            method: "DELETE",
+            data: { id: e },
+          }).then(() => {
+            containerRef.current?.refresh();
+          });
+        },
+      });
+    }
+  };
+
   return (
     <ExContainer
       ref={containerRef}
+      showEmpty={items.length === 0}
+      emptyRender={
+        (role === ROLE.COUNSELOR || role === ROLE.ADMIN) && (
+          <SubtaskButton onOkCallback={handleSubTaskOkCallback} task={data}>
+            添加任务
+          </SubtaskButton>
+        )
+      }
       request={async () => {
-        const { data } = await request(`/api/task/${id}`);
+        const { data } = await request(`/api/task/${taskId}`);
         setData(data);
-        setItems([
-          { label: "标题", text: data.title },
-          { label: "顾问", text: data.counselor.username },
-          { label: "学生", text: data.user.username },
-          { label: "状态", text: TaskEnum[data.status].text },
-          { label: "描述", text: data.remark },
-          { label: "创建时间", text: formatDate(data.createdAt) },
-        ]);
+        setItems(
+          data.subtask.map((item: any) => {
+            let temp = { ...item };
+
+            if (temp.list) {
+              temp.list = JSON.parse(temp.list).map((child: any) => ({
+                ...child,
+                attachment: formatAttachmentToList(child.attachment),
+              }));
+            }
+
+            return temp;
+          }),
+        );
+        // setItems([
+        //   { label: "标题", text: data.title },
+        //   { label: "顾问", text: data.counselor.username },
+        //   { label: "学生", text: data.user.username },
+        //   { label: "状态", text: TaskEnum[data.status].text },
+        //   { label: "描述", text: data.remark },
+        //   { label: "创建时间", text: formatDate(data.createdAt) },
+        // ]);
       }}
     >
-      <ProCard
+      {/* <ProCard
+        title={
+          <Space>
+            <span>任务详情</span>
+            {data && (
+              <Tag color={TaskEnum[data.status].status}>
+                {TaskEnum[data.status].text}
+              </Tag>
+            )}
+          </Space>
+        }
+        headerBordered
+      >
+        <ProDescriptions>
+          {items.map((item, index) => {
+            return (
+              <ProDescriptions.Item key={index} label={item.label}>
+                {item.text}
+              </ProDescriptions.Item>
+            );
+          })}
+        </ProDescriptions>
+      </ProCard> */}
+
+      {items.length > 0 && (
+        <ProCard
+          tabs={{
+            type:
+              role === ROLE.COUNSELOR || role === ROLE.ADMIN
+                ? "editable-card"
+                : "card",
+            onEdit: handleTabChange,
+            addIcon: (
+              <SubtaskButton
+                onOkCallback={handleSubTaskOkCallback}
+                task={data}
+                buttonProps={{ type: "text" }}
+              >
+                <PlusOutlined />
+              </SubtaskButton>
+            ),
+          }}
+        >
+          {items.map((record: any) => (
+            <ProCard.TabPane key={record.id} tab={record.title}>
+              <div className={styles.tab_content}>
+                <div>
+                  <h1>任务描述</h1>
+                  <h2>{record.remark}</h2>
+                </div>
+
+                <div>
+                  <h1>任务目标</h1>
+                  <h2>{record.targetRemark}</h2>
+                </div>
+
+                <div>
+                  <h1>要求描述</h1>
+                  <h2>{record.requireRemark}</h2>
+                </div>
+
+                <div>
+                  <h1>时间(完成|执行&截止的时间)</h1>
+                  <h2>{`创建时间:${formatDate(record.startTime)}`}</h2>
+                  <h2>{`完成时间:${formatDate(record.endTime)}`}</h2>
+                </div>
+
+                <div>
+                  <h1>服务记录查看/上传</h1>
+                  {!record.list ? (
+                    <div className={styles.empty}>
+                      <Empty />
+                    </div>
+                  ) : (
+                    record.list?.map((child: any, index: number) => (
+                      <div key={index} className={styles.history}>
+                        <h3>{child.title}</h3>
+                        <h3>{child.content}</h3>
+                        {child.attachment.length > 0 && (
+                          <Space>
+                            <span>附件: </span>
+                            {child.attachment.map(
+                              (attachment: any, attachmentIndex: number) => (
+                                <a key={attachmentIndex}>{attachment.name}</a>
+                              ),
+                            )}
+                          </Space>
+                        )}
+                      </div>
+                    ))
+                  )}
+                </div>
+
+                {(role === ROLE.COUNSELOR || role === ROLE.ADMIN) && (
+                  <SubtaskButton
+                    onOkCallback={handleSubTaskOkCallback}
+                    task={data}
+                    record={record}
+                  />
+                )}
+
+                <div className={styles.tab_footer}>
+                  <Space>
+                    {(role === ROLE.COUNSELOR || role === ROLE.ADMIN) && (
+                      <Button>学生提醒</Button>
+                    )}
+
+                    {role === ROLE.ADMIN && <Button>顾问提醒</Button>}
+
+                    {/*  <Button>更新发布</Button> */}
+                    <Button>服务内容下载</Button>
+                    <MessageButton
+                      task={data}
+                      record={record}
+                      buttonProps={{ type: "link" }}
+                    >
+                      留言
+                    </MessageButton>
+                  </Space>
+                </div>
+              </div>
+            </ProCard.TabPane>
+          ))}
+        </ProCard>
+      )}
+
+      {/*   <ProCard
         title={
           <Space>
             <span>任务详情</span>
@@ -551,7 +896,13 @@ export default function Page() {
             })}
           </div>
         )}
-      </ProCard>
+      </ProCard> */}
     </ExContainer>
   );
+}
+
+export default function Page() {
+  const { id } = useParams();
+
+  return <>{id && <TaskDetailPage taskId={id} />}</>;
 }

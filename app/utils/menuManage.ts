@@ -13,7 +13,7 @@ const student = [
         icon: 'SmileFilled'
     },
     {
-        path: '/task',
+        path: '/student/task',
         name: '任务中心',
         icon: 'SmileFilled'
     },
