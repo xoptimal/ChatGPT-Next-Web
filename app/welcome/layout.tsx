@@ -12,7 +12,13 @@ export default function RootLayout({
 }) {
   return (
     <BaseLayout hideContainer>
-      <ExContent>{children}</ExContent>
+      <ExContent pageContainerProps={{ 
+        childrenContentStyle: {
+          padding: 0,
+        },
+      }}>
+        {children}
+      </ExContent>
     </BaseLayout>
   );
 }

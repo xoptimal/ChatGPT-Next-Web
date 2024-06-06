@@ -8,7 +8,6 @@ import request from "../utils/api";
 import styles from './page.module.scss'
 import {useAsyncEffect} from "ahooks";
 import {ROLE} from "@/app/utils/dic";
-import {NULL} from "sass";
 
 const card = [
     {title: '问答', subTitle: 'QUESTION', key: 'psq', role: 1},

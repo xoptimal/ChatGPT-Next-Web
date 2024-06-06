@@ -129,6 +129,17 @@ model scheduleAudit {
   @@map("schedule_audit")
 }
 
+model taskTarget {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isDeleted Int?     @default(0)
+
+  remark String? @db.LongText
+  userId String? @map("user_id")
+  task   task[]
+}
+
 model task {
   id           Int       @id @default(autoincrement())
   createdAt    DateTime  @default(now())
@@ -143,6 +154,9 @@ model task {
   counselor    User      @relation("CounselorTask", fields: [counselorId], references: [id])
   subtask      subtask[]
   createUserId String
+
+  taskTargetId Int?
+  taskTarget   taskTarget? @relation(fields: [taskTargetId], references: [id])
 }
 
 model subtask {
@@ -157,13 +171,14 @@ model subtask {
   remark        String //描述
   targetRemark  String //  任务目标
 
-  status       String //  0=待开始, 1=进行中, 2=已完成, 3=中断任务
-  startTime    DateTime
-  endTime      DateTime
-  task         task           @relation(fields: [taskId], references: [id])
-  taskId       Int
-  list         String?        @db.LongText //  附件
-  //subtaskList subtask_list[]
+  status     String   @default("0") //  0=待开始, 1=进行中, 2=已完成, 3=中断任务
+  isDisabled Int?     @default(1) // 1=正常 2=禁用  
+  startTime  DateTime
+  endTime    DateTime
+  task       task     @relation(fields: [taskId], references: [id])
+  taskId     Int
+  list       String?  @db.LongText //  附件
+
   subtask_list subtask_list[]
 }
 

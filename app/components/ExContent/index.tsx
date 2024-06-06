@@ -1,11 +1,10 @@
 "use client";
 import Icon from "@/app/components/icon";
-import { ROLE, getRole } from "@/app/utils/dic";
+import { ROLE } from "@/app/utils/dic";
 import { getMenus } from "@/app/utils/menuManage";
 import {
   LogoutOutlined,
   SolutionOutlined,
-  TeamOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import type {
@@ -15,11 +14,12 @@ import type {
 } from "@ant-design/pro-components";
 import { PageContainer, ProLayout } from "@ant-design/pro-components";
 import type { MenuProps } from "antd";
-import { Button, Dropdown, Space, Tag } from "antd";
+import { Button, Dropdown, Space } from "antd";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
+import RoleTag from "../RoleTag";
 import ScrollToTopButton from "../ScrollToTopButton";
 
 const settings: ProSettings = {
@@ -86,12 +86,6 @@ export function getSideMenus(role: number = -1, other = true) {
   return routes;
 }
 
-function RoleTag(props: { role?: number; type?: number }) {
-  const { role, type } = props;
-  const [color, text] = getRole(role, type);
-  return <Tag color={color}>{text}</Tag>;
-}
-
 export default (props: React.PropsWithChildren<ExContentProps>) => {
   const { pageContainerProps, proLayoutProps } = props;
 
@@ -137,7 +131,12 @@ export default (props: React.PropsWithChildren<ExContentProps>) => {
     }
   };
 
-  const title = role === 99 ? '管理端' : role === 1 ? '顾问端' : '用户端'
+  const title =
+    role === ROLE.ADMIN
+      ? "管理端"
+      : role === ROLE.COUNSELOR
+      ? "顾问端"
+      : "用户端";
 
   return (
     <div
@@ -148,6 +147,9 @@ export default (props: React.PropsWithChildren<ExContentProps>) => {
     >
       <ProLayout
         {...routeSetting}
+        onMenuHeaderClick={(e) => {
+          router.replace("/");
+        }}
         bgLayoutImgList={[
           {
             src: "https://img.alicdn.com/imgextra/i2/O1CN01O4etvp1DvpFLKfuWq_!!6000000000279-2-tps-609-606.png",
@@ -241,6 +243,12 @@ export default (props: React.PropsWithChildren<ExContentProps>) => {
                       恩代服务
                     </Button>
                   )}
+
+                  {pathname !== "/" && (
+                    <Button size="small" onClick={() => router.replace("/")}>
+                      返回
+                    </Button>
+                  )}
                 </div>
               ) : undefined,
             ];
@@ -267,6 +275,7 @@ export default (props: React.PropsWithChildren<ExContentProps>) => {
         )}
         {...settings}
         {...proLayoutProps}
+        headerContentRender={() => <span></span>}
       >
         <PageContainer
           breadcrumbRender={false}

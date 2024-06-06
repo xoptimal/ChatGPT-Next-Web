@@ -1,5 +1,11 @@
 
 .container {
+  display: flex;
+  width: 100%;
+}
+
+.left {
+  flex: 1;
 }
 
 .top {
@@ -22,7 +28,7 @@
 
 .content {
   flex-direction: column;
-  width: 100%;
+  width: 200px;
   padding-top: 2rem;
 }
 
@@ -128,30 +134,30 @@
   display: none;
 }
 
-@media (min-width: 1001px) {
-  .container {
-    width: 640px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
+// @media (min-width: 1001px) {
+//   .container {
+//     //width: 640px;
+//     margin: 0 auto;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     height: 100%;
 
-    .content {
-      display: grid;
-      grid-template-rows: auto auto; /* 两行 */
-      grid-template-columns: repeat(3, 1fr); /* 三列 */
-      gap: 2rem; /* 设置行列间距 */
-      height: 30rem;
-      padding: 0;
+//     // .content {
+//     //   display: grid;
+//     //   grid-template-rows: auto auto; /* 两行 */
+//     //   grid-template-columns: repeat(3, 1fr); /* 三列 */
+//     //   gap: 2rem; /* 设置行列间距 */
+//     //   height: 30rem;
+//     //   padding: 0;
 
-      > div {
-        width: 100%;
-        margin-bottom: 0;
-      }
-    }
-  }
-}
+//     //   > div {
+//     //     width: 100%;
+//     //     margin-bottom: 0;
+//     //   }
+//     // }
+//   }
+// }
 
 .modal_title {
   width: 100%;

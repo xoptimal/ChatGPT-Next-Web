@@ -16,6 +16,7 @@ export async function GET(
       user: true,
       counselor: true,
       subtask: true,
+      taskTarget: true,
     },
   });
 

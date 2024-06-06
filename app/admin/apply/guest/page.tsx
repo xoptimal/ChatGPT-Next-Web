@@ -149,7 +149,7 @@ export default function Page() {
                 showEditor={record?.status === 5}
                 auditOptions={auditOptions}
                 listKey={"scheduleAudit"}
-                name={record?.user.username}
+                name={record?.user?.username}
                 renderAction={(item: any) => (
                   <>
                     <a

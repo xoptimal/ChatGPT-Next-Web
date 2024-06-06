@@ -1,0 +1,59 @@
+.modal_body_list {
+  display: flex;
+  flex-direction: column;
+
+  > div {
+    font-size: 16px;
+    background: #f1f1f1;
+    margin-bottom: 16px;
+    padding: 8px 16px;
+    border-radius: 8px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .admin {
+      padding-top: 8px;
+      border-top: solid 1px #cecece;
+      margin-top: 16px;
+    }
+
+    > div {
+      //margin-bottom: 8px;
+      white-space: pre-wrap;
+
+      .attachment {
+        margin-top: 8px;
+        width: 64px;
+        height: 64px;
+      }
+
+      > a {
+        display: block;
+      }
+    }
+  }
+}
+
+.modal_body_title {
+  display: flex;
+  flex-shrink: 0;
+
+  > h1 {
+    font-size: 16px;
+    color: #333;
+    font-weight: normal;
+  }
+
+  > span {
+    font-size: 16px;
+    color: #999;
+    padding-left: 8px;
+  }
+}
+
+.icon_attachment {
+  width: 64px;
+  height: 64px;
+}

@@ -43,7 +43,7 @@ export default function (props: any) {
     fileList: fileListProps = [],
   } = props;
 
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const handleChange: UploadProps["onChange"] = (info) => {
     if (onChange) {
@@ -82,7 +82,7 @@ export default function (props: any) {
       }
     }
 
-    setLoading(true)
+    setLoading(true);
 
     await manualUpload(file, (uploadFile: any) => {
       const info = {
@@ -93,13 +93,17 @@ export default function (props: any) {
       } else {
         setFileList(info.fileList);
       }
-      setLoading(false)
+      setLoading(false);
     });
 
     return false;
   };
 
-  const uploadButton = <Button loading={loading} icon={<UploadOutlined />}>点击上传</Button>;
+  const uploadButton = (
+    <Button loading={loading} icon={<UploadOutlined />} disabled={uploadProps?.disabled}>
+      点击上传
+    </Button>
+  );
 
   return (
     <div className={className}>

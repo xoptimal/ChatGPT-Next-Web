@@ -1,6 +1,6 @@
 "use client";
 import ExUpload from "@/app/components/ExUpload";
-import styles from "@/app/service/product/page.module.scss";
+import styles from "./index.module.scss";
 import {
   formatAttachmentToList,
   formatDate,
@@ -26,9 +26,9 @@ export default function AuditContent(props: any) {
         {record?.[listKey].map((item: any, index: number) => {
           const attachmentList = formatAttachmentToList(item.attachment);
           return (
-            <div key={item.id}>
-              <div>
-                <div>
+            <div key={item.id} >
+              <div >
+                <div className={styles.modal_body_title}>
                   <h1>您</h1>
                   <span>{formatDate(item.createdAt, { showTime: true })}</span>
                 </div>
@@ -45,7 +45,7 @@ export default function AuditContent(props: any) {
               </div>
               {item.auditMessage && (
                 <div key={index} className={styles.admin}>
-                  <div>
+                  <div className={styles.modal_body_title}>
                     <h1>系统管理员</h1>
                     <span>
                       {formatDate(item.updatedAt, { showTime: true })}

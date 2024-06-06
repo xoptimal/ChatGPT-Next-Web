@@ -19,12 +19,13 @@
 
 .content {
   width: 100%;
-  padding: 24px;
+  //padding: 16px;
   white-space: pre-wrap;
   color: #333;
   text-align: left;
   overflow-wrap: break-word;
   line-height: 1.5;
+  padding-bottom: 16px;
 }
 
 .attachment {
@@ -177,9 +178,18 @@ $text-color: #34495e;
   }
 }
 
+.tab_title {
+  display: flex;
+  align-items: center;
+}
+
 .tab_footer {
   display: flex;
   justify-content: flex-end;
+}
+
+.tabs {
+  margin-top: 16px;
 }
 
 .history {
@@ -194,4 +204,8 @@ $text-color: #34495e;
 
 .empty {
   width: 160px;
+}
+
+.targetContent {
+  min-height: 700px;
 }

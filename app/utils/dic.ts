@@ -19,36 +19,46 @@ export function getRole(role: ROLE = ROLE.STUDENT, type: number = 0) {
     color = "red";
     name = "管理员";
   } else if (role === ROLE.STUDENT) {
-    switch (type) {
-      case 2:
-        color = "orange";
-        name = "VVVIP";
-        break;
-      case 3:
-        color = "volcano";
-        name = "加州精英";
-        break;
-      default:
-        name = "普通会员";
-        color = "gold";
+    if (type) {
+      switch (type) {
+        case 2:
+          color = "orange";
+          name = "VVVIP";
+          break;
+        case 3:
+          color = "volcano";
+          name = "加州精英";
+          break;
+        default:
+          name = "普通会员";
+          color = "gold";
+      }
+    } else {
+      color = "gold";
+      name = "学生";
     }
   } else if (role === ROLE.COUNSELOR) {
-    switch (type) {
-      case 1:
-        color = "geekblue";
-        name = "初级顾问";
-        break;
-      case 2:
-        color = "blue";
-        name = "中级顾问";
-        break;
-      case 3:
-        color = "cyan";
-        name = "高级顾问";
-        break;
-      default:
-        color = "purple";
-        name = "未认证顾问";
+    if (type) {
+      switch (type) {
+        case 1:
+          color = "geekblue";
+          name = "初级顾问";
+          break;
+        case 2:
+          color = "blue";
+          name = "中级顾问";
+          break;
+        case 3:
+          color = "cyan";
+          name = "高级顾问";
+          break;
+        default:
+          color = "purple";
+          name = "未认证顾问";
+      }
+    } else {
+      color = "purple";
+      name = "顾问";
     }
   }
 
@@ -183,6 +193,17 @@ const subTaskStatus = {
   1: "待开始",
 };
 
+const subTaskStatusOptions = [
+  { label: "待开始", value: 1 },
+  { label: "进行中", value: 2 },
+  { label: "已完成", value: 3 },
+];
+
+const subTaskDisabledOptions = [
+  { label: "可预览", value: 1 },
+  { label: "不可预览", value: 2 },
+];
+
 const studentEnum = {
   1: "普通会员",
   2: "VVVIP",
@@ -206,6 +227,8 @@ enum COUNSELOR_TYPE {
 }
 
 export {
+  subTaskDisabledOptions,
+  subTaskStatusOptions,
   STUDENT_TYPE,
   COUNSELOR_TYPE,
   counselorLevelToStudentOptions,

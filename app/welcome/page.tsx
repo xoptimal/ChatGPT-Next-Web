@@ -6,8 +6,7 @@ import { useEffect, useState } from "react";
 import { getMenus } from "@/app/utils/menuManage";
 import styles from "./page.module.scss";
 
-
-export default function Guide() {
+function WelcomeView(props: any) {
   const router = useRouter();
 
   const { data: session } = useSession();
@@ -24,6 +23,7 @@ export default function Guide() {
 
   return (
     <div className={styles.container}>
+      <div className={styles.left}>{props.children}</div>
       <div className={styles.content}>
         {menus.map((item, index) => (
           <div
@@ -41,3 +41,7 @@ export default function Guide() {
     </div>
   );
 }
+
+export { WelcomeView };
+
+export default WelcomeView;
