@@ -10,12 +10,10 @@ const student = [
     {
         path: '/student/appointment',
         name: '预约咨询',
-        icon: 'SmileFilled'
     },
     {
         path: '/student/task',
         name: '任务中心',
-        icon: 'SmileFilled'
     },
     // {
     //     path: '/student/profile',
@@ -30,7 +28,6 @@ const student = [
     {
         path: '/gpt',
         name: 'GPT',
-        icon: 'SmileFilled'
     },
 ]
 
@@ -43,12 +40,10 @@ const admin = [
     {
         path: '/admin/users',
         name: '用户管理',
-        icon: 'SmileFilled',
         routes: [
             {
                 path: '/admin/users/guest',
                 name: '签约客户',
-                icon: 'SmileFilled',
                 routes: [
                     {
                         path: '/admin/users/guest/student',
@@ -63,12 +58,10 @@ const admin = [
             {
                 path: '/admin/users/counselor',
                 name: '顾问',
-                icon: 'SmileFilled'
             },
             {
                 path: '/admin/users/channel',
                 name: '渠道',
-                icon: 'SmileFilled'
             },
         ]
     },
@@ -76,22 +69,18 @@ const admin = [
     {
         path: '/admin/apply',
         name: '申请管理',
-        icon: 'SmileFilled',
         routes: [
             {
                 path: '/admin/apply/guest',
                 name: '普通用户',
-                icon: 'SmileFilled',
             },
             {
                 path: '/admin/apply/counselor',
                 name: '顾问',
-                icon: 'SmileFilled'
             },
             {
                 path: '/admin/apply/channel',
                 name: '渠道',
-                icon: 'SmileFilled'
             },
         ]
     },
@@ -116,17 +105,14 @@ const admin = [
     {
         path: '/admin/psq',
         name: '问卷管理',
-        icon: 'SmileFilled'
     },
     {
         path: '/task',
         name: '任务中心',
-        icon: 'SmileFilled'
     },
     {
         path: '/statistics',
         name: '数据管理',
-        icon: 'SmileFilled'
     },
 ]
 
@@ -144,12 +130,10 @@ const counselor = [
     {
         path: '/counselor/schedule',
         name: '管理日程',
-        icon: 'SmileFilled'
     },
     {
         path: '/task',
         name: '任务中心',
-        icon: 'SmileFilled'
     },
     // {
     //     path: '/counselor/profile',
@@ -159,7 +143,6 @@ const counselor = [
     {
         path: '/gpt',
         name: 'GPT',
-        icon: 'SmileFilled'
     },
 ]
 
