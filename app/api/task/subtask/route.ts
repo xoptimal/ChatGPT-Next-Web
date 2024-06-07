@@ -10,6 +10,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     let data = await req.json();
 
     data.createUserId = session?.user.userId;
+    data.status = '1';
 
     const res = await prisma.subtask.create({ data });
 

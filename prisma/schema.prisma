@@ -171,7 +171,7 @@ model subtask {
   remark        String //描述
   targetRemark  String //  任务目标
 
-  status     String   @default("0") //  0=待开始, 1=进行中, 2=已完成, 3=中断任务
+  status     String //  0=待开始, 1=进行中, 2=已完成, 3=中断任务
   isDisabled Int?     @default(1) // 1=正常 2=禁用  
   startTime  DateTime
   endTime    DateTime

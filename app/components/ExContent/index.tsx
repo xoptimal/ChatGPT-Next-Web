@@ -187,7 +187,7 @@ export default (props: React.PropsWithChildren<ExContentProps>) => {
           title: (
             <Space>
               <span>{session?.user.username}</span>
-              <RoleTag role={role} type={type} />
+              {session && <RoleTag role={role} type={type} />}
             </Space>
           ),
           render: (props, dom) => {
@@ -224,7 +224,7 @@ export default (props: React.PropsWithChildren<ExContentProps>) => {
                     e.preventDefault();
                   }}
                 >
-                  {role === ROLE.COUNSELOR && (!type || type === 0) && (
+                  {pathname === "/" && role === ROLE.COUNSELOR && (!type || type === 1) && (
                     <Button
                       type={"primary"}
                       size="small"
@@ -234,7 +234,7 @@ export default (props: React.PropsWithChildren<ExContentProps>) => {
                     </Button>
                   )}
 
-                  {role === ROLE.STUDENT && (!type || type === 0) && (
+                  {pathname === "/" && role === ROLE.STUDENT && (!type || type === 1) && (
                     <Button
                       type={"primary"}
                       size="small"

@@ -42,7 +42,7 @@ ENV PROXY_URL=""
 ENV OPENAI_API_KEY=""
 ENV GOOGLE_API_KEY=""
 ENV CODE=""
-ENV DATABASE_URL="mysql://root:45345123@43.154.37.43:3306/endai"
+ENV DATABASE_URL=""
 WORKDIR /app
 
 COPY --from=builder /app/public ./public

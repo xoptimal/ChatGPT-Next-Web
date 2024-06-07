@@ -117,7 +117,7 @@ export default function Page() {
       let level =
         type === STUDENT_TYPE.INTERMEDIATE || type === STUDENT_TYPE.ADVANCED
           ? COUNSELOR_TYPE.ADVANCED
-          : COUNSELOR_TYPE.BEGINNER;
+          : COUNSELOR_TYPE.INTERMEDIATE;
 
       setLevel(level);
 

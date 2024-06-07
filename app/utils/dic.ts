@@ -40,14 +40,14 @@ export function getRole(role: ROLE = ROLE.STUDENT, type: number = 0) {
   } else if (role === ROLE.COUNSELOR) {
     if (type) {
       switch (type) {
-        case 1:
+        case 2:
           color = "geekblue";
           name = "初级顾问";
           break;
-        case 2:
-          color = "blue";
-          name = "中级顾问";
-          break;
+        // case 2:
+        //   color = "blue";
+        //   name = "中级顾问";
+        //   break;
         case 3:
           color = "cyan";
           name = "高级顾问";
@@ -120,32 +120,32 @@ const scheduleReadyType = {
 };
 
 const counselorLevelToStudentOptions = [
-  { label: "初级咨询", value: 1 },
+  { label: "初级咨询", value: 2 },
   //{ label: "中级顾问", value: 2 },
   { label: "高级咨询", value: 3 },
 ];
 
 const counselorLevelOptions = [
-  { label: "初级顾问", value: 1 },
+  { label: "初级顾问", value: 2 },
   //{ label: "中级顾问", value: 2 },
   { label: "高级顾问", value: 3 },
 ];
 
 const productEnum = {
-  1: "初级顾问",
+  2: "初级顾问",
   //2: "中级顾问",
   3: "高级顾问",
 };
 
 const counselorLevelEnum: any = {
-  1: {
+  2: {
     text: "初级顾问",
     status: "success",
   },
-  2: {
-    text: "中级顾问",
-    status: "success",
-  },
+  // 2: {
+  //   text: "中级顾问",
+  //   status: "success",
+  // },
   3: {
     text: "高级顾问",
     status: "success",
@@ -215,13 +215,11 @@ const studentOptions = [
   { label: "加州精英", value: 3 },
 ];
 enum STUDENT_TYPE {
-  BEGINNER = 1,
   INTERMEDIATE = 2,
   ADVANCED = 3,
 }
 
 enum COUNSELOR_TYPE {
-  BEGINNER = 1,
   INTERMEDIATE = 2,
   ADVANCED = 3,
 }

@@ -62,13 +62,15 @@ export default function () {
         <div>
           <h2>联系方式</h2>
           <p>
-            <strong>邮箱：</strong>info@educationconsulting.com
+            <strong>邮箱：</strong>contact@nblessings.com
           </p>
           <p>
-            <strong>地址：</strong>北京市朝阳区建国路88号现代城C座1203室
+            <strong>地址：</strong>4th Floor, Building 8, 358 Kangding Road,
+                                                    Jing'an
+                                                    District, Shanghai
           </p>
           <p>
-            <strong>联系电话：</strong>+86 10 1234 5678
+            <strong>联系电话：</strong>+86 183 0180 2101
           </p>
         </div>
        

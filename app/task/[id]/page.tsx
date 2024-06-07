@@ -7,6 +7,7 @@ import {
   getRole,
   subTaskDisabledOptions,
   subTaskStatus,
+  taskEnum,
 } from "@/app/utils/dic";
 import {
   BetaSchemaForm,
@@ -85,8 +86,7 @@ const ActionButton = (props: any) => {
     {
       title: "状态",
       dataIndex: "status",
-      valueType: "select",
-      valueEnum: subTaskStatus,
+      valueEnum: taskEnum,
     },
     {
       title: "界面",
@@ -343,6 +343,9 @@ export function TaskDetailPage(props: any) {
     title: null,
   });
 
+  console.log("modal", modal);
+  
+
   const columns: ProFormColumnsType[] = [
     {
       title: "标题",
@@ -554,6 +557,7 @@ export function TaskDetailPage(props: any) {
   ];
 
   return (
+    <>
     <ExContainer
       ref={containerRef}
       showEmpty={items.length === 0}
@@ -796,8 +800,10 @@ export function TaskDetailPage(props: any) {
           </Radio.Button>
         </Radio.Group>
       </div>
+     
+    </ExContainer>
 
-      <Modal
+    <Modal
         title={modal.title}
         open={modal.open}
         width={800}
@@ -909,7 +915,8 @@ export function TaskDetailPage(props: any) {
           submitter={false}
         ></BetaSchemaForm>
       </Modal>
-    </ExContainer>
+
+    </>
   );
 }
 

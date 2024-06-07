@@ -129,10 +129,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       await prisma.scheduleAudit.create({
         data: {
           scheduleId: data.id,
-          message: `发起预约
-        咨询内容: ${remark}
-        咨询时间: ${startTime} - ${endTime}
-        `,
+          message: `发起预约 咨询内容: ${remark}`,
         },
       });
 
