@@ -340,7 +340,6 @@ function TaskContent(props: any) {
     title: null,
   });
 
-
   const columns: ProFormColumnsType[] = [
     {
       title: "标题",
@@ -556,6 +555,12 @@ function TaskContent(props: any) {
       <ExContainer
         ref={containerRef}
         showEmpty={items.length === 0}
+        emptyProps={{
+          description:
+            role === ROLE.COUNSELOR || role === ROLE.ADMIN
+              ? "您还未添加任务, 请尽快添加!"
+              : "顾问正在努力计划中, 请稍作等待!",
+        }}
         emptyRender={
           (role === ROLE.COUNSELOR || role === ROLE.ADMIN) && (
             <Button

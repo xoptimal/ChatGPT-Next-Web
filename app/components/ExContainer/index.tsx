@@ -1,16 +1,16 @@
 "use client";
 
 import { useAsyncEffect } from "ahooks";
-import { Empty, Spin } from "antd";
-import React, { useImperativeHandle } from "react";
-import { useState } from "react";
+import { Empty, EmptyProps, Spin } from "antd";
+import React, { useImperativeHandle, useState } from "react";
 
-import styles from './index.module.scss'
+import styles from "./index.module.scss";
 
 type ExContainerProps = {
   request: () => void;
   showEmpty?: boolean;
-  emptyRender?: React.ReactNode
+  emptyRender?: React.ReactNode;
+  emptyProps?: EmptyProps;
 };
 
 type ExContainerRef = {
@@ -21,7 +21,13 @@ const ExContainer = React.forwardRef<
   ExContainerRef,
   React.PropsWithChildren<ExContainerProps>
 >((props, ref) => {
-  const { children, request, showEmpty = false, emptyRender } = props;
+  const {
+    children,
+    request,
+    showEmpty = false,
+    emptyRender,
+    emptyProps,
+  } = props;
 
   const [loading, setLoading] = useState(true);
 
@@ -41,10 +47,10 @@ const ExContainer = React.forwardRef<
     <>
       {loading ? (
         <div className={styles.loading}>
-           <Spin size="large" />
+          <Spin size="large" />
         </div>
       ) : showEmpty ? (
-        <Empty>{emptyRender}</Empty>
+        <Empty {...emptyProps}>{emptyRender}</Empty>
       ) : (
         children
       )}
@@ -54,6 +60,6 @@ const ExContainer = React.forwardRef<
 
 export type { ExContainerRef };
 
-ExContainer.displayName = "ExContainer"
+ExContainer.displayName = "ExContainer";
 
 export default ExContainer;
