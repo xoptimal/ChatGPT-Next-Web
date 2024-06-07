@@ -49,8 +49,8 @@ type ExTableProps<DataSource, U, ValueType = "text"> = {
   onModalChange?: (open: boolean, selectItem: any, type: number) => void;
   showCreateButton?: boolean;
   form?: any;
-  addButtonText?: string
-  renderAddButton?: (onClick: () => void) => ReactNode
+  addButtonText?: string;
+  renderAddButton?: (onClick: () => void) => ReactNode;
 };
 
 export enum ModalType {
@@ -77,7 +77,7 @@ export default function ExTable(props: ExTableProps<any, any>) {
     onModalChange: onModalChangeProps,
     showCreateButton = false,
     form,
-    addButtonText = '添加',
+    addButtonText = "添加",
     renderAddButton,
   } = props;
 
@@ -148,6 +148,8 @@ export default function ExTable(props: ExTableProps<any, any>) {
     }
     return temp;
   }, [showColumnOption, optionRender]);
+
+
 
   function onModalChange(open: boolean, selectItem: any, type: number) {
     if (onModalChangeProps) {
@@ -252,26 +254,27 @@ export default function ExTable(props: ExTableProps<any, any>) {
           const arr = [];
 
           if (showCreateButton) {
-
             let addDom;
-            const onClick =() => {
+            const onClick = () => {
               setType(ModalType.create);
               setOpen(true);
               setSelectItem(null);
               onModalChange?.(true, null, type);
-            }
+            };
 
-            if(renderAddButton) {
+            if (renderAddButton) {
               addDom = renderAddButton(onClick);
             } else {
-              addDom = <Button
-              key="create"
-              icon={<PlusOutlined />}
-              onClick={onClick}
-              type="primary"
-            >
-              {addButtonText}
-            </Button>
+              addDom = (
+                <Button
+                  key="create"
+                  icon={<PlusOutlined />}
+                  onClick={onClick}
+                  type="primary"
+                >
+                  {addButtonText}
+                </Button>
+              );
             }
 
             arr.push(addDom);

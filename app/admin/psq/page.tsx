@@ -1,33 +1,10 @@
 "use client";
 import ExTable from "@/app/components/ExTable";
+import PreviewPsqList from "@/app/components/PreviewPsqList";
 import { ProColumns } from "@ant-design/pro-components";
 import { Modal } from "antd";
 
-import styles from "./page.module.scss";
-
-export function PreviewPsqList(props: any) {
-  const {  name, psqList } = props;
-
-  return (
-    <>
-      <div className={styles.title}>
-        <div className={styles.drawer_title}>
-          来自<a>{name}</a>同学问卷调查
-        </div>
-      </div>
-      {psqList.map((item: any, index: number) => (
-        <div key={index} className={styles.item}>
-          <div>
-            <h1>{item.question}</h1>
-            <p>{item.value}</p>
-          </div>
-        </div>
-      ))}
-    </>
-  );
-}
-
-export default function Page() {
+ export default function Page() {
   const columns: ProColumns[] = [
     {
       title: "姓名",

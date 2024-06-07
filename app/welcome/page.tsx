@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { getMenus } from "@/app/utils/menuManage";
 import styles from "./page.module.scss";
 
-function WelcomeView(props: any) {
+export default function Page(props: any) {
   const router = useRouter();
 
   const { data: session } = useSession();
@@ -41,7 +41,3 @@ function WelcomeView(props: any) {
     </div>
   );
 }
-
-export { WelcomeView };
-
-export default WelcomeView;

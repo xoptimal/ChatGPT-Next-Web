@@ -1,5 +1,5 @@
 "use client";
-import { TaskDetailPage } from "@/app/task/[id]/page";
+import { TaskContent } from "@/app/components/TaskContent";
 import request from "@/app/utils/api";
 import { useAsyncEffect } from "ahooks";
 import { useState } from "react";
@@ -12,5 +12,5 @@ export default function Page() {
     setId(res.data.id);
   }, []);
 
-  return <>{id && <TaskDetailPage taskId={id} />}</>;
+  return <>{id && <TaskContent taskId={id} />}</>;
 }

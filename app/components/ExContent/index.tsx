@@ -1,5 +1,4 @@
 "use client";
-import Icon from "@/app/components/icon";
 import { ROLE } from "@/app/utils/dic";
 import { getMenus } from "@/app/utils/menuManage";
 import {
@@ -86,7 +85,7 @@ export function getSideMenus(role: number = -1, other = true) {
   return routes;
 }
 
-export default (props: React.PropsWithChildren<ExContentProps>) => {
+export default function ExContent(props: React.PropsWithChildren<ExContentProps>) {
   const { pageContainerProps, proLayoutProps } = props;
 
   const { data: session } = useSession();
@@ -102,10 +101,10 @@ export default (props: React.PropsWithChildren<ExContentProps>) => {
       path: "/",
       routes: routes.map((item) => ({
         ...item,
-        icon: <Icon icon={item.icon}></Icon>,
+        //icon: <Icon icon={item.icon}></Icon>,
         routes: item.routes?.map((child: any) => ({
           ...child,
-          icon: <Icon icon={child.icon}></Icon>,
+          //icon: <Icon icon={child.icon}></Icon>,
         })),
       })),
     },
@@ -290,4 +289,4 @@ export default (props: React.PropsWithChildren<ExContentProps>) => {
       </ProLayout>
     </div>
   );
-};
+}

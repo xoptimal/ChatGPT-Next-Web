@@ -51,7 +51,7 @@ const roleOptions = [
     }
 ]
 
-export default (props: any) => {
+export default function Register(props: any) {
 
     const {setType, onFinish} = props
 

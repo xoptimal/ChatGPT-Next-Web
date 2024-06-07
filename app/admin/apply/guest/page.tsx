@@ -8,8 +8,8 @@ import { Empty, Form, Modal } from "antd";
 
 import AdminAuditContent from "@/app/components/AdminAuditContent";
 import { useState } from "react";
-import { PreviewPsqList } from "../../psq/page";
-import { studentViewColumns } from "../../users/guest/student/page";
+import PreviewPsqList from "@/app/components/PreviewPsqList";
+import { studentViewColumns } from "../../users/guest/student/columns";
 
 const auditOptions = [
   { label: "通过", value: 1 },

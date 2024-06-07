@@ -4,8 +4,8 @@ import ExTable, { ModalType } from "@/app/components/ExTable";
 import { Form, Modal } from "antd";
 
 import AdminAuditContent from "@/app/components/AdminAuditContent";
-import { productColumns } from "@/app/student/apply/page";
 import request from "@/app/utils/api";
+import { productColumns } from "@/app/student/apply/columns";
 
 export default function Page() {
   const [form] = Form.useForm();

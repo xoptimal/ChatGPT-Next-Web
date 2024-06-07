@@ -28,7 +28,7 @@ export default function Page() {
     }));
   };
 
-  const columns: any[] = [
+  const columns: (ProColumns & {colProps?: any})[] = [
     {
       title: "标题",
       dataIndex: "title",
@@ -100,7 +100,6 @@ export default function Page() {
       },
       render: (dom, record) => record.user?.username,
     },
-
     {
       title: "描述",
       dataIndex: "remark",
@@ -132,10 +131,6 @@ export default function Page() {
       showDetailAction={false}
       optionRender={(record, onClick, doms) => {
         const arr = [];
-
-        console.log(role, "role");
-        
-
         if (role === 99 || role === 1) {
           arr.push(doms[0]);
         }

@@ -54,4 +54,6 @@ const ExContainer = React.forwardRef<
 
 export type { ExContainerRef };
 
+ExContainer.displayName = "ExContainer"
+
 export default ExContainer;

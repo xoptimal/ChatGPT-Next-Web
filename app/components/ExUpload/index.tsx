@@ -34,7 +34,7 @@ async function manualUpload(file: any, callback: any) {
   observable.subscribe(subscription);
 }
 
-export default function (props: any) {
+export default function ExUpload(props: any) {
   const {
     className,
     onChange,

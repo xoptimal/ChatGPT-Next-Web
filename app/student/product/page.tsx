@@ -1,7 +1,7 @@
 import styles from "./page.module.scss";
 import Image from "next/image";
 
-export default function () {
+export default function StudentProduct() {
   return (
     <div className={styles.container}>
       <div className={styles.service}>
@@ -65,9 +65,9 @@ export default function () {
             <strong>邮箱：</strong>contact@nblessings.com
           </p>
           <p>
-            <strong>地址：</strong>4th Floor, Building 8, 358 Kangding Road,
+            <strong>地址：</strong>{`4th Floor, Building 8, 358 Kangding Road,
                                                     Jing'an
-                                                    District, Shanghai
+                                                    District, Shanghai`}
           </p>
           <p>
             <strong>联系电话：</strong>+86 183 0180 2101

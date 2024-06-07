@@ -1,88 +1,12 @@
 "use client";
 import ExTable, { ModalType } from "@/app/components/ExTable";
 import request from "@/app/utils/api";
-import {
-  ROLE,
-  UNIVERSITIES,
-  studentEnum,
-  studentOptions,
-} from "@/app/utils/dic";
-import {
-  BetaSchemaForm,
-  ProDescriptions,
-  ProDescriptionsItemProps,
-  type ProColumns,
-} from "@ant-design/pro-components";
+import { ROLE, studentOptions } from "@/app/utils/dic";
+import { BetaSchemaForm, ProDescriptions } from "@ant-design/pro-components";
 import { Form, Modal } from "antd";
-
-const columns: ProColumns[] = [
-  {
-    title: "学号",
-    dataIndex: "studentId",
-    search: false,
-  },
-  {
-    title: "姓名",
-    dataIndex: "username",
-  },
-  {
-    title: "身份",
-    dataIndex: "type",
-    valueEnum: studentEnum,
-  },
-  {
-    title: "学校",
-    key: "school",
-    dataIndex: "school",
-    valueEnum: UNIVERSITIES,
-    search: false,
-  },
-  {
-    title: "年级",
-    dataIndex: "class",
-    search: false,
-  },
-  {
-    title: "成绩",
-    dataIndex: "score",
-    search: false,
-  },
-  {
-    title: "电话",
-    dataIndex: "phone",
-  },
-  {
-    title: "邮箱",
-    dataIndex: "email",
-  },
-  {
-    title: "注册时间",
-    search: false,
-    dataIndex: "createdAt",
-    valueType: "dateTime",
-  },
-];
-
-const studentViewColumns: ProDescriptionsItemProps[] = [
-  ...(columns as any),
-  {
-    title: "年龄",
-    dataIndex: "age",
-  },
-  {
-    title: "成绩",
-    dataIndex: "score",
-  },
-  {
-    title: "地址",
-    dataIndex: "address",
-    span: 2,
-  },
-];
-
+import { columns, studentViewColumns } from "./columns";
 
 export default function Page() {
-
   const [form] = Form.useForm();
 
   return (
@@ -112,7 +36,7 @@ export default function Page() {
         return (
           <Modal
             {...modalProps}
-            title={type === ModalType.detail ?  "学生详情" : "身份编辑"}
+            title={type === ModalType.detail ? "学生详情" : "身份编辑"}
             width={600}
             onOk={() =>
               onOk(async (values) => {
@@ -166,5 +90,3 @@ export default function Page() {
     </ExTable>
   );
 }
-
-export {studentViewColumns}
