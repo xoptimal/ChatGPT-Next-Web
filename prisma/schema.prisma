@@ -48,6 +48,7 @@ model User {
   userTask           task[]         @relation("UserTask")
   counselorTask      task[]         @relation("CounselorTask")
   subtask_list       subtask_list[] @relation("SubTaskList")
+  parent             parent[]
 
   @@map("users")
 }
@@ -56,6 +57,7 @@ model parent {
   id       String @id @default(uuid())
   userId   String @map("user_id")
   parentId String @map("parentId")
+  User     User   @relation(fields: [parentId], references: [id])
 }
 
 model product {
