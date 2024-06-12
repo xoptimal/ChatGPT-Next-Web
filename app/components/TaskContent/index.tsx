@@ -213,6 +213,12 @@ function MessageButton(
             <ExContainer
               ref={containerRef}
               showEmpty={list.length === 0}
+              pageContainerProps={{
+                pageHeaderRender: false,
+                childrenContentStyle: {
+                  padding: 0,
+                },
+              }}
               request={async () => {
                 const { data } = await request("/api/task/subtaskMessage", {
                   params: { subtaskId: record.id },
@@ -227,7 +233,7 @@ function MessageButton(
 
                 const [color, text] = getRole(user.role, user.type);
                 return (
-                  <div key={item.id}>
+                  <div key={item.id} style={{marginBottom: 16}}>
                     <Space className={styles.message_title}>
                       <Tag bordered={false} color={color}>
                         {text}
@@ -659,14 +665,16 @@ function TaskContent(props: any) {
                   </div>
                 ))}
 
-                <a
-                  onClick={() => {
-                    setModal({ open: true, data: record, title: "编辑" });
-                    form.setFieldsValue(record);
-                  }}
-                >
-                  编辑
-                </a>
+               { (role === ROLE.ADMIN || role === ROLE.COUNSELOR || role === ROLE.STUDENT) && 
+                 <a
+                 onClick={() => {
+                   setModal({ open: true, data: record, title: "编辑" });
+                   form.setFieldsValue(record);
+                 }}
+               >
+                 编辑
+               </a>
+               }
 
                 <div className={styles.tab_footer}>
                   <Space>
@@ -718,7 +726,8 @@ function TaskContent(props: any) {
                 </div>
               ) : (
                 <Empty>
-                  <Button
+                  { (role === ROLE.ADMIN || role === ROLE.COUNSELOR) &&
+                    <Button
                     type="primary"
                     onClick={() => {
                       setTargetModal({
@@ -731,6 +740,7 @@ function TaskContent(props: any) {
                   >
                     添加目标
                   </Button>
+                  }
                 </Empty>
               )}
             </div>

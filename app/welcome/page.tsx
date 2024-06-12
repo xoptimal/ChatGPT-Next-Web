@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 
 import { getMenus } from "@/app/utils/menuManage";
 import styles from "./page.module.scss";
+import ExContainer from "../components/ExContainer";
 
 export default function Page(props: any) {
   const router = useRouter();
@@ -22,6 +23,11 @@ export default function Page(props: any) {
   }
 
   return (
+    <ExContainer pageContainerProps={{ 
+      childrenContentStyle: {
+        padding: 0,
+      },
+    }}>
     <div className={styles.container}>
       <div className={styles.left}>{props.children}</div>
       <div className={styles.content}>
@@ -39,5 +45,6 @@ export default function Page(props: any) {
         ))}
       </div>
     </div>
+    </ExContainer>
   );
 }

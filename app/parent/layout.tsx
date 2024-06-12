@@ -1,3 +1,5 @@
+"use client";
+
 import BaseLayout from "@/app/components/base-layout";
 import dynamic from "next/dynamic";
 
@@ -12,9 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <BaseLayout hideContainer>
-      <ExContent>
-        {children}
-      </ExContent>
+      <ExContent>{children}</ExContent>
     </BaseLayout>
   );
 }

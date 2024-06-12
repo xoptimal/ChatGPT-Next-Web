@@ -12,6 +12,13 @@ export async function GET(req: NextRequest, res: NextResponse) {
       where: {
         id: userId ?? session!.user.userId,
       },
+      select: {
+        id: true,
+        username: true,
+        phone: true,
+        email: true,
+        info: true,
+      },
     });
 
     let data = user;

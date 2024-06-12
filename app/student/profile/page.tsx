@@ -1,13 +1,27 @@
 "use client";
+import ExContainer, { ExContainerRef } from "@/app/components/ExContainer";
 import { getSideMenus } from "@/app/components/ExContent";
 import PsqButton from "@/app/components/PsqButton";
 import SideContainer from "@/app/components/SideContainer";
 import request from "@/app/utils/api";
 import { UNIVERSITIES } from "@/app/utils/dic";
-import { BetaSchemaForm, ProDescriptions } from "@ant-design/pro-components";
-import { Button, Descriptions, Modal, Result, Space, message } from "antd";
+import { CopyOutlined } from "@ant-design/icons";
+import { BetaSchemaForm } from "@ant-design/pro-components";
+import {
+  Button,
+  Descriptions,
+  Form,
+  Modal,
+  Result,
+  Space,
+  message,
+} from "antd";
+import md5 from "crypto-js/md5";
 import { useSession } from "next-auth/react";
-import { useEffect, useMemo, useState } from "react";
+import React, { useRef } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+// @ts-ignore
+import CopyToClipboard from "react-copy-to-clipboard";
 
 const formItemProps = {
   rules: [
@@ -139,10 +153,17 @@ export default function Page() {
               onClick={() =>
                 setModal({
                   open: true,
-                  data: [
-                    { label: "账号", value: data["parent1_email"] },
-                    { label: "密码", value: data["parent1_phone"] },
-                  ],
+                  data: {
+                    email: data["parent1_email"],
+                    password: data["parent1_phone"].toString(),
+                    phone: data["parent1_phone"].toString(),
+                    username: data["parent1_username"],
+                    info: {
+                      age: data["parent1_age"],
+                      job: data["parent1_job"],
+                      jobName: data["parent1_jobName"],
+                    },
+                  },
                 })
               }
             >
@@ -160,7 +181,22 @@ export default function Page() {
         title: buttons.parent2 ? (
           <Space>
             <span>家长2</span>
-            <Button>生成账号</Button>
+            <Button onClick={() =>
+                setModal({
+                  open: true,
+                  data: {
+                    email: data["parent2_email"],
+                    password: data["parent2_phone"].toString(),
+                    phone: data["parent2_phone"].toString(),
+                    username: data["parent2_username"],
+                    info: {
+                      age: data["parent2_age"],
+                      job: data["parent2_job"],
+                      jobName: data["parent2_jobName"],
+                    },
+                  },
+                })
+              }>生成账号</Button>
           </Space>
         ) : (
           "家长2"
@@ -195,9 +231,14 @@ export default function Page() {
 
     if (parent1) {
       //  填写了信息
+
       const find1 = data.find(
-        (find: any) => find.parent && find.parent.id === user["parent1_id"],
+        (find: any) => find.parentId === user["parent1_id"],
       );
+
+      console.log("find1", find1);
+      
+
       if (!find1) {
         //  说明没有关联, 展示按钮
         temp.parent1 = true;
@@ -206,79 +247,145 @@ export default function Page() {
 
     if (parent2) {
       //  填写了信息
-      const find1 = data.find(
-        (find: any) => find.parent && find.parent.id === user["parent2_id"],
+      const find2 = data.find(
+        (find: any) => find.parentId === user["parent2_id"],
       );
-      if (!find1) {
+
+      console.log("find2", find2);
+      if (!find2) {
         //  说明没有关联, 展示按钮
         temp.parent2 = true;
       }
     }
 
+    console.log("temp", temp);
+    
+
     setButtons(temp);
   }
+
+  const onCopy = useCallback(() => {
+    message.success("复制成功, 赶紧发给家长吧!");
+  }, []);
+
+  const [form] = Form.useForm();
+  const containerRef = useRef<ExContainerRef>(null);
 
   return (
     <SideContainer
       title="个人信息"
       items={getSideMenus(session?.user.role, false)}
     >
-      <BetaSchemaForm
-        style={{ width: "800px" }}
-        grid
-        rowProps={{
-          gutter: [16, 16],
-        }}
-        colProps={{
-          span: 12,
-        }}
-        submitter={{
-          searchConfig: {
-            submitText: "更新个人信息",
-          },
-          render: (_, doms) => {
-            return [doms[1], show && <PsqButton key="psq">下一步</PsqButton>];
-          },
-        }}
-        onFinish={async (values) => {
-          await request("/api/user/profile", {
-            method: "PUT",
-            data: values,
-          });
-
-          setData(values);
-          message.success("更新成功");
-        }}
+      <ExContainer
+        ref={containerRef}
         request={async () => {
           const res = await request("/api/user/profile");
           setData(res.data);
           checkParentUser(res.data);
-          return res.data;
-        }}
-        columns={columns}
-      ></BetaSchemaForm>
-
-      <Modal
-        title={`生成账号`}
-        open={modal.open}
-        onCancel={() => setModal({ open: false, data: null })}
-        onOk={() => {
-
-          //  on ok
-          setModal((prev: any) => ({...prev, result: true}))
-
+          form.setFieldsValue(res.data);
         }}
       >
-        {
-          modal.result ? <Result></Result> : <Descriptions column={1} title={`家长:${data["parent1_username"]} 账号密码`}>
-          {modal.data &&
-            modal.data.map((item: any) => (
-              <Descriptions.Item key={item.value} label={item.label}>
-                {item.value}
-              </Descriptions.Item>
-            ))}
-        </Descriptions>
-        }
+        <BetaSchemaForm
+          style={{ width: "800px" }}
+          grid
+          rowProps={{
+            gutter: [16, 16],
+          }}
+          form={form}
+          colProps={{
+            span: 12,
+          }}
+          submitter={{
+            searchConfig: {
+              submitText: "更新个人信息",
+            },
+            render: (_, doms) => {
+              return [doms[1], show && <PsqButton key="psq">下一步</PsqButton>];
+            },
+          }}
+          onFinish={async (values) => {
+
+            await request("/api/user/profile", {
+              method: "PUT",
+              data: {...data, ...values,},
+            });
+
+            setData(values);
+            message.success("更新成功");
+
+            //  刷新页面
+            containerRef.current?.refresh()
+
+          }}
+          columns={columns}
+        ></BetaSchemaForm>
+      </ExContainer>
+
+      <Modal
+        title={`生成家长账号`}
+        open={modal.open}
+        confirmLoading={modal.loading}
+        onCancel={() => setModal({ open: false, data: null })}
+        onOk={async () => {
+          //  loading
+          setModal((prev: any) => ({ ...prev, loading: true }));
+
+          //  md5
+          const password = md5(modal.data.password).toString();
+          const data = { ...modal.data, password };
+
+          // register
+          await request("/api/user/parent", { data, method: "post" });
+
+          //  result
+          setModal((prev: any) => ({ ...prev, loading: false, result: true }));
+
+          //刷新数据
+          containerRef.current?.refresh();
+        }}
+        footer={(originNode) => (modal.result ? false : originNode)}
+      >
+        {modal.result ? (
+          <Result
+            rootClassName="create-result"
+            status="success"
+            title="账号创建成功"
+            subTitle={`欢迎来到恩代
+              恩代地址: https://endai.vercel.app/
+              账号: ${modal.data?.email} 密码: ${modal.data?.password}`}
+            extra={
+              <CopyToClipboard
+                onCopy={onCopy}
+                text={`欢迎来到恩代
+              恩代地址: https://endai.vercel.app/
+              账号: ${modal.data?.email} 密码: ${modal.data?.password}`}
+              >
+                <Button
+                  type="primary"
+                  key="console"
+                  icon={<CopyOutlined />}
+                  onClick={() => {}}
+                >
+                  复制
+                </Button>
+              </CopyToClipboard>
+            }
+          ></Result>
+        ) : (
+          <Descriptions
+            column={1}
+            title="初始账号密码如下:"
+            bordered
+            size="small"
+          >
+            <Descriptions.Item label={"账号"}>
+              {modal.data?.email}
+            </Descriptions.Item>
+            <Descriptions.Item label={"密码"}>
+              {modal.data?.password}
+            </Descriptions.Item>
+          </Descriptions>
+        )}
       </Modal>
     </SideContainer>
   );

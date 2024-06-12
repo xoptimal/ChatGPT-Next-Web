@@ -146,6 +146,20 @@ const counselor = [
     },
 ]
 
+const parent = [
+    {
+        path: '/parent/task',
+        name: '查看孩子进度',
+    },
+    {
+        path: '/student/product',
+        name: '产品中心',
+    },
+    {
+        path: '/gpt',
+        name: 'GPT',
+    },
+]
 
 export function getMenus(role: number = -1) {
 
@@ -158,6 +172,9 @@ export function getMenus(role: number = -1) {
             return admin;
         case ROLE.COUNSELOR:
             return counselor;
+            case ROLE.PARENT:
+                return parent;
+    
         default:
             return routes
     }

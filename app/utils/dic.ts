@@ -60,6 +60,9 @@ export function getRole(role: ROLE = ROLE.STUDENT, type: number = 0) {
       color = "purple";
       name = "顾问";
     }
+  } else if (role === ROLE.PARENT) {
+    color = "green";
+    name = "家长";
   }
 
   return [color, name];

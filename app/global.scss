@@ -46,3 +46,11 @@ div {
   flex: 1;
   text-align: center;
 }
+
+.create-result .ant-result-subtitle {
+  white-space: pre-line;
+  text-align: left !important;
+  padding: 8px 16px;
+  background-color: #f1f1f1;
+  border-radius: 8px;
+}

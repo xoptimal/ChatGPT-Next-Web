@@ -48,7 +48,8 @@ model User {
   userTask           task[]         @relation("UserTask")
   counselorTask      task[]         @relation("CounselorTask")
   subtask_list       subtask_list[] @relation("SubTaskList")
-  parent             parent[]
+  UserParent         parent[]       @relation("UserParent")
+  ParentChild        parent[]       @relation("ParentChild")
 
   @@map("users")
 }
@@ -57,7 +58,8 @@ model parent {
   id       String @id @default(uuid())
   userId   String @map("user_id")
   parentId String @map("parentId")
-  User     User   @relation(fields: [parentId], references: [id])
+  parent   User   @relation("UserParent", fields: [parentId], references: [id])
+  user     User   @relation("ParentChild", fields: [userId], references: [id])
 }
 
 model product {

@@ -1,3 +1,4 @@
+import { getQuery } from "@/app/utils/api";
 import { authOptions } from "@/lib/authOptions";
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth/next";
@@ -6,9 +7,11 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest) {
   const session = await getServerSession(authOptions);
 
+  const { userId } = getQuery(req);
+
   const data = await prisma.task.findFirst({
     where: {
-      userId: session!.user.userId,
+      userId: userId ?? session!.user.userId,
     },
     include: {
       user: true,

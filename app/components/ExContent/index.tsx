@@ -66,6 +66,15 @@ export function getSideMenus(role: number = -1, other = true) {
         label: "我的申请",
       },
     ];
+  } else if(role === ROLE.PARENT) {
+    routes = [
+      {
+        key: "/parent/profile",
+        icon: <UserOutlined />,
+        label: "个人信息",
+      },
+     
+    ];
   }
 
   if (other) {
@@ -85,7 +94,9 @@ export function getSideMenus(role: number = -1, other = true) {
   return routes;
 }
 
-export default function ExContent(props: React.PropsWithChildren<ExContentProps>) {
+export default function ExContent(
+  props: React.PropsWithChildren<ExContentProps>,
+) {
   const { pageContainerProps, proLayoutProps } = props;
 
   const { data: session } = useSession();
@@ -135,6 +146,8 @@ export default function ExContent(props: React.PropsWithChildren<ExContentProps>
       ? "管理端"
       : role === ROLE.COUNSELOR
       ? "顾问端"
+      : role === ROLE.PARENT
+      ? "家长端"
       : "用户端";
 
   return (
@@ -223,25 +236,29 @@ export default function ExContent(props: React.PropsWithChildren<ExContentProps>
                     e.preventDefault();
                   }}
                 >
-                  {pathname === "/" && role === ROLE.COUNSELOR && (!type || type === 1) && (
-                    <Button
-                      type={"primary"}
-                      size="small"
-                      onClick={() => router.push("/counselor/apply")}
-                    >
-                      顾问申请
-                    </Button>
-                  )}
+                  {pathname === "/" &&
+                    role === ROLE.COUNSELOR &&
+                    (!type || type === 1) && (
+                      <Button
+                        type={"primary"}
+                        size="small"
+                        onClick={() => router.push("/counselor/apply")}
+                      >
+                        顾问申请
+                      </Button>
+                    )}
 
-                  {pathname === "/" && role === ROLE.STUDENT && (!type || type === 1) && (
-                    <Button
-                      type={"primary"}
-                      size="small"
-                      onClick={() => router.push("/student/product")}
-                    >
-                      恩代服务
-                    </Button>
-                  )}
+                  {pathname === "/" &&
+                    role === ROLE.STUDENT &&
+                    (!type || type === 1) && (
+                      <Button
+                        type={"primary"}
+                        size="small"
+                        onClick={() => router.push("/student/product")}
+                      >
+                        恩代服务
+                      </Button>
+                    )}
 
                   {pathname !== "/" && (
                     <Button size="small" onClick={() => router.replace("/")}>
@@ -276,15 +293,7 @@ export default function ExContent(props: React.PropsWithChildren<ExContentProps>
         {...proLayoutProps}
         headerContentRender={() => <span></span>}
       >
-        <PageContainer
-          breadcrumbRender={false}
-          title={false}
-          pageHeaderRender={false}
-          {...pageContainerProps}
-        >
-          {props.children}
-        </PageContainer>
-
+       {props.children}
         <ScrollToTopButton />
       </ProLayout>
     </div>
