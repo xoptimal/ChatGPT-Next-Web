@@ -636,7 +636,6 @@ function TaskContent(props: any) {
                 </div>
 
                 <div>
-                  <h1>时间(完成|执行&截止的时间)</h1>
                   <h2>{`创建时间:${formatDate(record.startTime)}`}</h2>
                   <h2>{`完成时间:${formatDate(record.endTime)}`}</h2>
                 </div>

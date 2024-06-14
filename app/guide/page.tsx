@@ -9,19 +9,6 @@ import styles from './page.module.scss'
 import {useAsyncEffect} from "ahooks";
 import {ROLE} from "@/app/utils/dic";
 
-const card = [
-    {title: '问答', subTitle: 'QUESTION', key: 'psq', role: 1},
-    {title: '指导', subTitle: 'GUIDE', key: 'gpt', role: 0},
-    {title: '规划', subTitle: 'PLAN', key: '', role: -1},
-    {title: '文书', subTitle: 'BOOK', key: '', role: -1},
-    {title: '政策', subTitle: 'POLICY', key: '', role: -1},
-    {title: '报告', subTitle: 'REPORT', key: 'report', role: 2},
-    {title: '待定1', subTitle: 'Coming soon', key: '', role: -1},
-    {title: '待定2', subTitle: 'Coming soon', key: '', role: -1},
-    {title: '待定3', subTitle: 'Coming soon', key: '', role: -1},
-    {title: '待定4', subTitle: 'Coming soon', key: '', role: -1},
-]
-
 const roleCard = {
     [ROLE.STUDENT] : [
         {title: '预约咨询', subTitle: 'reserve', key: 'psq', },
@@ -47,7 +34,7 @@ const roleCard = {
     [ROLE.ADMIN] : [
         {title: '用户管理', subTitle: 'reserve', key: 'users', },
         {title: '服务管理', subTitle: 'reserve', key: 'services', },
-        {title: '数据管理', subTitle: 'reserve', key: 'data', },
+        //{title: '数据管理', subTitle: 'reserve', key: 'data', },
     ]
 }
 

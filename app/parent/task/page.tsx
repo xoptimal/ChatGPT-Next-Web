@@ -12,10 +12,10 @@ export default function Page() {
 
   const [activeKey, setActiveKey] = useState();
 
-  async function init() {
+  async function init(current?: string) {
     const res = await request("/api/task/find", {
       method: "GET",
-      params: { userId: activeKey },
+      params: { userId: current ?? activeKey },
     });
     setId(res.data?.id);
   }
@@ -29,16 +29,16 @@ export default function Page() {
   return (
     <ExContainer
       emptyProps={{
-        description: "您的小孩还未进行任何预约",
+        description: childList.length === 0 ?  "你未绑定孩子账号" : "您的小孩还未进行任何预约",
       }}
       showEmpty={!id}
       pageContainerProps={{
         childrenContentStyle: {
           padding: 0,
         },
-        title: (
+        title: childList.length > 0 && (
           <Space>
-            <span>当前孩子:</span>
+            <span>学生:</span>
             <Radio.Group
               optionType="button"
               value={activeKey}
@@ -52,13 +52,17 @@ export default function Page() {
       }}
       request={async () => {
         const { data } = await request("/api/user/parent/child");
-        setChildList(
-          data.map((item: any) => ({
-            label: item.user.username,
-            value: item.userId,
-          })),
-        );
-        setActiveKey(data[0].userId);
+
+        if(data?.length > 0) {
+          setChildList(
+            data.map((item: any) => ({
+              label: item.user.username,
+              value: item.userId,
+            })),
+          );
+          setActiveKey(data[0].userId);
+          await init(data[0].userId); 
+        }
       }}
     >
      <TaskContent taskId={id} />

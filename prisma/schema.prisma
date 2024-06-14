@@ -151,13 +151,13 @@ model task {
   isDeleted    Int?      @default(0)
   title        String
   remark       String?
-  status       String //  0=待开始, 1=进行中, 2=已完成, 3=中断任务
+  status       String?   @default("1")
   userId       String?   @map("user_id")
   counselorId  String    @map("counselor_id")
   user         User?     @relation("UserTask", fields: [userId], references: [id])
   counselor    User      @relation("CounselorTask", fields: [counselorId], references: [id])
   subtask      subtask[]
-  createUserId String
+  createUserId String?
 
   taskTargetId Int?
   taskTarget   taskTarget? @relation(fields: [taskTargetId], references: [id])
@@ -168,17 +168,17 @@ model subtask {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   isDeleted    Int?     @default(0)
-  createUserId String
+  createUserId String?
 
-  title         String //  标题
-  requireRemark String //  要求描述
-  remark        String //描述
-  targetRemark  String //  任务目标
+  title         String? //  标题
+  requireRemark String? //  要求描述
+  remark        String? //描述
+  targetRemark  String? //  任务目标
 
-  status     String //  0=待开始, 1=进行中, 2=已完成, 3=中断任务
+  status     String?  @default("1")
   isDisabled Int?     @default(1) // 1=正常 2=禁用  
-  startTime  DateTime
-  endTime    DateTime
+  startTime  DateTime?
+  endTime    DateTime?
   task       task     @relation(fields: [taskId], references: [id])
   taskId     Int
   list       String?  @db.LongText //  附件

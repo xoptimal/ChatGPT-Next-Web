@@ -29,6 +29,10 @@ function formatDateToFromNow(date: Date) {
 }
 
 function formatDate(date: Date, config?: { showTime: boolean }) {
+  if (!date) {
+    return "";
+  }
+
   let format = "YYYY-MM-DD";
   if (config && config.showTime) {
     format = "YYYY-MM-DD HH:mm:ss";

@@ -32,8 +32,20 @@ export async function POST(req: NextRequest, res: NextResponse) {
       info: JSON.stringify(body.info),
     };
 
-    //  创建家长
-    const parent = await prisma.user.create({ data });
+    // 检查家长是否存在
+    let parent = await prisma.user.findUnique({
+      where: { email: data.email, phone: data.phone },
+    });
+
+    let created = false; 
+
+    //  家长不存在
+    if (!parent) {
+      //  创建家长
+      parent = await prisma.user.create({ data });
+    } else {
+      created = true;
+    }
 
     //  增加关联
     await prisma.parent.create({
@@ -60,7 +72,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       },
     });
 
-    return NextResponse.json({ status: 200, statusText: "OK", data: parent });
+    return NextResponse.json({ status: 200, statusText: "OK", data: {created} });
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "System exception" }, { status: 500 });

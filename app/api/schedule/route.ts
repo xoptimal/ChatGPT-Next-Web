@@ -57,29 +57,48 @@ export async function POST(req: NextRequest, res: NextResponse) {
 }
 
 export async function PUT(req: NextRequest, res: NextResponse) {
-    try {
-        const data = await req.json();
+  try {
+    const data = await req.json();
 
-        await prisma.scheduleAudit.update({
-            where: {
-                id: data.targetId
-            },
-            data: {
-                auditMessage: data.auditMessage,
-            }
-        });
+    await prisma.scheduleAudit.update({
+      where: {
+        id: data.targetId,
+      },
+      data: {
+        auditMessage: data.auditMessage,
+      },
+    });
 
-        await prisma.schedule.update({
-            where: {id: data.scheduleId},
-            data: {
-                status: data.status,
-            },
-        });
+    const schedule = await prisma.schedule.update({
+      where: { id: data.scheduleId },
+      data: {
+        status: data.status,
+      },
+    });
 
-        return NextResponse.json({status: 200, statusText: "OK"});
+    //  这个表示已经预约成功, 自动创建主任务
+    if (data.status === 1) {
 
-    } catch (error) {
-        console.error(error);
-        return NextResponse.json({error: "System exception"}, {status: 500});
+      //  创建主任务
+      const task = await prisma.task.create({ data: {
+        title: '系统自动生成计划',
+        userId: schedule.userId,
+        counselorId: schedule.counselorId,
+      } });
+
+
+      //  创建子任务
+      await prisma.subtask.create({ data: {
+        taskId: task.id,
+        title: "基础分析",
+        startTime: schedule.createdAt
+      } });
+
     }
+
+    return NextResponse.json({ status: 200, statusText: "OK" });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: "System exception" }, { status: 500 });
+  }
 }

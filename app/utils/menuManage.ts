@@ -110,10 +110,10 @@ const admin = [
         path: '/task',
         name: '任务中心',
     },
-    {
-        path: '/statistics',
-        name: '数据管理',
-    },
+    // {
+    //     path: '/statistics',
+    //     name: '数据管理',
+    // },
 ]
 
 const counselor = [

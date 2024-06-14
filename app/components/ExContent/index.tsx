@@ -260,7 +260,7 @@ export default function ExContent(
                       </Button>
                     )}
 
-                  {pathname !== "/" && (
+                  {pathname !== "/" && role !== ROLE.PARENT && (
                     <Button size="small" onClick={() => router.replace("/")}>
                       返回
                     </Button>

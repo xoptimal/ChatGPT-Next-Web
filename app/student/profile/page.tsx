@@ -18,8 +18,7 @@ import {
 } from "antd";
 import md5 from "crypto-js/md5";
 import { useSession } from "next-auth/react";
-import React, { useRef } from "react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 // @ts-ignore
 import CopyToClipboard from "react-copy-to-clipboard";
 
@@ -181,7 +180,8 @@ export default function Page() {
         title: buttons.parent2 ? (
           <Space>
             <span>家长2</span>
-            <Button onClick={() =>
+            <Button
+              onClick={() =>
                 setModal({
                   open: true,
                   data: {
@@ -196,7 +196,10 @@ export default function Page() {
                     },
                   },
                 })
-              }>生成账号</Button>
+              }
+            >
+              生成账号
+            </Button>
           </Space>
         ) : (
           "家长2"
@@ -237,7 +240,6 @@ export default function Page() {
       );
 
       console.log("find1", find1);
-      
 
       if (!find1) {
         //  说明没有关联, 展示按钮
@@ -251,16 +253,11 @@ export default function Page() {
         (find: any) => find.parentId === user["parent2_id"],
       );
 
-      console.log("find2", find2);
       if (!find2) {
         //  说明没有关联, 展示按钮
         temp.parent2 = true;
       }
     }
-
-    console.log("temp", temp);
-    
-
     setButtons(temp);
   }
 
@@ -270,6 +267,14 @@ export default function Page() {
 
   const [form] = Form.useForm();
   const containerRef = useRef<ExContainerRef>(null);
+
+  const copyValue = modal.resultData?.created
+    ? `欢迎来到恩代
+    恩代地址: https://endai.vercel.app/
+    账号已存在, 请直接让家长登录查看关联!`
+    : `欢迎来到恩代
+    恩代地址: https://endai.vercel.app/
+    账号: ${modal.data?.email} 密码: ${modal.data?.password}`;
 
   return (
     <SideContainer
@@ -304,18 +309,16 @@ export default function Page() {
             },
           }}
           onFinish={async (values) => {
-
             await request("/api/user/profile", {
               method: "PUT",
-              data: {...data, ...values,},
+              data: { ...data, ...values },
             });
 
             setData(values);
             message.success("更新成功");
 
             //  刷新页面
-            containerRef.current?.refresh()
-
+            containerRef.current?.refresh();
           }}
           columns={columns}
         ></BetaSchemaForm>
@@ -335,10 +338,18 @@ export default function Page() {
           const data = { ...modal.data, password };
 
           // register
-          await request("/api/user/parent", { data, method: "post" });
+          const resultRes = await request("/api/user/parent", {
+            data,
+            method: "post",
+          });
 
           //  result
-          setModal((prev: any) => ({ ...prev, loading: false, result: true }));
+          setModal((prev: any) => ({
+            ...prev,
+            loading: false,
+            result: true,
+            resultData: resultRes.data,
+          }));
 
           //刷新数据
           containerRef.current?.refresh();
@@ -349,17 +360,10 @@ export default function Page() {
           <Result
             rootClassName="create-result"
             status="success"
-            title="账号创建成功"
-            subTitle={`欢迎来到恩代
-              恩代地址: https://endai.vercel.app/
-              账号: ${modal.data?.email} 密码: ${modal.data?.password}`}
-            extra={
-              <CopyToClipboard
-                onCopy={onCopy}
-                text={`欢迎来到恩代
-              恩代地址: https://endai.vercel.app/
-              账号: ${modal.data?.email} 密码: ${modal.data?.password}`}
-              >
+            title={modal.resultData?.created ? "账号关联成功" : "账号创建成功"}
+            subTitle={copyValue}
+            extra={ !modal.resultData?.created &&
+              <CopyToClipboard onCopy={onCopy} text={copyValue}>
                 <Button
                   type="primary"
                   key="console"

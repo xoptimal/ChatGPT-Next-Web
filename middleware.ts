@@ -1,50 +1,25 @@
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
-// // import { NextResponse } from "next/server";
-
-// import { NextResponse } from "next/server";
-
-// // export const config = {
-// //   // https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
-
-// //   matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
-
-// //   //  这里写的就是要授权, 才可以访问的页面
-// // //   matcher: [
-// // //     "/",
-// // //     "/task",
-// // //     "/task/27",
-// // //     "/guide",
-// // //     "/psq",
-// // //     "/report",
-// // //     "/unauthorized",
-// // //     "/api/user/profile",
-// // //     "/api/psq",
-// // //     "/api/report",
-// // //     // {
-// // //     //     source: '/((?!api|_next/static|_next/image|favicon.ico).*)',
-// // //     //     missing: [
-// // //     //       { type: 'header', key: 'next-router-prefetch' },
-// // //     //       { type: 'header', key: 'purpose', value: 'prefetch' },
-// // //     //     ],
-// // //     // }
-// // //   ],
-// // };
-
+import { ROLE } from "@/app/utils/dic";
 
 export default withAuth(
   function middleware(req) {
+
     const { token } = req.nextauth;
     const { pathname, origin } = req.nextUrl;
 
     if (token) {
-      return NextResponse.next();
-    } else {
-        if(pathname.startsWith("/login")) {
+      if(token.role === ROLE.PARENT && pathname !== '/parent/task') {
+        return NextResponse.redirect(`${origin}/parent/task`)
+      }
 
-        } else {
-            return NextResponse.redirect(`${origin}/login`);
-        }
+      return NextResponse.next();
+
+    } else {
+      if (pathname.startsWith("/login")) {
+      } else {
+        return NextResponse.redirect(`${origin}/login`);
+      }
     }
   },
   {
@@ -57,5 +32,15 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
-};
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.png|.*\\.jpg|.*\\.gif|.*\\.js|.*\\.css|.*\\.svg|.*\\.woff|.*\\.woff2|.*\\.ttf).*)',
+
+ ],
+}

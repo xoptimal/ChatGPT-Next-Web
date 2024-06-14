@@ -5,16 +5,14 @@ const ExContent = dynamic(() => import("@/app/components/ExContent"), {
   ssr: false,
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
     <BaseLayout hideContainer>
-      <ExContent>
-        {children}
-      </ExContent>
+      <ExContent>{children}</ExContent>
     </BaseLayout>
   );
 }
