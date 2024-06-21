@@ -1,5 +1,4 @@
 "use client";
-
 import ExContainer, { ExContainerRef } from "@/app/components/ExContainer";
 import request from "@/app/utils/api";
 import {
@@ -26,6 +25,8 @@ import {
   Tag,
   message,
 } from "antd";
+import { saveAs } from "file-saver";
+import htmlDocx from "html-docx-js/dist/html-docx";
 import { useEffect, useRef, useState } from "react";
 
 import ExUpload from "@/app/components/ExUpload";
@@ -233,7 +234,7 @@ function MessageButton(
 
                 const [color, text] = getRole(user.role, user.type);
                 return (
-                  <div key={item.id} style={{marginBottom: 16}}>
+                  <div key={item.id} style={{ marginBottom: 16 }}>
                     <Space className={styles.message_title}>
                       <Tag bordered={false} color={color}>
                         {text}
@@ -322,6 +323,73 @@ function TaskContent(props: any) {
         });
       },
     });
+  };
+
+  const onDownload = () => {
+    const dom = document.querySelector("#task_content");
+    const htmlContent = `
+          <!DOCTYPE HTML>
+          <html>
+            <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+                <meta http-equiv="Content-Style-Type" content="text/css">
+                <meta name="generator" content="Aspose.Words for .NET 15.1.0.0">
+                <title></title>
+                <style>
+            $primary-font: "Arial, sans-serif";
+            $heading-color: #2c3e50;
+            $text-color: #34495e;
+
+            body {
+              font-family: $primary-font;
+              color: $text-color;
+              padding-left: 8px;
+            }
+
+            > div {
+                margin-bottom: 32px;
+            }
+
+            h1,
+            h2 {
+                color: $heading-color;
+                margin-top: 20px;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            h1 {
+                font-size: 16px;
+                margin-bottom: 10px;
+            }
+
+            h2 {
+                font-size: 14px;
+                font-weight: normal;
+            }
+
+            ol {
+                margin: 20px 0;
+                padding-left: 20px;
+
+                li {
+                    margin-bottom: 10px;
+
+                    strong {
+                        color: $heading-color;
+                    }
+                }
+        }
+    </style>
+            </head>
+            <body>
+              ${dom?.outerHTML}
+            </body>
+          </html>`;
+    const blob = htmlDocx.asBlob(htmlContent);
+
+
+    saveAs(blob, `导出.docx`);
   };
 
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -620,60 +688,66 @@ function TaskContent(props: any) {
             activeIndex > -1 &&
             record && (
               <div key={record.id} className={styles.tab_content}>
-                <div>
-                  <h1>任务描述</h1>
-                  <h2>{record.remark}</h2>
-                </div>
-
-                <div>
-                  <h1>任务目标</h1>
-                  <h2>{record.targetRemark}</h2>
-                </div>
-
-                <div>
-                  <h1>要求描述</h1>
-                  <h2>{record.requireRemark}</h2>
-                </div>
-
-                <div>
-                  <h2>{`创建时间:${formatDate(record.startTime)}`}</h2>
-                  <h2>{`完成时间:${formatDate(record.endTime)}`}</h2>
-                </div>
-
-                {record.list?.map((child: any, index: number) => (
-                  <div key={index}>
-                    <div className={styles.tab_title}>
-                      <Space>
-                        <h1>{child.title} </h1>
-                        <span>{`| 创建人: ${
-                          child.role === ROLE.ADMIN ? "管理员" : child.username
-                        }`}</span>
-                      </Space>
-                    </div>
-                    <h2>{child.content}</h2>
-                    {child.attachment.length > 0 && (
-                      <Space>
-                        <span>附件: </span>
-                        {child.attachment.map(
-                          (attachment: any, attachmentIndex: number) => (
-                            <a key={attachmentIndex}>{attachment.name}</a>
-                          ),
-                        )}
-                      </Space>
-                    )}
+                <div id="task_content">
+                  <div>
+                    <h1>任务描述</h1>
+                    <h2>{record.remark}</h2>
                   </div>
-                ))}
 
-               { (role === ROLE.ADMIN || role === ROLE.COUNSELOR || role === ROLE.STUDENT) && 
-                 <a
-                 onClick={() => {
-                   setModal({ open: true, data: record, title: "编辑" });
-                   form.setFieldsValue(record);
-                 }}
-               >
-                 编辑
-               </a>
-               }
+                  <div>
+                    <h1>任务目标</h1>
+                    <h2>{record.targetRemark}</h2>
+                  </div>
+
+                  <div>
+                    <h1>要求描述</h1>
+                    <h2>{record.requireRemark}</h2>
+                  </div>
+
+                  <div>
+                    <h2>{`创建时间:${formatDate(record.startTime)}`}</h2>
+                    <h2>{`完成时间:${formatDate(record.endTime)}`}</h2>
+                  </div>
+
+                  {record.list?.map((child: any, index: number) => (
+                    <div key={index}>
+                      <div className={styles.tab_title}>
+                        <Space>
+                          <h1>{child.title} </h1>
+                          <span>{`| 创建人: ${
+                            child.role === ROLE.ADMIN
+                              ? "管理员"
+                              : child.username
+                          }`}</span>
+                        </Space>
+                      </div>
+                      <h2>{child.content}</h2>
+                      {child.attachment.length > 0 && (
+                        <Space>
+                          <span>附件: </span>
+                          {child.attachment.map(
+                            (attachment: any, attachmentIndex: number) => (
+                              <a key={attachmentIndex}>{attachment.name}</a>
+                            ),
+                          )}
+                        </Space>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                {(role === ROLE.ADMIN ||
+                  role === ROLE.COUNSELOR ||
+                  role === ROLE.STUDENT) && (
+                  <a
+                    onClick={() => {
+                      setModal({ open: true, data: record, title: "编辑" });
+                      form.setFieldsValue(record);
+                    }}
+                  >
+                    编辑
+                  </a>
+                )}
 
                 <div className={styles.tab_footer}>
                   <Space>
@@ -684,7 +758,7 @@ function TaskContent(props: any) {
                     {role === ROLE.ADMIN && <Button>顾问提醒</Button>}
 
                     {/*  <Button>更新发布</Button> */}
-                    <Button>服务内容下载</Button>
+                    <Button onClick={onDownload}>服务内容下载</Button>
                     <MessageButton
                       task={task}
                       record={record}
@@ -725,21 +799,21 @@ function TaskContent(props: any) {
                 </div>
               ) : (
                 <Empty>
-                  { (role === ROLE.ADMIN || role === ROLE.COUNSELOR) &&
+                  {(role === ROLE.ADMIN || role === ROLE.COUNSELOR) && (
                     <Button
-                    type="primary"
-                    onClick={() => {
-                      setTargetModal({
-                        open: true,
-                        data: null,
-                        title: "添加目标",
-                      });
-                      targetForm.resetFields();
-                    }}
-                  >
-                    添加目标
-                  </Button>
-                  }
+                      type="primary"
+                      onClick={() => {
+                        setTargetModal({
+                          open: true,
+                          data: null,
+                          title: "添加目标",
+                        });
+                        targetForm.resetFields();
+                      }}
+                    >
+                      添加目标
+                    </Button>
+                  )}
                 </Empty>
               )}
             </div>
@@ -928,3 +1002,4 @@ function TaskContent(props: any) {
 }
 
 export { TaskContent };
+
