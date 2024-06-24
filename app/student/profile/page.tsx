@@ -4,7 +4,6 @@ import { getSideMenus } from "@/app/components/ExContent";
 import PsqButton from "@/app/components/PsqButton";
 import SideContainer from "@/app/components/SideContainer";
 import request from "@/app/utils/api";
-import { UNIVERSITIES } from "@/app/utils/dic";
 import { CopyOutlined } from "@ant-design/icons";
 import { BetaSchemaForm } from "@ant-design/pro-components";
 import {
@@ -106,7 +105,6 @@ export default function Page() {
             title: "学校",
             key: "school",
             dataIndex: "school",
-            valueEnum: UNIVERSITIES,
           },
           {
             title: "年级",

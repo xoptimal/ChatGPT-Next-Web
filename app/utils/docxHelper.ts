@@ -2,14 +2,13 @@ import {
   Document,
   ExternalHyperlink,
   HeadingLevel,
-  IRunPropertiesOptions,
   Packer,
   Paragraph,
-  TextRun,
+  TextRun
 } from "docx";
 import { saveAs } from "file-saver";
-import { formatDate, getImageUrl } from "./helper";
 import { ROLE } from "./dic";
+import { formatDate, getImageUrl } from "./helper";
 
 function formatChildren(record: any) {
   const children = [
@@ -35,23 +34,22 @@ function formatChildren(record: any) {
 
     if (child.attachment.length > 0) {
       const names = child.attachment.map(
-        (attachment: { name: string, uid: string }) => {
+        (attachment: { name: string; uid: string }) => {
           const hyperlink = new ExternalHyperlink({
             link: getImageUrl(attachment.uid),
             children: [
-                new TextRun({
-                    text: attachment.name,
-                    style: "Hyperlink",
-                }),
+              new TextRun({
+                text: attachment.name,
+                style: "Hyperlink",
+              }),
             ],
-        });
-        return hyperlink;
+          });
+          return hyperlink;
         },
       );
-      children.push(new Paragraph({children: [
-        new TextRun("附件: "),
-        ...names,
-      ]}));
+      children.push(
+        new Paragraph({ children: [new TextRun("附件: "), ...names] }),
+      );
     }
   });
 
@@ -132,4 +130,3 @@ function createSubHeading(text: string, name: string): Paragraph {
     ],
   });
 }
-

@@ -68,18 +68,6 @@ export function getRole(role: ROLE = ROLE.STUDENT, type: number = 0) {
   return [color, name];
 }
 
-const UNIVERSITIES = {
-  SHJTU: "上海交通大学",
-  FUDAN: "复旦大学",
-  TONGJI: "同济大学",
-  ECNU: "华东师范大学",
-  SHU: "上海大学",
-  SUFE: "上海财经大学",
-  USST: "上海理工大学",
-  DHU: "东华大学",
-  ECUST: "华东理工大学",
-  SMU: "上海海事大学",
-};
 
 const ENTITY_TYPE = {
   1: "个体",
@@ -239,7 +227,6 @@ export {
   ENTITY_TYPE,
   INVITATION_CODE,
   ROLE,
-  UNIVERSITIES,
   WEI_XIN_CONTACT,
   counselorLevelOptions,
   productEnum,

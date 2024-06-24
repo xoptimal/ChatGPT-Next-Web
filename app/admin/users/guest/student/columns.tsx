@@ -1,5 +1,5 @@
 "use client";
-import { UNIVERSITIES, studentEnum } from "@/app/utils/dic";
+import { studentEnum } from "@/app/utils/dic";
 import {
   ProDescriptionsItemProps,
   type ProColumns,
@@ -24,7 +24,6 @@ const columns: ProColumns[] = [
     title: "学校",
     key: "school",
     dataIndex: "school",
-    valueEnum: UNIVERSITIES,
     search: false,
   },
   {

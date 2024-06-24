@@ -18,18 +18,7 @@ import {
 import { Button, Form } from "antd";
 import { useRef, useState } from "react";
 
-const universities = [
-  { label: "上海交通大学", value: "SHJTU" },
-  { label: "复旦大学", value: "FUDAN" },
-  { label: "同济大学", value: "TONGJI" },
-  { label: "华东师范大学", value: "ECNU" },
-  { label: "上海大学", value: "SHU" },
-  { label: "上海财经大学", value: "SUFE" },
-  { label: "上海理工大学", value: "USST" },
-  { label: "东华大学", value: "DHU" },
-  { label: "华东理工大学", value: "ECUST" },
-  { label: "上海海事大学", value: "SMU" },
-];
+
 
 const roleOptions = [
   {
@@ -135,15 +124,14 @@ export default function Register(props: any) {
               ]}
             />
 
-            <ProFormSelect
+            <ProFormText
               name="school"
-              options={universities}
               label={"学校"}
               placeholder={"学校"}
               rules={[
                 {
                   required: true,
-                  message: "请选择所在学校",
+                  message: "请输入所在学校",
                 },
               ]}
             />
