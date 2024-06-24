@@ -25,11 +25,10 @@ import {
   Tag,
   message,
 } from "antd";
-import { saveAs } from "file-saver";
-import htmlDocx from "html-docx-js/dist/html-docx";
 import { useEffect, useRef, useState } from "react";
 
 import ExUpload from "@/app/components/ExUpload";
+import { generateDocx } from "@/app/utils/docxHelper";
 import {
   formatAttachmentToList,
   formatDate,
@@ -325,72 +324,7 @@ function TaskContent(props: any) {
     });
   };
 
-  const onDownload = () => {
-    const dom = document.querySelector("#task_content");
-    const htmlContent = `
-          <!DOCTYPE HTML>
-          <html>
-            <head>
-                <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-                <meta http-equiv="Content-Style-Type" content="text/css">
-                <meta name="generator" content="Aspose.Words for .NET 15.1.0.0">
-                <title></title>
-                <style>
-            $primary-font: "Arial, sans-serif";
-            $heading-color: #2c3e50;
-            $text-color: #34495e;
 
-            body {
-              font-family: $primary-font;
-              color: $text-color;
-              padding-left: 8px;
-            }
-
-            > div {
-                margin-bottom: 32px;
-            }
-
-            h1,
-            h2 {
-                color: $heading-color;
-                margin-top: 20px;
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-
-            h1 {
-                font-size: 16px;
-                margin-bottom: 10px;
-            }
-
-            h2 {
-                font-size: 14px;
-                font-weight: normal;
-            }
-
-            ol {
-                margin: 20px 0;
-                padding-left: 20px;
-
-                li {
-                    margin-bottom: 10px;
-
-                    strong {
-                        color: $heading-color;
-                    }
-                }
-        }
-    </style>
-            </head>
-            <body>
-              ${dom?.outerHTML}
-            </body>
-          </html>`;
-    const blob = htmlDocx.asBlob(htmlContent);
-
-
-    saveAs(blob, `导出.docx`);
-  };
 
   const [activeIndex, setActiveIndex] = useState(-1);
 
@@ -413,6 +347,10 @@ function TaskContent(props: any) {
     record: null,
     title: null,
   });
+
+  const onDownload = () => {
+    generateDocx(record);
+  };
 
   const columns: ProFormColumnsType[] = [
     {
@@ -727,7 +665,7 @@ function TaskContent(props: any) {
                           <span>附件: </span>
                           {child.attachment.map(
                             (attachment: any, attachmentIndex: number) => (
-                              <a key={attachmentIndex}>{attachment.name}</a>
+                              <a key={attachmentIndex} target="_blank" href={getImageUrl(attachment.uid)}>{attachment.name}</a>
                             ),
                           )}
                         </Space>

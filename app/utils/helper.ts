@@ -12,8 +12,7 @@ function handlerError(e: unknown) {
 }
 
 function getImageUrl(uid: String) {
-  const uploadUrl = "http://sdn3icoqm.hn-bkt.clouddn.com/" + uid;
-  return uploadUrl;
+  return "http://sdn3icoqm.hn-bkt.clouddn.com/" + uid;
 }
 
 function formatDateToFromNow(date: Date) {
