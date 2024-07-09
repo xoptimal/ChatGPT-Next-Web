@@ -22,11 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <BaseLayout hideContainer>
-      <ErrorBoundary>
-        <Router>
-          <ExContent>{children}</ExContent>
-        </Router>
-      </ErrorBoundary>
+      <ExContent>{children}</ExContent>
     </BaseLayout>
   );
 }

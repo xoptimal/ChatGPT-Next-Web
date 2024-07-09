@@ -24,7 +24,7 @@ export default function Page() {
 
   async function fetchInitialAssistantList() {
     try {
-      cozeBots();
+      //cozeBots();
 
       //  添加到Store
       //store.setSessions(bots);
@@ -48,7 +48,7 @@ export default function Page() {
             key={item.botId}
             onClick={() => {
               store.selectSession(index);
-              router.push(`/coze/bots/${item.botId}`);
+              router.push(`/coze/bot`);
             }}
           >
             {item.name}

@@ -909,13 +909,13 @@ export function Chat() {
 
       <div className={styles2["chat-input-panel"]}>
         <div>
-          {messages.length === 1 && (
+       {/*   {messages.length === 1 && (
             <PromptGuide
               prompts={getPrompts(session.id)}
               onPromptSelect={onPromptSelect2Guide}
             />
           )}
-
+*/}
           <PromptHints prompts={promptHints} onPromptSelect={onPromptSelect} />
 
           <div className={styles2["chat-input-panel-inner"]}>
