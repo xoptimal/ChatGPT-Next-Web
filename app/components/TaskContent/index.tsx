@@ -652,7 +652,7 @@ function TaskContent(props: any) {
                       <div className={styles.tab_title}>
                         <Space>
                           <h1>{child.title} </h1>
-                          <span>{`| 创建人: ${
+                           <span>{`| 创建人: ${
                             child.role === ROLE.ADMIN
                               ? "管理员"
                               : child.username

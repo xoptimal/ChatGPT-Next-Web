@@ -3,7 +3,7 @@ import { trimTopic } from "../utils";
 import Locale, { getLang } from "../locales";
 import { showToast } from "../components/ui-lib";
 import { ModelConfig, ModelType, useAppConfig } from "./config";
-import { createEmptyMask, Mask } from "./mask";
+import { Mask } from "./mask";
 import {
   DEFAULT_INPUT_TEMPLATE,
   DEFAULT_SYSTEM_TEMPLATE,
@@ -13,25 +13,41 @@ import {
   SUMMARIZE_MODEL,
 } from "../constant";
 import { ClientApi, RequestMessage } from "../client/api";
-import { ChatControllerPool } from "../client/controller";
-import { prettyObject } from "../utils/format";
 import { estimateTokenLength } from "../utils/token";
 import { nanoid } from "nanoid";
 import { createPersistStore } from "../utils/store";
+import {
+  addMessage,
+  createThread,
+  removeFile,
+  uploadFile,
+} from "@/app/services/api";
+import { runChatAssistant } from "@/app/modules/assistantModules";
+import { fetchAssistantResponse } from "@/app/modules/chatModules";
+import { prettyObject } from "@/app/utils/format";
+import { ChatControllerPool } from "../client/controller";
 
+export type UploadFileType = {
+  id: string;
+  object?: string;
+  purpose?: string;
+  filename: string;
+  bytes?: number;
+  created_at?: number;
+  status: string;
+};
 export type ChatMessage = RequestMessage & {
-  date: string;
+  date?: string;
   streaming?: boolean;
   isError?: boolean;
-  id: string;
+  id?: string;
   model?: ModelType;
-  prompts?: string []
+  prompts?: string[];
 };
 
 export function createMessage(override: Partial<ChatMessage>): ChatMessage {
   return {
     id: nanoid(),
-    date: new Date().toLocaleString(),
     role: "user",
     content: "",
     ...override,
@@ -55,18 +71,36 @@ export interface ChatSession {
   lastSummarizeIndex: number;
   clearContextIndex?: number;
 
+  threadId?: string;
+
   mask: Mask;
 
-  token?: string
+  uploadFiles?: UploadFileType[];
 }
 
 export const DEFAULT_TOPIC = Locale.Store.DefaultTopic;
-export const BOT_HELLO: ChatMessage = createMessage({
-  role: "assistant",
-  content: Locale.Store.BotHello,
-});
 
-function createEmptySession(): ChatSession {
+// export const BOT_HELLO: ChatMessage = createMessage({
+//     role: "assistant",
+//     content: Locale.Store.BotHello,
+// });
+
+const DEFAULT_MASK_AVATAR = "gpt-bot";
+
+const createEmptyMask = () =>
+  ({
+    id: nanoid(),
+    avatar: DEFAULT_MASK_AVATAR,
+    name: DEFAULT_TOPIC,
+    context: [],
+    syncGlobalConfig: true, // use global config as default
+    modelConfig: { ...useAppConfig.getState().modelConfig },
+    lang: getLang(),
+    builtin: false,
+    createdAt: Date.now(),
+  }) as Mask;
+
+function createEmptySession(override?: any): ChatSession {
   return {
     id: nanoid(),
     topic: DEFAULT_TOPIC,
@@ -79,8 +113,8 @@ function createEmptySession(): ChatSession {
     },
     lastUpdate: Date.now(),
     lastSummarizeIndex: 0,
-
     mask: createEmptyMask(),
+    ...override,
   };
 }
 
@@ -120,12 +154,22 @@ function fillTemplateWith(input: string, modelConfig: ModelConfig) {
   return output;
 }
 
-const DEFAULT_CHAT_STATE = {
-  sessions: [createEmptySession()],
-  currentSessionIndex: 0,
+export interface LocalStoredAssistant {
+  assistantName?: string | null;
+  assistantDescription?: string | null;
+  assistantId: string | null;
+  threadId?: string | null;
+}
+
+const DEFAULT_CHAT_STATE: {
+  sessions: any[];
+  currentSessionIndex: number;
+} = {
+  sessions: [],
+  currentSessionIndex: -1,
 };
 
-export const useChatStore = createPersistStore(
+export const useCozeStore = createPersistStore(
   DEFAULT_CHAT_STATE,
   (set, _get) => {
     function get() {
@@ -136,10 +180,71 @@ export const useChatStore = createPersistStore(
     }
 
     const methods = {
+      getFiles(): UploadFileType[] {
+        const session = get().currentSession();
+        return session.uploadFiles || [];
+      },
+
+      async removeFile(fileId: string) {
+        //  移除openai存储的
+        await removeFile(fileId);
+
+        //  移除本地
+        get().updateCurrentSession((session) => {
+          session.uploadFiles = session.uploadFiles?.filter(
+            (find: any) => find.id !== fileId,
+          );
+        });
+      },
+
+      async addFile(file: File) {
+        //   写入一条数据
+        get().updateCurrentSession((session) => {
+          const data = { filename: file.name, id: nanoid(), status: "loading" };
+          if (session.uploadFiles) {
+            session.uploadFiles.push(data);
+          } else {
+            session.uploadFiles = [data];
+          }
+        });
+        //  上传
+        const resp = await uploadFile(file);
+        //  更新数据
+        get().updateCurrentSession((session) => {
+          const index = session.uploadFiles!.length - 1;
+          session.uploadFiles![index] = resp.data;
+        });
+      },
+
+      setSessions(newSessions: any[]) {
+        set((state) => {
+          const sessions: any[] = [];
+          newSessions.forEach((item) => {
+            const find = state.sessions.find((find) => find.id === item.id);
+            if (find) {
+              //  针对特定参数, 做更新
+              sessions.push({
+                ...find,
+                name: item.name,
+                instructions: item.instructions,
+                model: item.model,
+              });
+            } else {
+              //  直接写入
+              sessions.push(createEmptySession(item));
+            }
+          });
+          return {
+            currentSessionIndex: state.currentSessionIndex || 0,
+            sessions: sessions,
+          };
+        });
+      },
+
       clearSessions() {
         set(() => ({
-          sessions: [createEmptySession()],
-          currentSessionIndex: 0,
+          sessions: [],
+          currentSessionIndex: -1,
         }));
       },
 
@@ -175,6 +280,8 @@ export const useChatStore = createPersistStore(
       },
 
       newSession(mask?: Mask) {
+        console.log("11111111111");
+
         const session = createEmptySession();
 
         if (mask) {
@@ -256,9 +363,7 @@ export const useChatStore = createPersistStore(
           set(() => ({ currentSessionIndex: index }));
         }
 
-        const session = sessions[index];
-
-        return session;
+        return sessions[index];
       },
 
       onNewMessage(message: ChatMessage) {
@@ -270,8 +375,10 @@ export const useChatStore = createPersistStore(
         get().summarizeSession();
       },
 
-      async onUserInput(content: string) {
+      async onUserInput(content: string, user: { username: string }) {
         const session = get().currentSession();
+
+        if (!session) return;
         const modelConfig = session.mask.modelConfig;
 
         const userContent = fillTemplateWith(content, modelConfig);
@@ -280,6 +387,7 @@ export const useChatStore = createPersistStore(
         const userMessage: ChatMessage = createMessage({
           role: "user",
           content: userContent,
+          date: new Date().toLocaleString(),
         });
 
         const botMessage: ChatMessage = createMessage({
@@ -305,15 +413,11 @@ export const useChatStore = createPersistStore(
           ]);
         });
 
-        var api: ClientApi;
-        if (modelConfig.model === "gemini-pro") {
-          api = new ClientApi(ModelProvider.GeminiPro);
-        } else {
-          api = new ClientApi(ModelProvider.GPT);
-        }
+        var api: ClientApi = new ClientApi(ModelProvider.COZE);
 
-        // make request
         api.llm.chat({
+          msg: userContent,
+          user,
           messages: sendMessages,
           config: { ...modelConfig, stream: true },
           onUpdate(message) {
@@ -325,13 +429,15 @@ export const useChatStore = createPersistStore(
               session.messages = session.messages.concat();
             });
           },
-          onFinish(message) {
+          onFinish(message, prompts) {
             botMessage.streaming = false;
             if (message) {
               botMessage.content = message;
+              botMessage.prompts = prompts;
               get().onNewMessage(botMessage);
             }
-            ChatControllerPool.remove(session.id, botMessage.id);
+
+            ChatControllerPool.remove(session.id, botMessage.id!);
           },
           onError(error) {
             const isAborted = error.message.includes("aborted");
@@ -532,7 +638,7 @@ export const useChatStore = createPersistStore(
           session.clearContextIndex ?? 0,
         );
         let toBeSummarizedMsgs = messages
-          .filter((msg) => !msg.isError)
+          .filter((msg: any) => !msg.isError)
           .slice(summarizeIndex);
 
         const historyMsgLength = countMessages(toBeSummarizedMsgs);
@@ -613,55 +719,7 @@ export const useChatStore = createPersistStore(
     return methods;
   },
   {
-    name: StoreKey.Chat,
-    version: 3.1,
-    migrate(persistedState, version) {
-      const state = persistedState as any;
-      const newState = JSON.parse(
-        JSON.stringify(state),
-      ) as typeof DEFAULT_CHAT_STATE;
-
-      if (version < 2) {
-        newState.sessions = [];
-
-        const oldSessions = state.sessions;
-        for (const oldSession of oldSessions) {
-          const newSession = createEmptySession();
-          newSession.topic = oldSession.topic;
-          newSession.messages = [...oldSession.messages];
-          newSession.mask.modelConfig.sendMemory = true;
-          newSession.mask.modelConfig.historyMessageCount = 4;
-          newSession.mask.modelConfig.compressMessageLengthThreshold = 1000;
-          newState.sessions.push(newSession);
-        }
-      }
-
-      if (version < 3) {
-        // migrate id to nanoid
-        newState.sessions.forEach((s) => {
-          s.id = nanoid();
-          s.messages.forEach((m) => (m.id = nanoid()));
-        });
-      }
-
-      // Enable `enableInjectSystemPrompts` attribute for old sessions.
-      // Resolve issue of old sessions not automatically enabling.
-      if (version < 3.1) {
-        newState.sessions.forEach((s) => {
-          if (
-            // Exclude those already set by user
-            !s.mask.modelConfig.hasOwnProperty("enableInjectSystemPrompts")
-          ) {
-            // Because users may have changed this configuration,
-            // the user's current configuration is used instead of the default
-            const config = useAppConfig.getState();
-            s.mask.modelConfig.enableInjectSystemPrompts =
-              config.modelConfig.enableInjectSystemPrompts;
-          }
-        });
-      }
-
-      return newState as any;
-    },
+    name: StoreKey.Assistant,
+    version: 1,
   },
 );

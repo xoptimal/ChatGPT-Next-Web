@@ -1,17 +1,17 @@
 "use client";
 
+import Image from "next/image";
 import React from "react";
 import "../global.scss";
-import Image from "next/image";
 
-import styles from "./base-layout.module.scss";
-import { useRouter } from "next/navigation";
-import { AntdRegistry } from "@ant-design/nextjs-registry";
-import { signOut, useSession } from "next-auth/react";
-import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
-import { Avatar, Button, Dropdown, MenuProps, Space } from "antd";
 import AuthProvider from "@/providers/auth-provider";
+import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
+import { AntdRegistry } from "@ant-design/nextjs-registry";
+import { Avatar, Button, Dropdown, MenuProps, Space } from "antd";
 import type { Metadata } from "next";
+import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import styles from "./base-layout.module.scss";
 
 function Container({
   children,

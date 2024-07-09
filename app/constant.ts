@@ -23,6 +23,8 @@ export enum Path {
   Auth = "/auth",
   //  针对Assistant的聊天窗口页面
   Thread = "/thread",
+  //  针对COZE
+  COZE = "/gpt",
 }
 
 export enum ApiPath {
@@ -76,6 +78,7 @@ export enum ServiceProvider {
 export enum ModelProvider {
   GPT = "GPT",
   GeminiPro = "GeminiPro",
+  COZE = "COZE",
 }
 
 export const OpenaiPath = {
@@ -95,6 +98,13 @@ export const Google = {
 
   // /api/openai/v1/chat/completions
 };
+
+export const COZE = {
+  ExampleEndpoint: "https://api.coze.com/",
+  ChatPath: "open_api/v2/chat",
+
+};
+
 
 export const DEFAULT_INPUT_TEMPLATE = `{{input}}`; // input / time / model / lang
 export const DEFAULT_SYSTEM_TEMPLATE = `
@@ -248,6 +258,15 @@ export const DEFAULT_MODELS = [
       id: "google",
       providerName: "Google",
       providerType: "google",
+    },
+  },
+  {
+    name: "coze",
+    available: true,
+    provider: {
+      id: "coze",
+      providerName: "coze",
+      providerType: "coze",
     },
   },
 ] as const;

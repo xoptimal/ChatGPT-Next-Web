@@ -463,7 +463,6 @@ function _Thread() {
     type RenderMessage = ChatMessage & { preview?: boolean };
 
     const assistantStore = useAssistantStore();
-
     const session = assistantStore.currentSession();
 
     const config = useAppConfig();

@@ -8,6 +8,8 @@ import {
 import { ChatMessage, ModelType, useAccessStore, useChatStore } from "../store";
 import { ChatGPTApi } from "./platforms/openai";
 import { GeminiProApi } from "./platforms/google";
+import { COZEApi } from "./platforms/coze";
+import { useCozeStore } from "../store/coze";
 export const ROLES = ["system", "user", "assistant"] as const;
 export type MessageRole = (typeof ROLES)[number];
 
@@ -33,9 +35,12 @@ export interface ChatOptions {
   config: LLMConfig;
 
   onUpdate?: (message: string, chunk: string) => void;
-  onFinish: (message: string) => void;
+  onFinish: (message: string, prompts?: string[]) => void;
   onError?: (err: Error) => void;
   onController?: (controller: AbortController) => void;
+
+  msg?: string
+  user?: {username: string}
 }
 
 export interface LLMUsage {
@@ -88,6 +93,10 @@ export class ClientApi {
   constructor(provider: ModelProvider = ModelProvider.GPT) {
     if (provider === ModelProvider.GeminiPro) {
       this.llm = new GeminiProApi();
+      return;
+    }
+    if (provider === ModelProvider.COZE) {
+      this.llm = new COZEApi();
       return;
     }
     this.llm = new ChatGPTApi();
@@ -143,18 +152,24 @@ export function getHeaders() {
   const accessStore = useAccessStore.getState();
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
-    "x-requested-with": "XMLHttpRequest",
-    "Accept": "application/json",
+    //"x-requested-with": "XMLHttpRequest",
+    Accept: "*",
   };
+
+  
   const modelConfig = useChatStore.getState().currentSession().mask.modelConfig;
   const isGoogle = modelConfig.model === "gemini-pro";
   const isAzure = accessStore.provider === ServiceProvider.Azure;
+  const isCOZE = modelConfig.model === "coze";
   const authHeader = isAzure ? "api-key" : "Authorization";
   const apiKey = isGoogle
     ? accessStore.googleApiKey
     : isAzure
     ? accessStore.azureApiKey
+    : isCOZE
+    ? useCozeStore.getState().currentSession().token!
     : accessStore.openaiApiKey;
+
 
   const makeBearer = (s: string) => `${isAzure ? "" : "Bearer "}${s.trim()}`;
   const validString = (x: string) => x && x.length > 0;

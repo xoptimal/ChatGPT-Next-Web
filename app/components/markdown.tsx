@@ -1,3 +1,5 @@
+'use client';
+
 import ReactMarkdown from "react-markdown";
 import RemarkMath from "remark-math";
 import RemarkBreaks from "remark-breaks";

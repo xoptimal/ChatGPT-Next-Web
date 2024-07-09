@@ -26,7 +26,7 @@ const student = [
     //     icon: 'SmileFilled'
     // },
     {
-        path: '/gpt',
+        path: '/coze/bots',
         name: 'GPT',
     },
 ]

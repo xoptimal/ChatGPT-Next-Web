@@ -11,7 +11,7 @@ import type {
   ProLayoutProps,
   ProSettings,
 } from "@ant-design/pro-components";
-import { PageContainer, ProLayout } from "@ant-design/pro-components";
+import { ProLayout } from "@ant-design/pro-components";
 import type { MenuProps } from "antd";
 import { Button, Dropdown, Space } from "antd";
 import { signOut, useSession } from "next-auth/react";
@@ -66,14 +66,13 @@ export function getSideMenus(role: number = -1, other = true) {
         label: "我的申请",
       },
     ];
-  } else if(role === ROLE.PARENT) {
+  } else if (role === ROLE.PARENT) {
     routes = [
       {
         key: "/parent/profile",
         icon: <UserOutlined />,
         label: "个人信息",
       },
-     
     ];
   }
 
@@ -293,7 +292,7 @@ export default function ExContent(
         {...proLayoutProps}
         headerContentRender={() => <span></span>}
       >
-       {props.children}
+        {props.children}
         <ScrollToTopButton />
       </ProLayout>
     </div>

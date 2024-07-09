@@ -132,7 +132,7 @@ export function SessionConfigModel(props: { onClose: () => void }) {
     );
 }
 
-function PromptToast(props: {
+export function PromptToast(props: {
     showToast?: boolean;
     showModal?: boolean;
     setShowModal: (_: boolean) => void;
@@ -162,7 +162,7 @@ function PromptToast(props: {
     );
 }
 
-function useSubmitHandler() {
+export function useSubmitHandler() {
     const config = useAppConfig();
     const submitKey = config.submitKey;
     const isComposing = useRef(false);
@@ -280,7 +280,7 @@ export function PromptHints(props: {
     );
 }
 
-function ClearContextDivider() {
+export function ClearContextDivider() {
     const chatStore = useChatStore();
 
     return (
@@ -300,7 +300,7 @@ function ClearContextDivider() {
     );
 }
 
-function ChatAction(props: {
+export function ChatAction(props: {
     text: string;
     icon: JSX.Element;
     onClick: () => void;
@@ -349,7 +349,7 @@ function ChatAction(props: {
     );
 }
 
-function useScrollToBottom() {
+export function useScrollToBottom() {
     // for auto-scroll
     const scrollRef = useRef<HTMLDivElement>(null);
     const [autoScroll, setAutoScroll] = useState(true);
