@@ -1,12 +1,9 @@
 import { COZE, REQUEST_TIMEOUT_MS } from "@/app/constant";
 import { useCozeStore } from "@/app/store/coze";
-import { ChatOptions, getHeaders, LLMApi, LLMModel, LLMUsage } from "../api";
 import {
-  EventStreamContentType,
-  fetchEventSource,
+  fetchEventSource
 } from "@fortaine/fetch-event-source";
-import { prettyObject } from "@/app/utils/format";
-import Locale from "../../locales";
+import { ChatOptions, getHeaders, LLMApi, LLMModel, LLMUsage } from "../api";
 
 export class COZEApi implements LLMApi {
   extractMessage(res: any) {
@@ -52,19 +49,23 @@ export class COZEApi implements LLMApi {
       content: v.content,
     }));
 
-    console.log("messages", messages);
-
     const session = useCozeStore.getState().currentSession();
+
+    const chat_history = messages.map((msg) => ({
+      "role": msg.role ,
+      "content": msg.content,
+      "content_type":"text"
+    }));
 
     const requestPayload = {
       query: options.msg,
-      conversation_id: "12333",
+      conversation_id: session.id,
       user: options.user?.username,
       bot_id: session.botId,
       stream: options.config.stream,
-      //chat_history: [],
+      chat_history,
       custom_variables: {
-        bot_name: "Rem",
+        bot_name: "小恩",
       },
     };
 
@@ -185,9 +186,9 @@ export class COZEApi implements LLMApi {
                 if (delta) {
                   remainText += delta;
                 }
-              } else if(message.type === 'follow_up') {
+              } else if (message.type === "follow_up") {
                 console.log("message.content", message.content);
-                prompts.push(message.content)
+                prompts.push(message.content);
               }
             } catch (e) {
               console.error("[Request] parse error", msg.data);

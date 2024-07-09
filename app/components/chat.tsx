@@ -300,7 +300,7 @@ export function ClearContextDivider() {
     );
 }
 
-export function ChatAction(props: {
+function ChatAction(props: {
     text: string;
     icon: JSX.Element;
     onClick: () => void;

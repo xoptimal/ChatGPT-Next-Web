@@ -398,7 +398,6 @@ export const useCozeStore = createPersistStore(
 
         // get recent messages
         const recentMessages = get().getMessagesWithMemory();
-        const sendMessages = recentMessages.concat(userMessage);
         const messageIndex = get().currentSession().messages.length + 1;
 
         // save user's and bot's message
@@ -418,7 +417,7 @@ export const useCozeStore = createPersistStore(
         api.llm.chat({
           msg: userContent,
           user,
-          messages: sendMessages,
+          messages: recentMessages,
           config: { ...modelConfig, stream: true },
           onUpdate(message) {
             botMessage.streaming = true;

@@ -5,7 +5,6 @@ import { useDebouncedCallback } from "use-debounce";
 import DeleteIcon from "../icons/clear.svg";
 import CopyIcon from "../icons/copy.svg";
 import StopIcon from "../icons/pause.svg";
-import PinIcon from "../icons/pin.svg";
 import ResetIcon from "../icons/reload.svg";
 import SendWhiteIcon from "../icons/send-white.svg";
 import LoadingIcon from "../icons/three-dots.svg";
@@ -50,9 +49,57 @@ import {
 } from "../constant";
 import { useCozeStore } from "../store/coze";
 import { prettyObject } from "../utils/format";
-import { ChatAction } from "./chat";
 import { Avatar } from "./emoji";
 import { showConfirm, showToast } from "./ui-lib";
+
+function ChatAction(props: {
+  text: string;
+  icon: JSX.Element;
+  onClick: () => void;
+}) {
+  const iconRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState({
+    full: 32,
+    icon: 32,
+  });
+
+  function updateWidth() {
+    if (!iconRef.current || !textRef.current) return;
+    const getWidth = (dom: HTMLDivElement) => dom.getBoundingClientRect().width;
+    const textWidth = getWidth(textRef.current);
+    const iconWidth = 32;
+    setWidth({
+      full: textWidth + iconWidth,
+      icon: iconWidth,
+    });
+  }
+
+  return (
+    <div
+      className={`${styles["chat-input-action"]} clickable`}
+      onClick={() => {
+        props.onClick();
+        setTimeout(updateWidth, 1);
+      }}
+      onMouseEnter={updateWidth}
+      onTouchStart={updateWidth}
+      style={
+        {
+          "--icon-width": `${width.icon}px`,
+          "--full-width": `${width.full}px`,
+        } as React.CSSProperties
+      }
+    >
+      <div ref={iconRef} className={styles["icon"]}>
+        {props.icon}
+      </div>
+      <div className={styles["text"]} ref={textRef}>
+        {props.text}
+      </div>
+    </div>
+  );
+}
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
@@ -160,17 +207,13 @@ export function PromptItemGuide(props: {
   return (
     <div className={styles["prompt-item-guide"]}>
       {prompts.map((prompt, i) => (
-        <div
-          key={i}
-          onClick={() => props.onPromptSelect(prompt)}
-        >
+        <div key={i} onClick={() => props.onPromptSelect(prompt)}>
           <div className={styles["hint-content"]}>{prompt}</div>
         </div>
       ))}
     </div>
   );
 }
-
 
 export function PromptGuide(props: {
   prompts: RenderPrompt[];
@@ -396,6 +439,12 @@ export function Chat() {
   const onPromptSelect2Guide = (prompt: RenderPrompt) => {
     setTimeout(() => {
       doSubmit(prompt.content);
+    }, 30);
+  };
+
+  const onPromptSelect3Guide = (prompt: string) => {
+    setTimeout(() => {
+      doSubmit(prompt);
     }, 30);
   };
 
@@ -717,37 +766,12 @@ export function Chat() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleClear = () => {
-    //  重置
-    cozeStore.resetSession();
-  };
-
-  const fileInput = useRef<HTMLInputElement>(null);
-
-  const beforeInput = async (event: any) => {
-    const file = event.target.files[0];
-    await cozeStore.addFile(file);
-    event.target.value = "";
-  };
-
-  const handleUpload = () => {
-    fileInput.current!.click();
-  };
-
-  const handleRemoveFile = (file: UploadFileType) => {
-    //  只针对上传成功做处理
-    if (file.status === "processed") {
-      cozeStore.removeFile(file.id);
-    }
-  };
-
-  console.log(":messages", messages);
-
   return (
     <div className={`${styles["chat"]} ${styles2["chat"]}`}>
       <div
         className={`${styles["chat-body"]} ${styles2["chat-body"]}`}
         ref={scrollRef}
+        onScroll={(e) => onChatBodyScroll(e.currentTarget)}
         onMouseDown={() => inputRef.current?.blur()}
         onTouchStart={() => {
           inputRef.current?.blur();
@@ -814,11 +838,11 @@ export function Chat() {
                                   onClick={() => onDelete(message.id ?? i)}
                                 />
 
-                                <ChatAction
+                                {/*    <ChatAction
                                   text={Locale.Chat.Actions.Pin}
                                   icon={<PinIcon />}
                                   onClick={() => onPinMessage(message)}
-                                />
+                                /> */}
                                 <ChatAction
                                   text={Locale.Chat.Actions.Copy}
                                   icon={<CopyIcon />}
@@ -855,14 +879,17 @@ export function Chat() {
                         defaultShow={i >= messages.length - 6}
                       />
                     </div>
+
                     {!isUser &&
                       !message.streaming &&
+                      !message.preview &&
                       message.prompts &&
+                      i === messages.length - 1 &&
                       message.prompts.length > 0 && (
                         <div>
                           <PromptItemGuide
                             prompts={message.prompts}
-                            onPromptSelect={onPromptSelect2Guide}
+                            onPromptSelect={onPromptSelect3Guide}
                           />
                         </div>
                       )}
@@ -890,23 +917,6 @@ export function Chat() {
           )}
 
           <PromptHints prompts={promptHints} onPromptSelect={onPromptSelect} />
-
-          {/* <div className={styles["chat-input-panel-upload"]}>
-    {uploadFiles.map(item => <div key={item.id}>
-
-        {
-            item.status === 'loading'
-                ? <div className={styles["loading-icon"]}><LoaderIcon/></div>
-                : (<>
-                    <div className={styles["upload-icon"]}><FileIcon/></div>
-                    <div className={styles["delete-icon"]} onClick={() => handleRemoveFile(item)}>
-                        <DeleteIcon/></div>
-                </>)
-        }
-        <span style={{color: item.status === 'error' ? 'red' : '#666'}}>{item.filename}</span>
-        <div className={styles["error-icon"]}><CancelIcon/></div>
-    </div>)}
-</div> */}
 
           <div className={styles2["chat-input-panel-inner"]}>
             <textarea

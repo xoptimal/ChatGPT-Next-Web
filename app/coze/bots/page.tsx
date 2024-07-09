@@ -4,6 +4,7 @@ import { PageContainer } from "@ant-design/pro-components";
 import { Button } from "antd";
 import { useRouter } from "next/navigation";
 
+import { cozeBots } from "@/app/services/api";
 import { useCozeStore } from "@/app/store/coze";
 import { useEffect } from "react";
 import styles from "./pages.module.scss";
@@ -23,8 +24,10 @@ export default function Page() {
 
   async function fetchInitialAssistantList() {
     try {
+      cozeBots();
+
       //  添加到Store
-      store.setSessions(bots);
+      //store.setSessions(bots);
       //  通知
       //props.init(res.assistants.length > 0)
     } catch (e) {
