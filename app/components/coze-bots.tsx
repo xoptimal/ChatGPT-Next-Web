@@ -7,18 +7,12 @@ import styles from "./coze-bots.module.scss";
 import { useEffect } from "react";
 
 const bots = [
-  {
-    name: "国内",
-    id: "7387343977437069364",
-    token:
-      "pat_tnQKRdgU368SnjQE4NdPrk63PdWDmV6GS3QwKMX8jvFgdAmnsBjLzqZWFY33BPeE",
-  },
 
   {
-    name: "国外",
-    id: "7385165908941635592",
+    name: "探险家",
+    id: "7387583435898241030",
     token:
-      "pat_J2Yh6fEXhsx8XFtdefLsMZ4VOx2iXWBzxxWaHArWrikT4txuFeGAQdLcMO3lBXyD",
+      "pat_mOmnjXGXizEZ5r7WMp11mbXBWT6cpJz46EqJOhwQ05PzjByTD0dfODeKq2NK8xnZ",
   },
 ];
 
