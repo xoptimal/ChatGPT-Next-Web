@@ -1,6 +1,7 @@
 
 .container {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     gap: 16px;
     padding-top: 200px;

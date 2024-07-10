@@ -20,7 +20,6 @@ import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import RoleTag from "../RoleTag";
 import ScrollToTopButton from "../ScrollToTopButton";
-import { log } from "console";
 
 const settings: ProSettings = {
   fixSiderbar: true,

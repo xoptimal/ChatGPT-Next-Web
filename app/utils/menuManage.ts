@@ -27,7 +27,7 @@ const student = [
     // },
     {
         path: '/coze',
-        name: 'COZE',
+        name: 'AI',
     },
 ]
 
@@ -142,7 +142,7 @@ const counselor = [
     // },
     {
         path: '/coze',
-        name: 'COZE',
+        name: 'AI',
     },
 ]
 
@@ -157,7 +157,7 @@ const parent = [
     },
     {
         path: '/coze',
-        name: 'COZE',
+        name: 'AI',
     },
 ]
 

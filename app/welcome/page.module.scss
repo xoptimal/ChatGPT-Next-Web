@@ -28,17 +28,18 @@
 
 .content {
   flex-direction: column;
-  width: 220px;
+  width: 140px;
   padding-top: 2rem;
+  margin-right: 24px;
 }
 
 .item {
   background: #fff;
   width: 90%;
   border-radius: 16px;
-  padding: 24px;
+  padding: 12px 24px;
   position: relative;
-  margin: 0 auto 2rem;
+  margin: 0 auto 40px;
 
   display: flex;
   flex-direction: column;
@@ -52,7 +53,7 @@
     height: 100%;
 
     > h1 {
-      font-size: 1.5rem;
+      font-size: 16px;
       font-weight: bold;
       color: #333;
       margin: 0;
@@ -70,7 +71,7 @@
   &:hover {
     background: white;
     box-shadow: 0 50px 100px -20px rgba(50, 50, 93, 0.1), 0 30px 60px -30px rgba(107, 124, 147, 0.15);
-    transform: translateY(-10px);
+    //transform: translateY(-10px);
     cursor: pointer;
 
     h1 {
