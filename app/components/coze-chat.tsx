@@ -1,4 +1,3 @@
-"use client";
 import React, { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
@@ -33,11 +32,6 @@ import { ChatControllerPool } from "../client/controller";
 import Locale from "../locales";
 import { Prompt, usePromptStore } from "../store/prompt";
 
-import { IconButton } from "./button";
-import styles from "./chat.module.scss";
-import styles2 from "./coze-chat.module.scss";
-
-import { UploadFileType } from "@/app/store/assistant";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ChatCommandPrefix, useChatCommand, useCommand } from "../command";
@@ -49,6 +43,9 @@ import {
 } from "../constant";
 import { useCozeStore } from "../store/coze";
 import { prettyObject } from "../utils/format";
+import { IconButton } from "./button";
+import styles from "./chat.module.scss";
+import styles2 from "./coze-chat.module.scss";
 import { Avatar } from "./emoji";
 import { showConfirm, showToast } from "./ui-lib";
 
@@ -307,19 +304,15 @@ export function PromptHints(props: {
   );
 }
 
-export function Chat() {
+export function _Chat() {
   type RenderMessage = ChatMessage & { preview?: boolean; prompts?: string[] };
 
   const cozeStore = useCozeStore();
   const session = cozeStore.currentSession();
-  console.log("session", session);
 
   const { data: userSession } = useSession();
 
   const config = useAppConfig();
-  const fontSize = config.fontSize;
-
-  const [showExport, setShowExport] = useState(false);
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [userInput, setUserInput] = useState("");
@@ -909,7 +902,7 @@ export function Chat() {
 
       <div className={styles2["chat-input-panel"]}>
         <div>
-       {/*   {messages.length === 1 && (
+          {/*   {messages.length === 1 && (
             <PromptGuide
               prompts={getPrompts(session.id)}
               onPromptSelect={onPromptSelect2Guide}
@@ -946,4 +939,10 @@ export function Chat() {
       </div>
     </div>
   );
+}
+
+export function CozeChat() {
+  const store = useCozeStore();
+  const sessionIndex = store.currentSessionIndex;
+  return store.sessions.length > 0 && <_Chat key={sessionIndex}></_Chat>;
 }

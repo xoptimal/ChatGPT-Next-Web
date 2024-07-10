@@ -24,7 +24,8 @@ export enum Path {
   //  针对Assistant的聊天窗口页面
   Thread = "/thread",
   //  针对COZE
-  COZE = "/gpt",
+  COZE = "/coze",
+  COZE_BOTS = "/bots",
 }
 
 export enum ApiPath {

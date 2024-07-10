@@ -20,6 +20,7 @@ import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import RoleTag from "../RoleTag";
 import ScrollToTopButton from "../ScrollToTopButton";
+import { log } from "console";
 
 const settings: ProSettings = {
   fixSiderbar: true,
@@ -123,12 +124,13 @@ export default function ExContent(
     },
   };
 
-  let pathname = usePathname();
+  const originPathname = usePathname();
+  let pathname = originPathname;
 
-  if (pathname === "/users") {
+  if (originPathname === "/users") {
     pathname = "/users/guest/student";
   }
-  if (pathname === "/service") {
+  if (originPathname === "/service") {
     pathname = "/service/product";
   }
 
@@ -260,7 +262,16 @@ export default function ExContent(
                     )}
 
                   {pathname !== "/" && role !== ROLE.PARENT && (
-                    <Button size="small" onClick={() => router.replace("/")}>
+                    <Button
+                      size="small"
+                      onClick={() => {
+                        if (window.location.href.indexOf("/coze#/coze") > -1) {
+                          router.back();
+                        } else {
+                          router.replace("/");
+                        }
+                      }}
+                    >
                       返回
                     </Button>
                   )}

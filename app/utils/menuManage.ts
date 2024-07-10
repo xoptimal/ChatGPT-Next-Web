@@ -26,8 +26,8 @@ const student = [
     //     icon: 'SmileFilled'
     // },
     {
-        path: '/coze/bots',
-        name: 'GPT',
+        path: '/coze',
+        name: 'COZE',
     },
 ]
 
@@ -141,8 +141,8 @@ const counselor = [
     //     icon: 'SmileFilled'
     // },
     {
-        path: '/gpt',
-        name: 'GPT',
+        path: '/coze',
+        name: 'COZE',
     },
 ]
 
@@ -156,8 +156,8 @@ const parent = [
         name: '产品中心',
     },
     {
-        path: '/gpt',
-        name: 'GPT',
+        path: '/coze',
+        name: 'COZE',
     },
 ]
 

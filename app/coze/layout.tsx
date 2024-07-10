@@ -1,28 +1,29 @@
-"use client";
-
-import { ErrorBoundary } from "../components/error";
 import "../styles/globals.scss";
-import "../styles/highlight.scss";
 import "../styles/markdown.scss";
-
+import "../styles/highlight.scss";
+import {getClientConfig} from "../config/client";
+import React from "react";
 import BaseLayout from "@/app/components/base-layout";
 import dynamic from "next/dynamic";
-import {
-  HashRouter as Router
-} from "react-router-dom";
+
 
 const ExContent = dynamic(() => import("@/app/components/ExContent"), {
-  ssr: false,
+    ssr: false,
 });
-
 export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
+                                       children,
+                                   }: {
+    children: React.ReactNode;
 }) {
-  return (
-    <BaseLayout hideContainer>
-      <ExContent>{children}</ExContent>
-    </BaseLayout>
-  );
+    return (
+        <BaseLayout hideContainer head={
+            <>
+                <meta name="config" content={JSON.stringify(getClientConfig())}/>
+                <script src="/serviceWorkerRegister.js" defer></script>
+            </>
+        }>
+            <ExContent>{children}</ExContent>
+        </BaseLayout>
+    );
 }
+

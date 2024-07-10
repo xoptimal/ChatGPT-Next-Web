@@ -106,6 +106,7 @@ export default function BaseLayout(props: any) {
       <head>
         <title>恩代 | Education</title>
         <link rel="shortuct icon" href="/favicon.ico" />
+        {props.head}
       </head>
       <body>
         <AntdRegistry>

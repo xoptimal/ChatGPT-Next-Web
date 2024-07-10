@@ -202,7 +202,7 @@ export function Home(props: any) {
     return (
         <ErrorBoundary>
             <Router>
-                {props.children ?? <Screen/>}
+                <Screen/>
             </Router>
         </ErrorBoundary>
     );
