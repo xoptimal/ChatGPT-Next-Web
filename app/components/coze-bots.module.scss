@@ -1,8 +1,184 @@
 
 .container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 16px;
-    padding-top: 200px;
+
+  background-color: #f1f1f1;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  //> div {
+  //  width: 100%;
+  //  height: 100%;
+  //  position: relative;
+  //  display: flex;
+  //  justify-content: center;
+  //  align-items: center;
+  //}
+}
+
+/* 详细信息文字 */
+.detailText {
+  color: #2373fe;;
+  pointer-events: auto;
+  height: 30px;
+  position: relative;
+}
+
+/* 设置绝对居中 */
+.absoluteCenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.demo {
+
+  /* width: 600px;
+height: 600px;
+padding: 100px;
+background-color: pink;
+box-sizing: border-box; */
+}
+
+.ulDiv,
+.liDiv {
+
+  position: absolute;
+  //top: 50%;
+  //left: 50%;
+  //transform: translate(-50%, -50%);
+
+  margin: 0;
+  list-style-type: none;
+  padding: 0;
+
+}
+
+.ulDiv {
+  /* background-color: #fff; */
+  background-color: transparent;
+  border-radius: 50%;
+  //position: relative;
+  //border: 1px solid #6b6b6b;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+}
+
+.liDiv {
+  width: 60px;
+  height: 60px;
+  position: absolute;
+  /* background-color: rgb(97, 153, 74); */
+  /* border: 1px solid #ccc; */
+  background-color: #fff;
+  border: 1px solid #c1c1c1;
+  color: #676767;
+  /* color: white; */
+  border-radius: 50%;
+  //line-height: 80px;
+  text-align: center;
+  /* left: 50%; */
+  margin-left: -30px;
+  margin-top: -30px;
+  transform-origin: 0px 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 1;
+
+  > span {
+    font-size: 12px;
+    transform: scale(0.9);
+  }
+
+}
+
+.main_bot {
+  width: 140px;
+  height: 140px;
+  z-index: 11;
+  cursor: pointer;
+}
+
+.ulDiv2 {
+  width: 100px;
+  height: 100px;
+  /* background-color: #2373fe; */
+  background-color: transparent;
+  padding: 20px;
+  border: none;
+  pointer-events: none;
+
+}
+
+.liDiv2 {
+  width: 30px;
+  height: 30px;
+  margin-left: -30px;
+  margin-top: -30px;
+}
+
+/* 向右靠边 */
+.sideRight {
+  position: absolute;
+  top: -150%;
+  left: 120%;
+  background-color: #f9f9f9;
+  pointer-events: none;
+  color: #676767;
+  width: 300px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+/* 设置中心盒子颜色 */
+.centerPeople {
+  background-color: #2373fe;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none
+}
+
+.ulContainer {
+
+}
+
+.baseBox {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+}
+
+/* 设置背景色 */
+.bgColor {
+  background-color: #f9f9f9;
+  padding: 5px;
+  position: absolute;
+  top: 95%;
+  left: -80%;
+  width: 150px;
+  line-height: 20px;
+  text-align: left;
+  color: #7ea2ca;
+  pointer-events: none;
+}
+
+/* 关系得背景色 */
+.relateBg {
+  background-color: #ff9c39;
+  color: #fff;
 }
